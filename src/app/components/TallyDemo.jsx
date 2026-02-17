@@ -1,5 +1,4 @@
 "use client";
-// @ts-nocheck
 import { useState, useEffect, useRef } from "react";
 
 // ═══════════════════════════════════════════════════════════════
@@ -65,7 +64,7 @@ const Btn = ({ children, onClick, primary, style }) => (<button onClick={onClick
 // ═══════════════════════════════════════════════
 // TAB 1: BEFORE & AFTER
 // ═══════════════════════════════════════════════
-const SCENARIOS = [{ id: "first", label: "First Purchase", maxStep: 8 }, { id: "repeat", label: "Repeat Purchase", maxStep: 5 }, { id: "second", label: "Second Agent", maxStep: 5 }];
+const SCENARIOS = [{ id: "first", label: "First Purchase", maxStep: 11 }, { id: "repeat", label: "Repeat Purchase", maxStep: 5 }, { id: "second", label: "Second Agent", maxStep: 5 }];
 
 function WithoutTally({ scenario, step }) {
   if (scenario === "first") {
@@ -95,7 +94,7 @@ function WithoutTally({ scenario, step }) {
           <div style={{ fontSize: 15, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Confirmed</div>
           <div style={{ padding: 12, borderRadius: 10, background: C.ambS, border: `1px solid ${C.amb}12`, textAlign: "center", width: "100%", marginTop: 16 }}><span style={{ fontSize: 10, color: C.amb, fontFamily: F.b, fontWeight: 500 }}>Now go back to Poke and tell it the code...</span></div>
         </div>
-      ) : (<><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="i booked it. confirmation DL-7829K" /><Bub from="agent" text="added to your calendar 📅" /><SysCard color={C.amb}><TimerBadge time="8–15 min total" color={C.red} /><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginTop: 6 }}>4 app switches · typed card · you did all the work</div></SysCard></div></>)}
+      ) : (<><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="finally booked it. confirmation DL-7829K" /><Bub from="agent" text="added to your calendar 📅" /><SysCard color={C.amb}><TimerBadge time="8–15 min total" color={C.red} /><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginTop: 6 }}>4 app switches · typed card · you did all the work</div></SysCard></div></>)}
     </div>;
   }
   if (scenario === "repeat") return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="get me an uber to Nobu tonight" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="UberX, 12 min, $28.50. but i can't book 😕" />}{step >= 2 && <SysCard color={C.red}><Ext s={10} c={C.red} /><span style={{ fontSize: 10, color: C.red, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>OPEN UBER APP</span></SysCard>}{step >= 3 && <Bub from="user" text="ugh, fine" />}{step >= 4 && <SysCard color={C.amb}><div style={{ fontSize: 11, color: C.amb, fontFamily: F.b, fontWeight: 500 }}>Every. Single. Time.</div><TimerBadge time="1–2 min" /></SysCard>}{step >= 5 && <Bub from="user" text="ok booked. Marcus, gray Camry, 12 min" />}</div></div>;
@@ -105,27 +104,167 @@ function WithoutTally({ scenario, step }) {
 function WithTally({ scenario, step }) {
   if (scenario === "first") {
     return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-      {step <= 2 ? (<><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="book me a flight to NYC next friday, cheapest nonstop" vis={step >= 0} /><Bub from="agent" text="found it! Delta DL482, $342 nonstop. $55 less than last week 📉" vis={step >= 1} />{step >= 2 && <Bub from="user" text="book it" />}{step >= 2 && <Bub from="agent" text="requesting payment… approval from Tally 📱" />}</div></>) : step <= 4 ? (
+      {step <= 2 ? (
+        /* CHAT: User asks, agent finds, user says book it */
+        <><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}>
+          <Bub from="user" text="book me a flight to NYC next friday, cheapest nonstop" vis={step >= 0} />
+          <Bub from="agent" text="found it! Delta DL482, $342 nonstop. $55 less than last week 📉" vis={step >= 1} />
+          {step >= 2 && <Bub from="user" text="book it" />}
+          {step >= 2 && <Bub from="agent" text="to complete this purchase, set up Tally (90 sec) 🛡️" />}
+        </div></>
+      ) : step === 3 ? (
+        /* STEP 3: ID VERIFICATION */
+        <div style={{ flex: 1, padding: 14, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 10, paddingTop: 4 }}>
+            <span style={{ fontSize: 14 }}>🌴</span>
+            <span style={{ fontSize: 13, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Poke Pay</span>
+            <span style={{ fontSize: 11, color: C.txF }}>·</span>
+            <Shield s={11} c={C.gold} />
+            <span style={{ fontSize: 11, color: C.gold, fontFamily: F.b, fontWeight: 500 }}>powered by Tally</span>
+          </div>
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Verify your identity</div>
+            <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, marginTop: 2 }}>Quick setup. One time only.</div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ padding: "12px 14px", borderRadius: 12, background: C.sf, border: `1px solid ${C.bd}` }}>
+              <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 4 }}>PHONE NUMBER</div>
+              <div style={{ fontSize: 14, color: C.tx, fontFamily: F.m }}>+1 (310) 555-0182</div>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              {[3, 7, 2, 9].map((d, i) => (
+                <div key={i} style={{ flex: 1, padding: "12px 0", borderRadius: 12, background: C.gG, border: `1px solid ${C.gB}`, textAlign: "center" }}>
+                  <span style={{ fontSize: 20, fontFamily: F.m, color: C.gold, fontWeight: 500 }}>{d}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ textAlign: "center" }}><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b }}>✓ Code verified</span></div>
+          </div>
+          <div style={{ marginTop: "auto", paddingTop: 12 }}>
+            <div style={{ padding: 10, borderRadius: 12, background: C.sf, border: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: "rgba(255,255,255,0.04)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={C.txM} strokeWidth={1.5}><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M12 9v0M12 15v0M9 12h0M15 12h0"/></svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 12, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Face ID</div>
+                <div style={{ fontSize: 9, color: C.txM, fontFamily: F.b }}>For instant approvals</div>
+              </div>
+              <Chk s={14} c={C.grn} />
+            </div>
+            <div style={{ width: "100%", padding: 12, borderRadius: 12, background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, textAlign: "center", cursor: "default" }}>
+              <span style={{ fontSize: 13, color: C.bg, fontFamily: F.b, fontWeight: 600 }}>Continue</span>
+            </div>
+            <div style={{ textAlign: "center", marginTop: 6 }}><TimerBadge time="15 sec" color={C.grn} /></div>
+          </div>
+        </div>
+      ) : step === 4 ? (
+        /* STEP 4: ADD PAYMENT METHOD */
+        <div style={{ flex: 1, padding: 14, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 10, paddingTop: 4 }}>
+            <span style={{ fontSize: 14 }}>🌴</span>
+            <span style={{ fontSize: 13, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Poke Pay</span>
+            <span style={{ fontSize: 11, color: C.txF }}>·</span>
+            <Shield s={11} c={C.gold} />
+            <span style={{ fontSize: 11, color: C.gold, fontFamily: F.b, fontWeight: 500 }}>powered by Tally</span>
+          </div>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Add a payment method</div>
+            <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, marginTop: 2 }}>Your card is never shared with agents.</div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <div style={{ padding: "12px 14px", borderRadius: 12, background: C.gG, border: `1px solid ${C.gB}`, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 32, height: 20, borderRadius: 4, background: "linear-gradient(135deg, #1A1F71, #2D4AA8)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 7, color: "white", fontFamily: F.b, fontWeight: 700 }}>VISA</span></div>
+              <div style={{ flex: 1 }}><div style={{ fontSize: 12, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Debit card</div><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b }}>Chase •••• 4821</div></div>
+              <Chk s={14} c={C.grn} />
+            </div>
+            <div style={{ padding: "12px 14px", borderRadius: 12, background: C.sf, border: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 32, height: 20, borderRadius: 4, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 10, color: C.txF }}>+</span></div>
+              <span style={{ fontSize: 12, color: C.txM, fontFamily: F.b }}>Add credit card</span>
+            </div>
+            <div style={{ padding: "12px 14px", borderRadius: 12, background: C.sf, border: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 32, height: 20, borderRadius: 4, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 10 }}>🏦</span></div>
+              <span style={{ fontSize: 12, color: C.txM, fontFamily: F.b }}>Link bank account</span>
+            </div>
+          </div>
+          <div style={{ marginTop: "auto", paddingTop: 10 }}>
+            <div style={{ width: "100%", padding: 12, borderRadius: 12, background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, textAlign: "center", cursor: "default" }}><span style={{ fontSize: 13, color: C.bg, fontFamily: F.b, fontWeight: 600 }}>Continue</span></div>
+            <div style={{ textAlign: "center", marginTop: 6 }}><TimerBadge time="15 sec" color={C.grn} /></div>
+          </div>
+        </div>
+      ) : step === 5 ? (
+        /* STEP 5: SET SPENDING RULES */
+        <div style={{ flex: 1, padding: 14, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+            <Shield s={12} c={C.gold} />
+            <span style={{ fontSize: 13, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Set your limits for Poke</span>
+          </div>
+          {[
+            { l: "Max per transaction", v: "$500" },
+            { l: "Daily spending cap", v: "$1,000" },
+            { l: "Auto-approve under", v: "$50" },
+          ].map((r, i) => (
+            <div key={i} style={{ padding: "12px 14px", borderRadius: 12, background: C.sf, border: `1px solid ${C.bd}`, marginBottom: 6, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 12, color: C.txS, fontFamily: F.b }}>{r.l}</span>
+              <span style={{ fontSize: 13, color: C.gold, fontFamily: F.m, fontWeight: 500 }}>{r.v}</span>
+            </div>
+          ))}
+          <div style={{ padding: "10px 14px", borderRadius: 12, background: C.redS, border: `1px solid ${C.red}10`, marginBottom: 6 }}>
+            <div style={{ fontSize: 11, color: C.txS, fontFamily: F.b, marginBottom: 4 }}>Blocked categories</div>
+            <div style={{ display: "flex", gap: 4 }}>{["Gambling", "Crypto"].map(c => <span key={c} style={{ padding: "3px 8px", borderRadius: 6, background: `${C.red}12`, fontSize: 10, color: C.red, fontFamily: F.b }}>{c}</span>)}</div>
+          </div>
+          <div style={{ marginTop: "auto", paddingTop: 8 }}>
+            <div style={{ width: "100%", padding: 12, borderRadius: 12, background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, textAlign: "center", cursor: "default" }}><span style={{ fontSize: 13, color: C.bg, fontFamily: F.b, fontWeight: 600 }}>Save & connect to Poke</span></div>
+          </div>
+        </div>
+      ) : step <= 7 ? (
+        /* STEPS 6-7: APPROVAL SCREEN */
         <div style={{ flex: 1, padding: 16, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          {step === 3 && <div style={{ width: "100%", padding: "8px 12px", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: `1px solid ${C.bd}`, marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 20, height: 20, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={9} c={C.bg}/></div><div style={{ flex: 1 }}><div style={{ fontSize: 10.5, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Tally</div><div style={{ fontSize: 9, color: C.txM, fontFamily: F.b }}>Poke wants to pay $342</div></div></div>}
-          <div style={{ width: 40, height: 40, borderRadius: 12, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 6px 20px rgba(191,163,109,0.22)`, marginTop: step === 3 ? 4 : 20, marginBottom: 12 }}><Shield s={18} c={C.bg}/></div>
-          <div style={{ fontSize: 12, color: C.txS, fontFamily: F.b, fontWeight: 500 }}>Payment Request</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 14, marginTop: 2 }}><span style={{ fontSize: 10 }}>🌴</span><span style={{ fontSize: 10.5, color: C.txM, fontFamily: F.b }}>via Poke</span></div>
-          <div style={{ fontSize: 36, fontFamily: F.d, color: C.gold, letterSpacing: -1 }}>$342</div>
-          <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b, marginBottom: 14 }}>Delta Air Lines</div>
-          <div style={{ padding: "8px 10px", borderRadius: 10, background: C.sf, border: `1px solid ${C.bd}`, width: "100%", marginBottom: 6 }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b, letterSpacing: 1.5, marginBottom: 2 }}>REASONING</div><div style={{ fontSize: 11, color: C.txS, fontFamily: F.b, lineHeight: 1.4 }}>Cheapest nonstop LAX→JFK. $55 less.</div></div>
-          {step === 4 ? <div style={{ width: "100%", textAlign: "center", marginTop: 6 }}><div style={{ width: 48, height: 48, borderRadius: 24, background: C.grnS, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px" }}><Chk s={22} c={C.grn}/></div><div style={{ fontSize: 13, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>Approved</div><div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}><TimerBadge time="5 sec" color={C.grn} /></div></div>
+          {step === 6 && <div style={{ width: "100%", padding: "8px 12px", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: `1px solid ${C.bd}`, marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 20, height: 20, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={9} c={C.bg}/></div><div style={{ flex: 1 }}><div style={{ fontSize: 10.5, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Tally</div><div style={{ fontSize: 9, color: C.txM, fontFamily: F.b }}>Poke wants to pay $342</div></div></div>}
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 20px rgba(191,163,109,0.22)", marginBottom: 10 }}><Shield s={16} c={C.bg}/></div>
+          <div style={{ fontSize: 11, color: C.txS, fontFamily: F.b }}>Payment Request</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 10, marginTop: 2 }}><span style={{ fontSize: 10 }}>🌴</span><span style={{ fontSize: 10, color: C.txM, fontFamily: F.b }}>via Poke</span></div>
+          <div style={{ fontSize: 32, fontFamily: F.d, color: C.gold }}>$342</div>
+          <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, marginBottom: 10 }}>Delta Air Lines</div>
+          <div style={{ padding: "6px 10px", borderRadius: 8, background: C.sf, border: `1px solid ${C.bd}`, width: "100%", marginBottom: 8 }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b, letterSpacing: 1.5, marginBottom: 2 }}>REASONING</div><div style={{ fontSize: 10, color: C.txS, fontFamily: F.b, lineHeight: 1.4 }}>Cheapest nonstop LAX→JFK. $55 less than last week.</div></div>
+          {step === 7 ? <div style={{ width: "100%", textAlign: "center", marginTop: 4 }}><div style={{ width: 44, height: 44, borderRadius: 22, background: C.grnS, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 6px" }}><Chk s={20} c={C.grn}/></div><div style={{ fontSize: 13, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>Approved</div><TimerBadge time="5 sec" color={C.grn} /></div>
           : <div style={{ display: "flex", gap: 8, width: "100%", marginTop: 4 }}><button style={{ flex: 1, padding: 10, borderRadius: 12, border: `1px solid ${C.red}12`, background: `${C.red}06`, color: C.red, fontSize: 12, fontFamily: F.b, fontWeight: 500, cursor: "default" }}>Decline</button><button style={{ flex: 2, padding: 10, borderRadius: 12, border: "none", background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, color: C.bg, fontSize: 12, fontFamily: F.b, fontWeight: 600, cursor: "default" }}>Approve · Face ID</button></div>}
         </div>
-      ) : (<><div style={{ padding: "8px 14px", borderBottom: `1px solid ${C.bd}` }}><div style={{ padding: 10, borderRadius: 10, background: C.gG, border: `1px solid ${C.gB}` }}><Lbl style={{ color: C.goldM, fontSize: 8, marginBottom: 4, letterSpacing: 3 }}>VIRTUAL CARD</Lbl><div style={{ fontFamily: F.m, fontSize: 13, color: C.gold, letterSpacing: 2 }}>4147 •••• •••• 8293</div></div></div><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}>
-        {step >= 5 && <SysCard color={C.grn}><div style={{ display: "flex", alignItems: "center", gap: 5 }}><Chk s={10} c={C.grn}/><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>APPROVED</span></div></SysCard>}
-        {step >= 6 && <Bub from="agent" text="booked ✓ Delta DL482, conf DL-7829K 📅" />}
-        {step >= 7 && <SysCard color={C.grn}><TimerBadge time="~30 sec total" color={C.grn} /><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginTop: 4 }}>0 app switches · card never exposed</div></SysCard>}
-      </div></>)}
+      ) : step <= 9 ? (
+        /* STEPS 8-9: BOOKED + VIRTUAL CARD */
+        <><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}>
+          <SysCard color={C.grn}><div style={{ display: "flex", alignItems: "center", gap: 5 }}><Chk s={10} c={C.grn}/><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>PAYMENT APPROVED</span></div><div style={{ padding: 8, borderRadius: 8, background: C.gG, border: `1px solid ${C.gB}`, marginTop: 6 }}><Lbl style={{ color: C.goldM, fontSize: 7, letterSpacing: 3 }}>VIRTUAL CARD ISSUED</Lbl><div style={{ fontFamily: F.m, fontSize: 12, color: C.gold, letterSpacing: 2, marginTop: 2 }}>4147 •••• •••• 8293</div></div></SysCard>
+          {step >= 9 && <Bub from="agent" text="booked ✓ Delta DL482, conf DL-7829K 📅" />}
+          {step >= 9 && <SysCard color={C.grn}><TimerBadge time="~90 sec total" color={C.grn} /><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginTop: 4 }}>incl. one-time setup · next time: 5 sec</div></SysCard>}
+        </div></>
+      ) : step === 10 ? (
+        /* STEP 10: DOWNLOAD APP */
+        <div style={{ flex: 1, padding: 14, display: "flex", flexDirection: "column" }}>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 52, height: 52, borderRadius: 14, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px rgba(191,163,109,0.25)", marginBottom: 14 }}><Shield s={24} c={C.bg}/></div>
+            <div style={{ fontSize: 16, color: C.tx, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Get the Tally app</div>
+            <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, textAlign: "center", lineHeight: 1.5, marginBottom: 16, maxWidth: 220 }}>Approve with Face ID. Manage all your agents. Set smarter rules.</div>
+            <div style={{ width: "100%", padding: 12, borderRadius: 12, background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, textAlign: "center", marginBottom: 8, cursor: "default" }}><span style={{ fontSize: 13, color: C.bg, fontFamily: F.b, fontWeight: 600 }}>Download Tally</span></div>
+            <div style={{ fontSize: 10, color: C.txF, fontFamily: F.b }}>Next time: approve in 5 seconds</div>
+          </div>
+          <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+            {["Dashboard", "Face ID", "Smart rules", "All agents"].map((ft, i) => (
+              <div key={i} style={{ padding: "4px 8px", borderRadius: 6, background: C.gG, border: `1px solid ${C.gB}` }}>
+                <span style={{ fontSize: 9, color: C.gold, fontFamily: F.b }}>{ft}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* STEP 11: SUMMARY */
+        <><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}>
+          <Bub from="agent" text="all set! flight booked, Tally app ready. next purchase will be instant ⚡" />
+          <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500, marginBottom: 4 }}>Setup complete. You're in control.</div><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b }}>0 app switches · card never exposed · Tally app ready</div></SysCard>
+        </div></>
+      )}
     </div>;
   }
-  if (scenario === "repeat") return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="get me an uber to Nobu tonight" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="UberX, 12 min, $28.50. booking now…" />}{step >= 2 && <SysCard color={C.grn}><Shield s={10} c={C.gold} /><span style={{ fontSize: 10, color: C.gold, fontFamily: F.b, fontWeight: 500, marginLeft: 6 }}>AUTO-APPROVED</span><span style={{ fontSize: 9, color: C.txF, fontFamily: F.b, marginLeft: 4 }}>$28 {"<"} $50</span></SysCard>}{step >= 3 && <Bub from="agent" text="uber booked ✓ Marcus, gray Camry, 12 min 🚗" />}{step >= 4 && <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Zero effort</div><div style={{ marginTop: 4 }}><TimerBadge time="0 sec" color={C.grn} /></div></SysCard>}</div></div>;
-  return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><div style={{ padding: "6px 14px 10px", borderBottom: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 28, height: 28, borderRadius: 14, background: `${C.gpt}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>🤖</div><div><div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>ChatGPT</div></div></div><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="order Sony WH-1000XM5 headphones" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="$348 on Amazon. setting up payment…" />}{step >= 2 && <SysCard color={C.gold}><Shield s={10} c={C.gold}/><span style={{ fontSize: 10, color: C.gold, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>TALLY RECOGNIZED YOU</span></SysCard>}{step >= 3 && <SysCard color={C.grn}><Chk s={10} c={C.grn}/><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>AUTHORIZED & APPROVED</span></SysCard>}{step >= 4 && <Bub from="agent" text="ordered ✓ Sony WH-1000XM5, arrives Wed" />}{step >= 5 && <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Two agents. One Tally.</div><div style={{ marginTop: 4 }}><TimerBadge time="3 sec" color={C.grn} /></div></SysCard>}</div></div>;
+    if (scenario === "repeat") return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="get me an uber to Nobu tonight" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="UberX, 12 min, $28.50. booking now…" />}{step >= 2 && <SysCard color={C.grn}><Shield s={10} c={C.gold} /><span style={{ fontSize: 10, color: C.gold, fontFamily: F.b, fontWeight: 500, marginLeft: 6 }}>AUTO-APPROVED</span><span style={{ fontSize: 9, color: C.txF, fontFamily: F.b, marginLeft: 4 }}>$28 {"<"} $50 limit</span></SysCard>}{step >= 3 && <Bub from="agent" text="uber booked ✓ Marcus, gray Camry, 12 min 🚗" />}{step >= 4 && <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Zero effort. Zero friction.</div><div style={{ marginTop: 4 }}><TimerBadge time="0 sec" color={C.grn} /></div></SysCard>}</div></div>;
+  return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><div style={{ padding: "6px 14px 10px", borderBottom: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 28, height: 28, borderRadius: 14, background: `${C.gpt}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>🤖</div><div><div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>ChatGPT</div></div></div><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="order Sony WH-1000XM5 headphones" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="$348 on Amazon. setting up payment…" />}{step >= 2 && <SysCard color={C.gold}><Shield s={10} c={C.gold}/><span style={{ fontSize: 10, color: C.gold, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>TALLY RECOGNIZED YOU</span></SysCard>}{step >= 3 && <SysCard color={C.grn}><Chk s={10} c={C.grn}/><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>AUTHORIZED & APPROVED</span></SysCard>}{step >= 4 && <Bub from="agent" text="ordered ✓ Sony WH-1000XM5, arrives Wed 📦" />}{step >= 5 && <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Two agents. One Tally.</div><div style={{ marginTop: 4 }}><TimerBadge time="3 sec" color={C.grn} /></div></SysCard>}</div></div>;
 }
 
 function BeforeAfterTab() {
@@ -656,6 +795,206 @@ function VisionTab() {
   );
 }
 
+
+// ═══════════════════════════════════════════════
+// TAB 5: TALLY APP
+// ═══════════════════════════════════════════════
+function TallyAppTab() {
+  const [screen, setScreen] = useState("home");
+  const navItems = [
+    { id: "home", icon: "⌂", label: "Home" },
+    { id: "agents", icon: "🤖", label: "Agents" },
+    { id: "card", icon: "💳", label: "Card" },
+    { id: "rules", icon: "🛡️", label: "Rules" },
+  ];
+
+  const AppNav = () => (
+    <div style={{ display: "flex", borderTop: `1px solid ${C.bd}`, padding: "6px 0 2px" }}>
+      {navItems.map(n => (
+        <div key={n.id} onClick={() => setScreen(n.id)} style={{ flex: 1, textAlign: "center", cursor: "pointer", padding: "4px 0" }}>
+          <div style={{ fontSize: 16 }}>{n.icon}</div>
+          <div style={{ fontSize: 8, color: screen === n.id ? C.gold : C.txF, fontFamily: F.b, fontWeight: screen === n.id ? 600 : 400, marginTop: 1 }}>{n.label}</div>
+          {screen === n.id && <div style={{ width: 16, height: 2, borderRadius: 1, background: C.gold, margin: "2px auto 0" }} />}
+        </div>
+      ))}
+    </div>
+  );
+
+  const HomeScreen = () => (
+    <div style={{ flex: 1, padding: "10px 14px", overflow: "auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>TALLY BALANCE</div><div style={{ fontSize: 26, fontFamily: F.d, color: C.gold }}>$2,847</div></div>
+        <div style={{ width: 32, height: 32, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={15} c={C.bg}/></div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 14 }}>
+        <div style={{ padding: 10, borderRadius: 10, background: C.gG, border: `1px solid ${C.gB}` }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>THIS MONTH</div><div style={{ fontSize: 16, fontFamily: F.d, color: C.tx, marginTop: 2 }}>$3,420</div><div style={{ fontSize: 9, color: C.grn, fontFamily: F.b, marginTop: 1 }}>32 transactions</div></div>
+        <div style={{ padding: 10, borderRadius: 10, background: C.sf, border: `1px solid ${C.bd}` }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>AGENTS</div><div style={{ fontSize: 16, fontFamily: F.d, color: C.tx, marginTop: 2 }}>4</div><div style={{ fontSize: 9, color: C.gold, fontFamily: F.b, marginTop: 1 }}>connected</div></div>
+      </div>
+      <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 8 }}>RECENT TRANSACTIONS</div>
+      {[
+        { agent: "🌴", name: "Poke", desc: "Delta Air Lines", amt: "$342.00", time: "2h ago", color: C.pk },
+        { agent: "🌴", name: "Poke", desc: "Uber to Nobu", amt: "$28.50", time: "5h ago", color: C.pk, auto: true },
+        { agent: "🤖", name: "ChatGPT", desc: "Sony WH-1000XM5", amt: "$348.00", time: "1d ago", color: C.gpt },
+        { agent: "🛒", name: "Instacart AI", desc: "Whole Foods order", amt: "$127.34", time: "2d ago", color: C.blu },
+        { agent: "🌴", name: "Poke", desc: "Blue Bottle Coffee", amt: "$14.50", time: "3d ago", color: C.pk, auto: true },
+      ].map((tx, i) => (
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: `1px solid ${C.bd}08` }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: `${tx.color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}>{tx.agent}</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ fontSize: 11.5, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>{tx.desc}</span>{tx.auto && <span style={{ fontSize: 7, color: C.gold, fontFamily: F.b, padding: "1px 4px", borderRadius: 3, background: C.gG }}>AUTO</span>}</div>
+            <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b }}>{tx.name} · {tx.time}</div>
+          </div>
+          <span style={{ fontSize: 12, color: C.tx, fontFamily: F.m, fontWeight: 500 }}>{tx.amt}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  const AgentsScreen = () => (
+    <div style={{ flex: 1, padding: "10px 14px", overflow: "auto" }}>
+      <div style={{ fontSize: 15, color: C.tx, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Connected agents</div>
+      <div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginBottom: 12 }}>4 agents using your Tally account</div>
+      {[
+        { icon: "🌴", name: "Poke", desc: "iMessage assistant", spent: "$2,140", txns: 24, limit: "$500/tx", color: C.pk, trust: 94 },
+        { icon: "🤖", name: "ChatGPT Operator", desc: "OpenAI", spent: "$892", txns: 8, limit: "$1,000/tx", color: C.gpt, trust: 88 },
+        { icon: "🛒", name: "Instacart AI", desc: "Grocery agent", spent: "$412", txns: 6, limit: "$200/tx", color: C.blu, trust: 91 },
+        { icon: "🏨", name: "Booking.com AI", desc: "Travel", spent: "$0", txns: 0, limit: "$2,000/tx", color: C.amb, trust: 82 },
+      ].map((a, i) => (
+        <div key={i} style={{ padding: 12, borderRadius: 14, background: C.sf, border: `1px solid ${C.bd}`, marginBottom: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+            <div style={{ width: 30, height: 30, borderRadius: 8, background: `${a.color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>{a.icon}</div>
+            <div style={{ flex: 1 }}><div style={{ fontSize: 13, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>{a.name}</div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b }}>{a.desc}</div></div>
+            <div style={{ padding: "3px 8px", borderRadius: 6, background: C.gG, border: `1px solid ${C.gB}` }}><span style={{ fontSize: 10, color: C.gold, fontFamily: F.m, fontWeight: 500 }}>{a.trust}</span></div>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ flex: 1, padding: "4px 8px", borderRadius: 6, background: "rgba(255,255,255,0.02)" }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b }}>SPENT</div><div style={{ fontSize: 11, color: C.tx, fontFamily: F.m }}>{a.spent}</div></div>
+            <div style={{ flex: 1, padding: "4px 8px", borderRadius: 6, background: "rgba(255,255,255,0.02)" }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b }}>TXS</div><div style={{ fontSize: 11, color: C.tx, fontFamily: F.m }}>{a.txns}</div></div>
+            <div style={{ flex: 1, padding: "4px 8px", borderRadius: 6, background: "rgba(255,255,255,0.02)" }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b }}>LIMIT</div><div style={{ fontSize: 11, color: C.gold, fontFamily: F.m }}>{a.limit}</div></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const CardScreen = () => (
+    <div style={{ flex: 1, padding: "10px 14px", overflow: "auto" }}>
+      <div style={{ padding: 18, borderRadius: 18, background: `linear-gradient(145deg, ${C.gold}18, ${C.goldM}08)`, border: `1px solid ${C.gB}`, marginBottom: 14 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 5 }}><Shield s={14} c={C.gold} /><span style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Tally</span></div>
+          <div style={{ width: 32, height: 20, borderRadius: 4, background: `linear-gradient(135deg, #1A1F71, #2D4AA8)` }}><span style={{ fontSize: 7, color: "white", fontFamily: F.b, fontWeight: 700, display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>VISA</span></div>
+        </div>
+        <div style={{ fontFamily: F.m, fontSize: 15, color: C.gold, letterSpacing: 3, marginBottom: 14 }}>4147 8293 0012 7744</div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div><div style={{ fontSize: 7, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>CARDHOLDER</div><div style={{ fontSize: 10, color: C.tx, fontFamily: F.b }}>MATEUS SILVA</div></div>
+          <div><div style={{ fontSize: 7, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>EXPIRES</div><div style={{ fontSize: 10, color: C.tx, fontFamily: F.m }}>09/29</div></div>
+        </div>
+      </div>
+      <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 8 }}>ACTIVE VIRTUAL CARDS</div>
+      {[
+        { merchant: "Delta Air Lines", card: "•••• 8293", exp: "Expires in 45 min", status: "Active" },
+        { merchant: "Amazon.com", card: "•••• 1057", exp: "Single-use", status: "Used" },
+      ].map((vc, i) => (
+        <div key={i} style={{ padding: 10, borderRadius: 10, background: C.sf, border: `1px solid ${C.bd}`, marginBottom: 5, display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 6, height: 6, borderRadius: 3, background: i === 0 ? C.grn : C.txF }} />
+          <div style={{ flex: 1 }}><div style={{ fontSize: 11, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>{vc.merchant}</div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.m }}>{vc.card} · {vc.exp}</div></div>
+        </div>
+      ))}
+      <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 8, marginTop: 14 }}>FUNDING METHODS</div>
+      {[
+        { type: "Debit", name: "Chase •••• 4821", primary: true },
+        { type: "Credit", name: "Amex •••• 1002", primary: false },
+      ].map((fm, i) => (
+        <div key={i} style={{ padding: 10, borderRadius: 10, background: i === 0 ? C.gG : C.sf, border: `1px solid ${i === 0 ? C.gB : C.bd}`, marginBottom: 5, display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 11, color: i === 0 ? C.gold : C.txS, fontFamily: F.b }}>{fm.type}</span>
+          <span style={{ fontSize: 11, color: C.txM, fontFamily: F.m, flex: 1 }}>{fm.name}</span>
+          {fm.primary && <span style={{ fontSize: 7, color: C.gold, fontFamily: F.b, padding: "2px 5px", borderRadius: 4, background: `${C.gold}10` }}>PRIMARY</span>}
+        </div>
+      ))}
+    </div>
+  );
+
+  const RulesScreen = () => (
+    <div style={{ flex: 1, padding: "10px 14px", overflow: "auto" }}>
+      <div style={{ fontSize: 15, color: C.tx, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Spending rules</div>
+      <div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginBottom: 12 }}>Global limits + per-agent overrides</div>
+      <div style={{ padding: 12, borderRadius: 12, background: C.gG, border: `1px solid ${C.gB}`, marginBottom: 10 }}>
+        <div style={{ fontSize: 9, color: C.goldM, fontFamily: F.b, letterSpacing: 2, marginBottom: 6 }}>GLOBAL DEFAULTS</div>
+        {[["Max per transaction", "$500"], ["Daily cap", "$2,000"], ["Auto-approve under", "$50"]].map(([l, v], i) => (
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: i < 2 ? `1px solid ${C.gold}08` : "none" }}>
+            <span style={{ fontSize: 11, color: C.txS, fontFamily: F.b }}>{l}</span>
+            <span style={{ fontSize: 11, color: C.gold, fontFamily: F.m, fontWeight: 500 }}>{v}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 6 }}>AGENT OVERRIDES</div>
+      {[
+        { icon: "🌴", name: "Poke", auto: "$75", max: "$500", color: C.pk },
+        { icon: "🛒", name: "Instacart AI", auto: "$200", max: "$300", color: C.blu },
+      ].map((a, i) => (
+        <div key={i} style={{ padding: 10, borderRadius: 10, background: C.sf, border: `1px solid ${C.bd}`, marginBottom: 5 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+            <span style={{ fontSize: 12 }}>{a.icon}</span><span style={{ fontSize: 11, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>{a.name}</span>
+          </div>
+          <div style={{ display: "flex", gap: 6 }}>
+            <div style={{ flex: 1, padding: "4px 6px", borderRadius: 5, background: C.gG }}><div style={{ fontSize: 7, color: C.txF, fontFamily: F.b }}>AUTO</div><div style={{ fontSize: 10, color: C.gold, fontFamily: F.m }}>{a.auto}</div></div>
+            <div style={{ flex: 1, padding: "4px 6px", borderRadius: 5, background: "rgba(255,255,255,0.02)" }}><div style={{ fontSize: 7, color: C.txF, fontFamily: F.b }}>MAX</div><div style={{ fontSize: 10, color: C.txS, fontFamily: F.m }}>{a.max}</div></div>
+          </div>
+        </div>
+      ))}
+      <div style={{ padding: 10, borderRadius: 10, background: C.redS, border: `1px solid ${C.red}08`, marginTop: 8 }}>
+        <div style={{ fontSize: 9, color: C.red, fontFamily: F.b, letterSpacing: 2, marginBottom: 4 }}>BLOCKED CATEGORIES</div>
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>{["Gambling", "Crypto", "Adult content"].map(c => <span key={c} style={{ padding: "3px 8px", borderRadius: 5, background: `${C.red}10`, fontSize: 9, color: C.red, fontFamily: F.b }}>{c}</span>)}</div>
+      </div>
+      <div style={{ padding: 10, borderRadius: 10, background: C.grnS, border: `1px solid ${C.grn}08`, marginTop: 6 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 5 }}><Chk s={10} c={C.grn}/><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Smart suggestion</span></div>
+        <div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginTop: 3, lineHeight: 1.4 }}>Based on your Poke spending, raise auto-approve to $75? You've approved 12 transactions under $75 this month.</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ maxWidth: 1060, margin: "0 auto", padding: "72px 20px 60px" }}>
+      <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>THE TALLY APP</Lbl>
+        <h2 style={{ fontFamily: F.b, fontSize: 32, fontWeight: 300, color: C.tx, letterSpacing: -0.5, marginBottom: 6 }}>
+          Your <span style={{ fontFamily: F.d, fontStyle: "italic", color: C.gold }}>agent control center</span>
+        </h2>
+        <p style={{ fontFamily: F.b, fontSize: 13, color: C.txM, maxWidth: 480, margin: "0 auto" }}>
+          Every agent. Every transaction. Every rule. One app. Downloaded at first purchase, essential by the third.
+        </p>
+      </div>
+      <div style={{ display: "flex", gap: 40, justifyContent: "center", alignItems: "flex-start" }}>
+        <Phone label="Tally" labelColor={C.gold} glow="gold">
+          <div style={{ padding: "4px 14px 6px", display: "flex", alignItems: "center", gap: 6 }}>
+            <Shield s={12} c={C.gold} /><span style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Tally</span>
+          </div>
+          {screen === "home" && <HomeScreen />}
+          {screen === "agents" && <AgentsScreen />}
+          {screen === "card" && <CardScreen />}
+          {screen === "rules" && <RulesScreen />}
+          <AppNav />
+        </Phone>
+        <div style={{ maxWidth: 380, paddingTop: 40 }}>
+          {[
+            { id: "home", title: "Dashboard", desc: "Tally Balance, monthly spend, recent transactions across all agents. See everything at a glance.", color: C.gold, features: ["Real-time transaction feed", "Spending by agent", "Monthly analytics"] },
+            { id: "agents", title: "Connected Agents", desc: "Every agent using your Tally. See trust scores, spending history, and per-agent limits.", color: C.grn, features: ["Trust scores per agent", "Spending & transaction count", "Per-agent limit overrides"] },
+            { id: "card", title: "Tally Card", desc: "Physical + virtual card. See active virtual cards issued for each purchase. Manage funding methods.", color: C.blu, features: ["Virtual cards self-destruct after use", "Card never exposed to agents", "Primary + backup funding"] },
+            { id: "rules", title: "Smart Rules", desc: "Global defaults + per-agent overrides. Tally suggests smarter limits based on your behavior.", color: C.purple, features: ["Auto-approve thresholds", "Blocked categories", "AI-powered suggestions"] },
+          ].map((s, i) => (
+            <div key={s.id} onClick={() => setScreen(s.id)} style={{ padding: 16, borderRadius: 14, background: screen === s.id ? `${s.color}06` : "transparent", border: `1px solid ${screen === s.id ? s.color + "15" : "transparent"}`, cursor: "pointer", marginBottom: 6, transition: "all 0.3s ease" }}>
+              <div style={{ fontSize: 13, color: screen === s.id ? s.color : C.txM, fontFamily: F.b, fontWeight: 600, marginBottom: 3 }}>{s.title}</div>
+              <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5, marginBottom: screen === s.id ? 8 : 0 }}>{screen === s.id ? s.desc : ""}</div>
+              {screen === s.id && <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                {s.features.map((f, fi) => <div key={fi} style={{ display: "flex", alignItems: "center", gap: 5 }}><Chk s={9} c={s.color} /><span style={{ fontSize: 10, color: C.txS, fontFamily: F.b }}>{f}</span></div>)}
+              </div>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════
@@ -676,13 +1015,14 @@ export default function TallyDemo() {
             <div style={{ maxWidth: 1100, margin: "0 auto", padding: "10px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={11} c={C.bg}/></div><span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tally</span></div>
               <div style={{ display: "flex", gap: 2 }}>
-                {[{ id: "ba", l: "Before & After" }, { id: "dev", l: "Developers" }, { id: "comp", l: "Competitors" }, { id: "vision", l: "Vision" }].map(t => (
+                {[{ id: "ba", l: "Before & After" }, { id: "app", l: "Tally App" }, { id: "dev", l: "Developers" }, { id: "comp", l: "Competitors" }, { id: "vision", l: "Vision" }].map(t => (
                   <button key={t.id} onClick={() => setView(t.id)} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: view === t.id ? C.gG : "transparent", color: view === t.id ? C.gold : C.txM, fontSize: 11.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{t.l}</button>
                 ))}
               </div>
             </div>
           </div>
           {view === "ba" && <BeforeAfterTab />}
+          {view === "app" && <TallyAppTab />}
           {view === "dev" && <DevTab />}
           {view === "comp" && <CompTab />}
           {view === "vision" && <VisionTab />}
