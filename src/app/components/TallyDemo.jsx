@@ -43,7 +43,7 @@ const Phone = ({ children, label, labelColor = C.txF, glow }) => (
       {glow === "gold" && <Shield s={10} c={C.gold} />}
       <span style={{ fontSize: 9, color: labelColor, fontFamily: F.b, letterSpacing: 3, textTransform: "uppercase", fontWeight: 600 }}>{label}</span>
     </div>
-    <div style={{ background: "#0D0D0D", borderRadius: 36, padding: 6, border: `1px solid ${glow === "gold" ? `${C.gold}15` : (glow === "red" ? `${C.red}10` : "rgba(255,255,255,0.06)")}`, boxShadow: `0 32px 64px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.06) inset${glow === "gold" ? `, 0 0 40px ${C.gG}` : ""}`, width: 300, flexShrink: 0 }}>
+    <div style={{ background: "#0D0D0D", borderRadius: 36, padding: 6, border: `1px solid ${glow === "gold" ? `${C.gold}15` : (glow === "red" ? `${C.red}10` : "rgba(255,255,255,0.06)")}`, boxShadow: `0 32px 64px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.06) inset${glow === "gold" ? `, 0 0 40px ${C.gG}` : ""}`, width: "min(300px, 80vw)", flexShrink: 0 }}>
       <div style={{ background: C.bg, borderRadius: 31, overflow: "hidden", height: 560, display: "flex", flexDirection: "column" }}>
         <div style={{ padding: "9px 18px 3px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 11.5, fontFamily: F.b, fontWeight: 600, color: C.tx }}>9:41</span>
@@ -64,6 +64,13 @@ const Btn = ({ children, onClick, primary, style }) => (<button onClick={onClick
 // ═══════════════════════════════════════════════
 // TAB 1: BEFORE & AFTER
 // ═══════════════════════════════════════════════
+
+function useIsMobile(bp = 768) {
+  const [m, setM] = useState(false);
+  useEffect(() => { const c = () => setM(window.innerWidth < bp); c(); window.addEventListener("resize", c); return () => window.removeEventListener("resize", c); }, [bp]);
+  return m;
+}
+
 const SCENARIOS = [{ id: "first", label: "First Purchase", maxStep: 11 }, { id: "repeat", label: "Repeat Purchase", maxStep: 5 }, { id: "second", label: "Second Agent", maxStep: 5 }];
 
 function WithoutTally({ scenario, step }) {
@@ -268,12 +275,13 @@ function WithTally({ scenario, step }) {
 }
 
 function BeforeAfterTab() {
+  const mob = useIsMobile(); const [phoneView, setPhoneView] = useState("with");
   const [scIdx, setScIdx] = useState(0); const [step, setStep] = useState(0); const [playing, setPlaying] = useState(false); const sc = SCENARIOS[scIdx];
   useEffect(() => { setStep(0); setPlaying(false); }, [scIdx]);
   useEffect(() => { if (!playing || step >= sc.maxStep) { setPlaying(false); return; } const t = setTimeout(() => setStep(s => s + 1), 1400); return () => clearTimeout(t); }, [playing, step, sc.maxStep]);
   const done = step >= sc.maxStep;
   return (<div style={{ maxWidth: 1060, margin: "0 auto", padding: "72px 20px 60px" }}>
-    <div style={{ textAlign: "center", marginBottom: 22 }}><h1 style={{ fontFamily: F.b, fontSize: 34, fontWeight: 300, color: C.tx, letterSpacing: -1, marginBottom: 6 }}>Same request. <span style={{ fontFamily: F.d, color: C.gold }}>Completely different.</span></h1></div>
+    <div style={{ textAlign: "center", marginBottom: 22 }}><h1 style={{ fontFamily: F.b, fontSize: mob ? 22 : 34, fontWeight: 300, color: C.tx, letterSpacing: -1, marginBottom: 6 }}>Same request. <span style={{ fontFamily: F.d, color: C.gold }}>Completely different.</span></h1></div>
     <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 18 }}>{SCENARIOS.map((s, i) => <button key={s.id} onClick={() => setScIdx(i)} style={{ padding: "8px 20px", borderRadius: 10, border: "none", background: scIdx === i ? C.gG : "transparent", color: scIdx === i ? C.gold : C.txM, fontSize: 12.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{s.label}</button>)}</div>
     <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 18 }}>
       <button onClick={() => { setStep(0); setPlaying(false); }} style={{ padding: "7px 16px", borderRadius: 8, border: `1px solid ${C.bd}`, background: "transparent", color: C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>Reset</button>
@@ -282,12 +290,22 @@ function BeforeAfterTab() {
       <button onClick={() => setStep(sc.maxStep)} style={{ padding: "7px 16px", borderRadius: 8, border: `1px solid ${C.bd}`, background: "transparent", color: C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>Show all</button>
     </div>
     <div style={{ display: "flex", gap: 5, justifyContent: "center", marginBottom: 22 }}>{Array.from({ length: sc.maxStep + 1 }).map((_, i) => <div key={i} onClick={() => { setStep(i); setPlaying(false); }} style={{ width: i === step ? 20 : 6, height: 6, borderRadius: 3, cursor: "pointer", background: i <= step ? C.gold : C.bd, opacity: i <= step ? (i === step ? 1 : 0.45) : 0.25, transition: "all 0.3s ease" }} />)}</div>
-    <div style={{ display: "flex", justifyContent: "center", gap: 28, alignItems: "flex-start" }}>
-      <Phone label="Without Tally" labelColor={C.red} glow="red"><WithoutTally scenario={sc.id} step={step} /></Phone>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 60, gap: 8 }}><div style={{ width: 1, height: 100, background: `linear-gradient(180deg, transparent, ${C.bd}, ${C.gold}20, ${C.bd}, transparent)` }} /><div style={{ fontSize: 10, color: C.txF, fontFamily: F.b, letterSpacing: 3, writingMode: "vertical-rl" }}>VS</div><div style={{ width: 1, height: 100, background: `linear-gradient(180deg, transparent, ${C.bd}, ${C.gold}20, ${C.bd}, transparent)` }} /></div>
-      <Phone label="With Tally" labelColor={C.gold} glow="gold"><WithTally scenario={sc.id} step={step} /></Phone>
-    </div>
-    {done && <div style={{ marginTop: 28, display: "flex", gap: 10, justifyContent: "center" }}>{(scIdx === 0 ? [["Time","8–15 min","~30 sec"],["Switches","4","0"],["Card exposed","Yes","Never"],["Steps","10","3"]] : scIdx === 1 ? [["Effort","Manual","Zero"],["Switches","2","0"],["Time","1–2 min","0 sec"]] : [["Setup","Full redo","1 tap"],["Cards","Re-enter","Inherited"],["Friction","Maximum","Zero"]]).map(([l,b,a],i) => (<div key={i} style={{ flex: 1, maxWidth: 180 }}><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 6, textAlign: "center" }}>{l.toUpperCase()}</div><div style={{ display: "flex", gap: 5 }}><div style={{ flex: 1, padding: "7px 8px", borderRadius: 8, background: C.redS, border: `1px solid ${C.red}10`, textAlign: "center" }}><span style={{ fontSize: 12, color: C.red, fontFamily: F.m, fontWeight: 500 }}>{b}</span></div><div style={{ flex: 1, padding: "7px 8px", borderRadius: 8, background: C.gG, border: `1px solid ${C.gB}`, textAlign: "center" }}><span style={{ fontSize: 12, color: C.grn, fontFamily: F.m, fontWeight: 500 }}>{a}</span></div></div></div>))}</div>}
+    {mob ? (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
+          <button onClick={() => setPhoneView("without")} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: phoneView === "without" ? `${C.red}15` : "transparent", color: phoneView === "without" ? C.red : C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>✕ Without Tally</button>
+          <button onClick={() => setPhoneView("with")} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: phoneView === "with" ? C.gG : "transparent", color: phoneView === "with" ? C.gold : C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>🛡 With Tally</button>
+        </div>
+        {phoneView === "without" ? <Phone label="Without Tally" labelColor={C.red} glow="red"><WithoutTally scenario={sc.id} step={step} /></Phone> : <Phone label="With Tally" labelColor={C.gold} glow="gold"><WithTally scenario={sc.id} step={step} /></Phone>}
+      </div>
+    ) : (
+      <div style={{ display: "flex", justifyContent: "center", gap: 28, alignItems: "flex-start" }}>
+        <Phone label="Without Tally" labelColor={C.red} glow="red"><WithoutTally scenario={sc.id} step={step} /></Phone>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 60, gap: 8 }}><div style={{ width: 1, height: 100, background: `linear-gradient(180deg, transparent, ${C.bd}, ${C.gold}20, ${C.bd}, transparent)` }} /><div style={{ fontSize: 10, color: C.txF, fontFamily: F.b, letterSpacing: 3, writingMode: "vertical-rl" }}>VS</div><div style={{ width: 1, height: 100, background: `linear-gradient(180deg, transparent, ${C.bd}, ${C.gold}20, ${C.bd}, transparent)` }} /></div>
+        <Phone label="With Tally" labelColor={C.gold} glow="gold"><WithTally scenario={sc.id} step={step} /></Phone>
+      </div>
+    )}
+    {done && <div style={{ marginTop: 28, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>{(scIdx === 0 ? [["Time","8–15 min","~30 sec"],["Switches","4","0"],["Card exposed","Yes","Never"],["Steps","10","3"]] : scIdx === 1 ? [["Effort","Manual","Zero"],["Switches","2","0"],["Time","1–2 min","0 sec"]] : [["Setup","Full redo","1 tap"],["Cards","Re-enter","Inherited"],["Friction","Maximum","Zero"]]).map(([l,b,a],i) => (<div key={i} style={{ flex: 1, maxWidth: 180 }}><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 6, textAlign: "center" }}>{l.toUpperCase()}</div><div style={{ display: "flex", gap: 5 }}><div style={{ flex: 1, padding: "7px 8px", borderRadius: 8, background: C.redS, border: `1px solid ${C.red}10`, textAlign: "center" }}><span style={{ fontSize: 12, color: C.red, fontFamily: F.m, fontWeight: 500 }}>{b}</span></div><div style={{ flex: 1, padding: "7px 8px", borderRadius: 8, background: C.gG, border: `1px solid ${C.gB}`, textAlign: "center" }}><span style={{ fontSize: 12, color: C.grn, fontFamily: F.m, fontWeight: 500 }}>{a}</span></div></div></div>))}</div>}
     {done && scIdx < 2 && <div style={{ textAlign: "center", marginTop: 20 }}><Btn primary onClick={() => setScIdx(s => s + 1)}>Next: {SCENARIOS[scIdx + 1].label} →</Btn></div>}
   </div>);
 }
@@ -299,17 +317,18 @@ const Kw=({children})=><span style={{color:"#C792EA"}}>{children}</span>;const F
 const Code = ({ children, label }) => <div style={{ background: "#08080A", borderRadius: 14, padding: "16px 18px", border: `1px solid ${C.bd}`, fontFamily: F.m, fontSize: 11.5, lineHeight: 1.8, color: "#C5C0B8", whiteSpace: "pre", overflow: "auto" }}>{label && <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>{label}</div>}{children}</div>;
 
 function DevTab() {
+  const mob = useIsMobile();
   const [tab, setTab] = useState("code");
   return <div style={{ maxWidth: 920, margin: "0 auto", padding: "72px 0 80px" }}>
-    <div style={{ textAlign: "center", marginBottom: 32 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>FOR DEVELOPERS</Lbl><h2 style={{ fontFamily: F.b, fontSize: 30, fontWeight: 300, color: C.tx }}>30 minutes. Two API calls. <span style={{ fontFamily: F.d, color: C.gold }}>Zero cost.</span></h2></div>
+    <div style={{ textAlign: "center", marginBottom: 32 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>FOR DEVELOPERS</Lbl><h2 style={{ fontFamily: F.b, fontSize: mob ? 20 : 30, fontWeight: 300, color: C.tx }}>30 minutes. Two API calls. <span style={{ fontFamily: F.d, color: C.gold }}>Zero cost.</span></h2></div>
     <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 24 }}>{[{ id: "code", l: "Integration" }, { id: "value", l: "Value Exchange" }].map(t => <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: "8px 20px", borderRadius: 10, border: "none", background: tab === t.id ? C.gG : "transparent", color: tab === t.id ? C.gold : C.txM, fontSize: 12.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{t.l}</button>)}</div>
-    {tab === "code" && <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+    {tab === "code" && <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 12 }}>
       <Code label="1 · Initialize"><Kw>import</Kw> {"{ "}<Tp>TallyConnect</Tp>{" }"} <Kw>from</Kw> <Str>'@tally-pay/connect'</Str>{"\n\n"}<Kw>const</Kw> <Pr>tally</Pr> = <Kw>new</Kw> <Fn2>TallyConnect</Fn2>({`{\n  `}<Pr>apiKey</Pr>: <Str>'pk_live_...'</Str>,{`\n  `}<Pr>agentName</Pr>: <Str>'Poke'</Str>{`\n}`})</Code>
       <Code label="2 · Request payment"><Kw>const</Kw> <Pr>payment</Pr> = <Kw>await</Kw> <Pr>tally</Pr>.<Fn2>requestPayment</Fn2>({`{\n  `}<Pr>consumerId</Pr>: <Str>'user_abc123'</Str>,{`\n  `}<Pr>amount</Pr>: <Nm>34200</Nm>,{`\n  `}<Pr>merchant</Pr>: <Str>'Delta Air Lines'</Str>{`\n}`})</Code>
       <Code label="3 · Handle response"><Kw>if</Kw> (<Pr>payment</Pr>.<Pr>status</Pr> === <Str>'approved'</Str>) {`{\n  `}<Kw>await</Kw> <Fn2>checkout</Fn2>(<Pr>payment</Pr>.<Pr>card</Pr>){`\n  `}<Kw>await</Kw> <Pr>tally</Pr>.<Fn2>confirm</Fn2>(<Pr>payment</Pr>.<Pr>id</Pr>){`\n}`}</Code>
       <Code label="4 · Webhooks"><Cm>{"// payment.approved → card ready"}</Cm>{"\n"}<Cm>{"// payment.completed → settled"}</Cm>{"\n"}<Cm>{"// payment.declined → reason"}</Cm></Code>
     </div>}
-    {tab === "value" && <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+    {tab === "value" && <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 14 }}>
       <Surf gold style={{ padding: 26 }}><div style={{ fontSize: 15, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 14 }}>Developer gets</div>{["Payment capability — free", "No PCI-DSS", "No fraud liability", "80M+ merchants via Visa", "Co-branded trust signal"].map((it,i) => <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 9 }}><Chk s={12} c={C.grn}/><span style={{ fontSize: 13, color: C.tx, fontFamily: F.b }}>{it}</span></div>)}</Surf>
       <Surf style={{ padding: 26 }}><div style={{ fontSize: 15, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 14 }}>Tally earns</div>{["1.5–2% interchange (not shared)", "Consumer at $0 CAC", "Trust data per transaction", "Brand recognition"].map((it,i) => <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 9 }}><div style={{ width: 5, height: 5, borderRadius: 3, background: C.gold, opacity: 0.4, flexShrink: 0 }}/><span style={{ fontSize: 13, color: C.txS, fontFamily: F.b }}>{it}</span></div>)}</Surf>
     </div>}
@@ -330,9 +349,10 @@ const COMPETITORS = [
 ];
 
 function CompTab() {
+  const mob = useIsMobile();
   const [open, setOpen] = useState(null);
   return <div style={{ maxWidth: 880, margin: "0 auto", padding: "72px 20px 80px" }}>
-    <div style={{ textAlign: "center", marginBottom: 28 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>COMPETITIVE LANDSCAPE</Lbl><h2 style={{ fontFamily: F.b, fontSize: 30, fontWeight: 300, color: C.tx, marginBottom: 6 }}>What if Poke chose <span style={{ fontFamily: F.d, color: C.gold }}>something else?</span></h2></div>
+    <div style={{ textAlign: "center", marginBottom: 28 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>COMPETITIVE LANDSCAPE</Lbl><h2 style={{ fontFamily: F.b, fontSize: mob ? 20 : 30, fontWeight: 300, color: C.tx, marginBottom: 6 }}>What if Poke chose <span style={{ fontFamily: F.d, color: C.gold }}>something else?</span></h2></div>
     <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 24 }}>
       {COMPETITORS.map((c, i) => <div key={i} style={{ borderRadius: 16, border: `1px solid ${open === i ? c.color + "30" : C.bd}`, background: open === i ? `${c.color}04` : C.sf, overflow: "hidden" }}>
         <div onClick={() => setOpen(open === i ? null : i)} style={{ padding: "16px 20px", cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
@@ -423,6 +443,7 @@ function fmt(n) { return n >= 10000 ? `$${(n/1000).toFixed(0)}B` : n >= 1000 ? `
 function fmtN(n) { return n >= 1000 ? `${(n/1000).toFixed(0)}M` : n >= 1 ? `${Math.round(n)}K` : `${n}`; }
 
 function VisionTab() {
+  const mob = useIsMobile();
   const [activePhase, setActivePhase] = useState(0);
   const [directView, setDirectView] = useState("how");
   const [hoveredYr, setHoveredYr] = useState(null);
@@ -447,7 +468,7 @@ function VisionTab() {
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
           <Lbl style={{ letterSpacing: 4, color: C.txF }}>KEY ASSUMPTIONS</Lbl>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "repeat(2, 1fr)" : "repeat(6, 1fr)", gap: 10 }}>
           {[
             { l: "Conversion", v: "72-90%", d: "Only way to checkout" },
             { l: "Monthly spend", v: "$450-3.8K", d: "8% to 63% of household" },
@@ -474,7 +495,7 @@ function VisionTab() {
           </div>
         </div>
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: F.b, fontSize: 11 }}>
+          <table style={{ width: "100%", minWidth: 700, borderCollapse: "collapse", fontFamily: F.b, fontSize: 11 }}>
             <thead><tr style={{ borderBottom: `1px solid ${C.bd}` }}>
               {["", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Yr 5", "Yr 6", "Yr 7"].map((h, i) => (
                 <th key={i} style={{ padding: "8px 10px", textAlign: i === 0 ? "left" : "right", color: C.txF, fontWeight: 500, fontSize: 10, letterSpacing: 1 }}>{h}</th>
@@ -587,7 +608,7 @@ function VisionTab() {
       {/* ─── PER-USER ECONOMICS ─── */}
       <Surf gold style={{ padding: "18px 22px", marginBottom: 20 }}>
         <Lbl style={{ marginBottom: 12, letterSpacing: 4, color: C.goldM }}>REVENUE PER USER — HOW IT COMPOUNDS</Lbl>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "repeat(4, 1fr)", gap: 12 }}>
           {[
             { yr: "Year 1", rev: calcRevenue(MODEL[0]).total / MODEL[0].uniq * 1e3, layers: "Interchange only", color: C.gold, phase: "Phase 1" },
             { yr: "Year 3", rev: calcRevenue(MODEL[2]).total / MODEL[2].uniq * 1e3, layers: "+ Direct + Premium", color: C.grn, phase: "Phase 2" },
@@ -611,7 +632,7 @@ function VisionTab() {
       {/* ─── BANK COMPARABLES ─── */}
       <Surf style={{ padding: "18px 22px", marginBottom: 20 }}>
         <Lbl style={{ marginBottom: 12, letterSpacing: 4, color: C.txF }}>HOW TALLY COMPARES TO BANKS AT SCALE</Lbl>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "repeat(4, 1fr)", gap: 12 }}>
           {[
             { name: "JPMorgan Chase", users: "80M", arpu: "~$750", color: C.txM, note: "Full-service bank" },
             { name: "Nubank", users: "100M", arpu: "~$50", color: C.txM, note: "Digital bank, LatAm" },
@@ -683,7 +704,7 @@ function VisionTab() {
           </>}
 
           {directView === "merchant" && <>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+            <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 12, marginBottom: 14 }}>
               <div style={{ padding: 16, borderRadius: 14, background: C.redS, border: `1px solid ${C.red}10` }}>
                 <div style={{ fontSize: 12, color: C.red, fontFamily: F.b, fontWeight: 600, marginBottom: 8 }}>What merchants pay today</div>
                 {[["Stripe", "2.9% + 30¢"], ["Adyen", "2.2% + 12¢"], ["Square", "2.6% + 10¢"], ["PayPal", "3.49% + 49¢"]].map(([n, f], i) => (
@@ -705,7 +726,7 @@ function VisionTab() {
           </>}
 
           {directView === "economics" && <>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 12, marginBottom: 12 }}>
               <div style={{ padding: 14, borderRadius: 12, background: C.gG, border: `1px solid ${C.gB}` }}>
                 <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 4 }}>VIA VISA RAILS</div>
                 <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.55 }}>Gross: 1.5–2% interchange<br />Lithic + network: –40%<br />Net: <span style={{ color: C.gold, fontWeight: 600 }}>~1% to Tally</span></div>
@@ -728,7 +749,7 @@ function VisionTab() {
           <div style={{ fontSize: 12, color: C.txS, fontFamily: F.b, lineHeight: 1.65, marginBottom: 14 }}>
             {fmtN(MODEL[3].uniq)} consumers, ${MODEL[3].vol.toFixed(0)}B volume, {MODEL[3].merchants.toLocaleString()} Direct merchants. Tally launches products built on the richest behavioral data in commerce.
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 10 }}>
             {[
               { icon: "💳", title: "Tally Card", desc: `Physical + virtual debit. ${MODEL[3].cardPct}% adoption by Yr 4. ~$45/user/yr card interchange.`, metric: `${fmtN(MODEL[3].uniq * MODEL[3].cardPct / 100)} holders` },
               { icon: "💰", title: "Tally Balance", desc: `Hold funds, earn yield, instant agent funding. ${MODEL[3].balPct}% adoption, avg $${MODEL[3].avgBal.toLocaleString()} balance.`, metric: `${fmt(calcRevenue(MODEL[3]).floatRev)} yield rev` },
@@ -752,7 +773,7 @@ function VisionTab() {
           <div style={{ fontSize: 12, color: C.txS, fontFamily: F.b, lineHeight: 1.65, marginBottom: 14 }}>
             {fmtN(MODEL[6].uniq)} consumers. ${MODEL[6].vol.toFixed(0)}B volume. {MODEL[6].merchants.toLocaleString()} Direct merchants. Apply for bank charter Year 4, live by Year 5. In the AI era, financial infrastructure moves at software speed.
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
             {[
               { title: "Deposits", desc: `${MODEL[6].depositPct}% of consumers hold avg $${(MODEL[6].avgDep/1000)}K. FDIC insured. 3.5% NIM.`, rev: fmt(calcRevenue(MODEL[6]).depositRev) + "/yr", color: C.purple },
               { title: "Lending", desc: `${MODEL[6].lendPct}% qualify for avg $${(MODEL[6].avgLoan/1000)}K loans. Agent data = best underwriting signal.`, rev: fmt(calcRevenue(MODEL[6]).lendRev) + "/yr", color: C.blu },
@@ -776,7 +797,7 @@ function VisionTab() {
       {/* ─── FLYWHEEL ─── */}
       <Surf gold style={{ padding: 22 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}><Shield s={14} c={C.gold} /><span style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Each phase funds the next</span></div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "repeat(4, 1fr)", gap: 10 }}>
           {[
             { n: "1", t: "Agents → Consumers", d: "Free SDK. $0 CAC. 65%+ convert because they must.", c: C.gold },
             { n: "2", t: "Volume → Direct", d: "Consumer base → merchants adopt. 0% fees. Skip Visa.", c: C.grn },
@@ -800,6 +821,7 @@ function VisionTab() {
 // TAB 5: TALLY APP
 // ═══════════════════════════════════════════════
 function TallyAppTab() {
+  const mob = useIsMobile();
   const [screen, setScreen] = useState("home");
   const navItems = [
     { id: "home", icon: "⌂", label: "Home" },
@@ -826,7 +848,7 @@ function TallyAppTab() {
         <div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>TALLY BALANCE</div><div style={{ fontSize: 26, fontFamily: F.d, color: C.gold }}>$2,847</div></div>
         <div style={{ width: 32, height: 32, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={15} c={C.bg}/></div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 6, marginBottom: 14 }}>
         <div style={{ padding: 10, borderRadius: 10, background: C.gG, border: `1px solid ${C.gB}` }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>THIS MONTH</div><div style={{ fontSize: 16, fontFamily: F.d, color: C.tx, marginTop: 2 }}>$3,420</div><div style={{ fontSize: 9, color: C.grn, fontFamily: F.b, marginTop: 1 }}>32 transactions</div></div>
         <div style={{ padding: 10, borderRadius: 10, background: C.sf, border: `1px solid ${C.bd}` }}><div style={{ fontSize: 8, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>AGENTS</div><div style={{ fontSize: 16, fontFamily: F.d, color: C.tx, marginTop: 2 }}>4</div><div style={{ fontSize: 9, color: C.gold, fontFamily: F.b, marginTop: 1 }}>connected</div></div>
       </div>
@@ -956,14 +978,14 @@ function TallyAppTab() {
     <div style={{ maxWidth: 1060, margin: "0 auto", padding: "72px 20px 60px" }}>
       <div style={{ textAlign: "center", marginBottom: 28 }}>
         <Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>THE TALLY APP</Lbl>
-        <h2 style={{ fontFamily: F.b, fontSize: 32, fontWeight: 300, color: C.tx, letterSpacing: -0.5, marginBottom: 6 }}>
+        <h2 style={{ fontFamily: F.b, fontSize: mob ? 22 : 32, fontWeight: 300, color: C.tx, letterSpacing: -0.5, marginBottom: 6 }}>
           Your <span style={{ fontFamily: F.d, color: C.gold }}>agent control center</span>
         </h2>
         <p style={{ fontFamily: F.b, fontSize: 13, color: C.txM, maxWidth: 480, margin: "0 auto" }}>
           Every agent. Every transaction. Every rule. One app. Downloaded at first purchase, essential by the third.
         </p>
       </div>
-      <div style={{ display: "flex", gap: 40, justifyContent: "center", alignItems: "flex-start" }}>
+      <div style={{ display: "flex", flexDirection: mob ? "column" : "row", gap: mob ? 20 : 40, justifyContent: "center", alignItems: mob ? "center" : "flex-start" }}>
         <Phone label="Tally" labelColor={C.gold} glow="gold">
           <div style={{ padding: "4px 14px 6px", display: "flex", alignItems: "center", gap: 6 }}>
             <Shield s={12} c={C.gold} /><span style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Tally</span>
@@ -974,7 +996,7 @@ function TallyAppTab() {
           {screen === "rules" && <RulesScreen />}
           <AppNav />
         </Phone>
-        <div style={{ maxWidth: 380, paddingTop: 40 }}>
+        <div style={{ maxWidth: mob ? "100%" : 380, paddingTop: mob ? 0 : 40 }}>
           {[
             { id: "home", title: "Dashboard", desc: "Tally Balance, monthly spend, recent transactions across all agents. See everything at a glance.", color: C.gold, features: ["Real-time transaction feed", "Spending by agent", "Monthly analytics"] },
             { id: "agents", title: "Connected Agents", desc: "Every agent using your Tally. See trust scores, spending history, and per-agent limits.", color: C.grn, features: ["Trust scores per agent", "Spending & transaction count", "Per-agent limit overrides"] },
@@ -999,6 +1021,7 @@ function TallyAppTab() {
 // MAIN APP
 // ═══════════════════════════════════════════════
 export default function TallyDemo() {
+  const mob = useIsMobile();
   const [view, setView] = useState("ba");
   return (
     <>

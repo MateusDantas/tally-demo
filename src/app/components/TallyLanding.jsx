@@ -6,6 +6,12 @@ import { useState, useEffect, useRef } from "react";
 // Developer-first · Investor tab · Vision memo
 // ═══════════════════════════════════════════════════════════════
 
+function useIsMobile(bp = 768) {
+  const [m, setM] = useState(false);
+  useEffect(() => { const c = () => setM(window.innerWidth < bp); c(); window.addEventListener("resize", c); return () => window.removeEventListener("resize", c); }, [bp]);
+  return m;
+}
+
 const C = {
   gold: "#BFA36D", goldM: "#917A4A", goldL: "#D4C4A0",
   bg: "#050505", bgS: "#0A0A09",
@@ -68,6 +74,7 @@ function Stat({ value, label, sub, color = C.gold }) {
 // HERO
 // ═══════════════════════════════════════════════
 function Hero({ onNav }) {
+  const mob = useIsMobile();
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "0 24px", position: "relative" }}>
       {/* Subtle radial glow */}
@@ -94,7 +101,7 @@ function Hero({ onNav }) {
       </FadeIn>
 
       <FadeIn delay={0.45}>
-        <div style={{ display: "flex", gap: 12 }}>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
           <button onClick={() => onNav("dev")} style={{ padding: "14px 32px", borderRadius: 12, border: "none", background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, color: C.bg, fontSize: 14, fontFamily: F.b, fontWeight: 600, cursor: "pointer", letterSpacing: 0.3, boxShadow: `0 4px 24px ${C.gold}25` }}>
             Start building →
           </button>
@@ -105,7 +112,7 @@ function Hero({ onNav }) {
       </FadeIn>
 
       <FadeIn delay={0.6}>
-        <div style={{ display: "flex", gap: 40, marginTop: 80 }}>
+        <div style={{ display: "flex", gap: mob ? 24 : 40, marginTop: mob ? 48 : 80, flexWrap: "wrap", justifyContent: "center" }}>
           {[
             { v: "30 min", l: "integration" },
             { v: "3 lines", l: "to first payment" },
@@ -132,6 +139,7 @@ function Hero({ onNav }) {
 // DEVELOPERS
 // ═══════════════════════════════════════════════
 function DevSection() {
+  const mob = useIsMobile();
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
@@ -156,10 +164,10 @@ function DevSection() {
         </p>
       </FadeIn>
 
-      <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 32, alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "320px 1fr", gap: mob ? 20 : 32, alignItems: "start" }}>
         {/* Step selector */}
         <FadeIn delay={0.1}>
-          <div style={{ position: "sticky", top: 80, display: "flex", flexDirection: "column", gap: 4 }}>
+          <div style={{ position: mob ? "static" : "sticky", top: 80, display: "flex", flexDirection: "column", gap: 4 }}>
             {steps.map((s, i) => (
               <div key={i} onClick={() => setActiveStep(i)} style={{ padding: "16px 20px", borderRadius: 14, background: activeStep === i ? `${C.gold}08` : "transparent", border: `1px solid ${activeStep === i ? `${C.gold}15` : "transparent"}`, cursor: "pointer", transition: "all 0.3s ease" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -187,7 +195,7 @@ function DevSection() {
           <Code title={`Step ${activeStep + 1}: ${steps[activeStep].title}`}>{steps[activeStep].code}</Code>
 
           {/* What you get / what Tally handles */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 16, marginTop: 24 }}>
             <div style={{ padding: 24, borderRadius: 16, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
               <div style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 12 }}>What your agent gets</div>
               {["Payment capability at 80M+ merchants", "Single-use virtual Visa per transaction", "Consumer trust (they chose to allow you)", "Transaction confirmation & receipts", "Co-branded UX: 'YourApp Pay · powered by Tally'"].map((f, i) => (
@@ -209,7 +217,7 @@ function DevSection() {
           </div>
 
           {/* Integration metrics */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(3, 1fr)", gap: 12, marginTop: 24 }}>
             {[
               { v: "npm install", l: String.fromCharCode(64) + "tally-pay/connect", c: C.txS },
               { v: "0", l: "PCI requirements for you", c: C.grn },
@@ -231,6 +239,7 @@ function DevSection() {
 // INVESTORS
 // ═══════════════════════════════════════════════
 function InvestorSection() {
+  const mob = useIsMobile();
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "120px 24px" }}>
       <FadeIn>
@@ -248,7 +257,7 @@ function InvestorSection() {
 
       {/* Market stats */}
       <FadeIn delay={0.1}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 48 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "repeat(4, 1fr)", gap: 16, marginBottom: 48 }}>
           <Stat value="$3–5T" label="Agentic commerce by 2030" sub="McKinsey, Gartner" />
           <Stat value="<$100M" label="Total VC in agent payments" sub="Massive underfunding" color={C.red} />
           <Stat value="$0" label="Consumer acquisition cost" sub="Agents are the distribution" color={C.grn} />
@@ -258,7 +267,7 @@ function InvestorSection() {
 
       {/* The thesis */}
       <FadeIn delay={0.15}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 48 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 24, marginBottom: 48 }}>
           <div style={{ padding: 36, borderRadius: 20, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
             <div style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 16 }}>The thesis in four sentences</div>
             <div style={{ fontFamily: F.d, fontSize: 20, color: C.tx, lineHeight: 1.6 }}>
@@ -287,7 +296,7 @@ function InvestorSection() {
       <FadeIn delay={0.2}>
         <div style={{ marginBottom: 48 }}>
           <div style={{ fontSize: 13, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 20 }}>Revenue evolution — 7-year bottoms-up model</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(4, 1fr)", gap: 16 }}>
             {[
               { phase: "Phase 1", years: "Year 1", title: "Payment Rails", revenue: "$7M ARR", users: "130K", vol: "$702M", color: C.gold, desc: "Free SDK. Agents distribute. Interchange revenue. $0 CAC." },
               { phase: "Phase 2", years: "Years 2–3", title: "Tally Direct", revenue: "$634M ARR", users: "4.1M", vol: "$64B", color: C.grn, desc: "Skip Visa. Settle directly to merchants at 0% fees. 3x margin improvement." },
@@ -314,10 +323,10 @@ function InvestorSection() {
 
       {/* Per-user economics + comparables */}
       <FadeIn delay={0.25}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 24 }}>
           <div style={{ padding: 32, borderRadius: 20, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
             <div style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 20 }}>Revenue per user compounds 9×</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "1fr 1fr", gap: 16 }}>
               {[
                 { yr: "Year 1", arpu: "$54", layers: "Interchange", c: C.gold },
                 { yr: "Year 3", arpu: "$155", layers: "+ Direct + Premium", c: C.grn },
@@ -486,7 +495,7 @@ function VisionSection() {
 function Footer() {
   return (
     <div style={{ borderTop: `1px solid ${C.bd}`, padding: "48px 24px" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 24, height: 24, borderRadius: 7, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={12} c={C.bg}/></div>
           <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tally</span>
@@ -535,7 +544,7 @@ export default function TallyLanding() {
                 <div style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={11} c={C.bg}/></div>
                 <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tally</span>
               </div>
-              <div style={{ display: "flex", gap: 2 }}>
+              <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
                 {[
                   { id: "dev", l: "Developers" },
                   { id: "invest", l: "Investors" },
