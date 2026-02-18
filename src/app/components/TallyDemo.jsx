@@ -21,7 +21,7 @@ const C = {
   stripe: "#635BFF", visa: "#1A1F71", mc: "#EB001B", google: "#4285F4",
   purple: "#A78BFA", purpleS: "rgba(167,139,250,0.08)",
 };
-const F = { d: "var(--font-dm-serif), Georgia, serif", b: "var(--font-dm-sans), sans-serif", m: "var(--font-ibm-mono), monospace" };
+const F = { d: "var(--font-sora), 'DM Sans', sans-serif", b: "var(--font-dm-sans), sans-serif", m: "var(--font-ibm-mono), monospace" };
 
 // ─── ICONS ───
 const Shield = ({s=15,c=C.gold}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
@@ -273,7 +273,7 @@ function BeforeAfterTab() {
   useEffect(() => { if (!playing || step >= sc.maxStep) { setPlaying(false); return; } const t = setTimeout(() => setStep(s => s + 1), 1400); return () => clearTimeout(t); }, [playing, step, sc.maxStep]);
   const done = step >= sc.maxStep;
   return (<div style={{ maxWidth: 1060, margin: "0 auto", padding: "72px 20px 60px" }}>
-    <div style={{ textAlign: "center", marginBottom: 22 }}><h1 style={{ fontFamily: F.b, fontSize: 34, fontWeight: 300, color: C.tx, letterSpacing: -1, marginBottom: 6 }}>Same request. <span style={{ fontFamily: F.d, fontStyle: "italic", color: C.gold }}>Completely different.</span></h1></div>
+    <div style={{ textAlign: "center", marginBottom: 22 }}><h1 style={{ fontFamily: F.b, fontSize: 34, fontWeight: 300, color: C.tx, letterSpacing: -1, marginBottom: 6 }}>Same request. <span style={{ fontFamily: F.d, color: C.gold }}>Completely different.</span></h1></div>
     <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 18 }}>{SCENARIOS.map((s, i) => <button key={s.id} onClick={() => setScIdx(i)} style={{ padding: "8px 20px", borderRadius: 10, border: "none", background: scIdx === i ? C.gG : "transparent", color: scIdx === i ? C.gold : C.txM, fontSize: 12.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{s.label}</button>)}</div>
     <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 18 }}>
       <button onClick={() => { setStep(0); setPlaying(false); }} style={{ padding: "7px 16px", borderRadius: 8, border: `1px solid ${C.bd}`, background: "transparent", color: C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>Reset</button>
@@ -301,7 +301,7 @@ const Code = ({ children, label }) => <div style={{ background: "#08080A", borde
 function DevTab() {
   const [tab, setTab] = useState("code");
   return <div style={{ maxWidth: 920, margin: "0 auto", padding: "72px 0 80px" }}>
-    <div style={{ textAlign: "center", marginBottom: 32 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>FOR DEVELOPERS</Lbl><h2 style={{ fontFamily: F.b, fontSize: 30, fontWeight: 300, color: C.tx }}>30 minutes. Two API calls. <span style={{ fontFamily: F.d, fontStyle: "italic", color: C.gold }}>Zero cost.</span></h2></div>
+    <div style={{ textAlign: "center", marginBottom: 32 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>FOR DEVELOPERS</Lbl><h2 style={{ fontFamily: F.b, fontSize: 30, fontWeight: 300, color: C.tx }}>30 minutes. Two API calls. <span style={{ fontFamily: F.d, color: C.gold }}>Zero cost.</span></h2></div>
     <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 24 }}>{[{ id: "code", l: "Integration" }, { id: "value", l: "Value Exchange" }].map(t => <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: "8px 20px", borderRadius: 10, border: "none", background: tab === t.id ? C.gG : "transparent", color: tab === t.id ? C.gold : C.txM, fontSize: 12.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{t.l}</button>)}</div>
     {tab === "code" && <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
       <Code label="1 · Initialize"><Kw>import</Kw> {"{ "}<Tp>TallyConnect</Tp>{" }"} <Kw>from</Kw> <Str>'@tally-pay/connect'</Str>{"\n\n"}<Kw>const</Kw> <Pr>tally</Pr> = <Kw>new</Kw> <Fn2>TallyConnect</Fn2>({`{\n  `}<Pr>apiKey</Pr>: <Str>'pk_live_...'</Str>,{`\n  `}<Pr>agentName</Pr>: <Str>'Poke'</Str>{`\n}`})</Code>
@@ -332,7 +332,7 @@ const COMPETITORS = [
 function CompTab() {
   const [open, setOpen] = useState(null);
   return <div style={{ maxWidth: 880, margin: "0 auto", padding: "72px 20px 80px" }}>
-    <div style={{ textAlign: "center", marginBottom: 28 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>COMPETITIVE LANDSCAPE</Lbl><h2 style={{ fontFamily: F.b, fontSize: 30, fontWeight: 300, color: C.tx, marginBottom: 6 }}>What if Poke chose <span style={{ fontFamily: F.d, fontStyle: "italic", color: C.gold }}>something else?</span></h2></div>
+    <div style={{ textAlign: "center", marginBottom: 28 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>COMPETITIVE LANDSCAPE</Lbl><h2 style={{ fontFamily: F.b, fontSize: 30, fontWeight: 300, color: C.tx, marginBottom: 6 }}>What if Poke chose <span style={{ fontFamily: F.d, color: C.gold }}>something else?</span></h2></div>
     <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 24 }}>
       {COMPETITORS.map((c, i) => <div key={i} style={{ borderRadius: 16, border: `1px solid ${open === i ? c.color + "30" : C.bd}`, background: open === i ? `${c.color}04` : C.sf, overflow: "hidden" }}>
         <div onClick={() => setOpen(open === i ? null : i)} style={{ padding: "16px 20px", cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
@@ -435,7 +435,7 @@ function VisionTab() {
       <div style={{ textAlign: "center", marginBottom: 32 }}>
         <Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>BUSINESS MODEL & VISION</Lbl>
         <h2 style={{ fontFamily: F.b, fontSize: 32, fontWeight: 300, color: C.tx, letterSpacing: -0.5, marginBottom: 8 }}>
-          From payment rails to <span style={{ fontFamily: F.d, fontStyle: "italic", color: C.gold }}>the bank for agent commerce</span>
+          From payment rails to <span style={{ fontFamily: F.d, color: C.gold }}>the bank for agent commerce</span>
         </h2>
         <p style={{ fontFamily: F.b, fontSize: 14, color: C.txM, maxWidth: 580, margin: "0 auto" }}>
           Bottoms-up: agents → consumers → volume → stacking revenue layers. Seven years. AI moves fast.
@@ -957,7 +957,7 @@ function TallyAppTab() {
       <div style={{ textAlign: "center", marginBottom: 28 }}>
         <Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>THE TALLY APP</Lbl>
         <h2 style={{ fontFamily: F.b, fontSize: 32, fontWeight: 300, color: C.tx, letterSpacing: -0.5, marginBottom: 6 }}>
-          Your <span style={{ fontFamily: F.d, fontStyle: "italic", color: C.gold }}>agent control center</span>
+          Your <span style={{ fontFamily: F.d, color: C.gold }}>agent control center</span>
         </h2>
         <p style={{ fontFamily: F.b, fontSize: 13, color: C.txM, maxWidth: 480, margin: "0 auto" }}>
           Every agent. Every transaction. Every rule. One app. Downloaded at first purchase, essential by the third.
