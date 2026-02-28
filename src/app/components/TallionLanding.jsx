@@ -114,12 +114,12 @@ function Nav() {
 }
 
 // ═══════════════════════════════════════════════
-// 3D GOLD CARD
+// HERO CARD — TWO-LAYER PNG SYSTEM
 // ═══════════════════════════════════════════════
 function TallionCard() {
   const cardRef = useRef(null);
   const mob = useIsMobile();
-  const [rotation, setRotation] = useState({ x: 8, y: -12 });
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (mob) return;
@@ -131,98 +131,55 @@ function TallionCard() {
       const centerY = rect.top + rect.height / 2;
       const dx = (e.clientX - centerX) / rect.width;
       const dy = (e.clientY - centerY) / rect.height;
-      setRotation({ x: 8 - dy * 10, y: -12 + dx * 15 });
+      setRotation({ x: -dy * 5, y: dx * 8 });
     };
     window.addEventListener("mousemove", handleMouse);
     return () => window.removeEventListener("mousemove", handleMouse);
   }, [mob]);
 
-  const cardW = mob ? 300 : 380;
-  const cardH = mob ? 190 : 240;
+  const cardW = mob ? 340 : 500;
 
   return (
-    <div style={{ perspective: 1200, display: "flex", justifyContent: "center", alignItems: "center", animation: "fadeIn 1.2s ease 0.3s both" }}>
-      {/* Float wrapper */}
-      <div ref={cardRef} style={{ position: "relative", animation: mob ? "none" : "float 5s ease-in-out infinite" }}>
-        {/* Shadow below card */}
-        <div style={{
-          position: "absolute", bottom: -30, left: "50%", transform: "translateX(-50%)",
-          width: cardW * 0.7, height: 40, borderRadius: "50%",
-          background: "radial-gradient(ellipse, rgba(212,169,64,0.15) 0%, transparent 70%)",
-          filter: "blur(12px)",
-        }} />
-
-        {/* Card */}
-        <div style={{
-          width: cardW, height: cardH, borderRadius: 18, position: "relative", overflow: "hidden",
-          transform: `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)`,
-          transition: mob ? "none" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-          animation: "cardGlow 4s infinite",
-          cursor: "default",
-        }}
-        onMouseEnter={() => !mob && setRotation({ x: 3, y: -4 })}
-        onMouseLeave={() => !mob && setRotation({ x: 8, y: -12 })}
+    <div style={{
+      position: "relative", display: "flex", flexDirection: "column",
+      alignItems: "center", animation: "fadeIn 1.2s ease 0.3s both",
+    }}>
+      {/* LAYER 1 — Card image (floats + tilts) */}
+      <div style={{ perspective: 1200 }}>
+        <div
+          ref={cardRef}
+          style={{
+            animation: mob ? "none" : "float 5s ease-in-out infinite",
+            transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+            transition: mob ? "none" : "transform 0.15s ease-out",
+          }}
         >
-          {/* Gold gradient surface */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(145deg, #c9a238 0%, #b8922e 20%, #dab44c 40%, #c9a238 55%, #a8861e 75%, #c9a238 100%)",
-          }} />
-
-          {/* Diagonal stripe texture */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px)",
-            backgroundSize: "4px 4px",
-          }} />
-
-          {/* Shimmer sweep */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.15) 55%, transparent 70%)",
-            backgroundSize: "200% 100%",
-            animation: "shimmer 6s infinite",
-          }} />
-
-          {/* Card content */}
-          <div style={{
-            position: "relative", zIndex: 2, padding: mob ? "20px 22px" : "28px 32px",
-            display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%",
-          }}>
-            {/* Top row */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Image src="/images/tallion-icon-64.png" alt="Tallion" width={32} height={32} style={{ borderRadius: 8 }} />
-                <span style={{ fontSize: 15, fontWeight: 700, color: "rgba(26,21,8,0.8)", letterSpacing: "0.12em" }}>tallion</span>
-              </div>
-              {/* Chip */}
-              <div style={{
-                width: 36, height: 28, borderRadius: 5,
-                background: "linear-gradient(145deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15))",
-                border: "1px solid rgba(255,255,255,0.25)",
-              }} />
-            </div>
-
-            {/* Card number */}
-            <div style={{ fontSize: mob ? 15 : 18, fontWeight: 600, letterSpacing: "0.2em", color: "rgba(26,21,8,0.75)" }}>
-              4821 •••• •••• 7340
-            </div>
-
-            {/* Bottom row */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-              <div>
-                <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.15em", color: "rgba(26,21,8,0.4)", textTransform: "uppercase", marginBottom: 2 }}>Agent</div>
-                <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(26,21,8,0.65)", letterSpacing: "0.05em" }}>TRAVEL-AGENT-01</div>
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.15em", color: "rgba(26,21,8,0.4)", textTransform: "uppercase", marginBottom: 2 }}>Limit</div>
-                <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(26,21,8,0.65)" }}>$2,000</div>
-              </div>
-              <div style={{ fontSize: 18, fontWeight: 700, fontStyle: "italic", color: "rgba(26,21,8,0.5)", letterSpacing: "0.02em" }}>VISA</div>
-            </div>
-          </div>
+          <Image
+            src="/images/card-hero/tallion-card-hero.png"
+            alt="Tallion gold card"
+            width={cardW}
+            height={Math.round(cardW * 0.63)}
+            priority={true}
+            style={{ display: "block", width: cardW, height: "auto" }}
+          />
         </div>
       </div>
+
+      {/* LAYER 2 — Reflection (anchored, does NOT float or tilt) */}
+      {!mob && (
+        <div style={{
+          position: "relative", marginTop: -10,
+          opacity: 0.5, pointerEvents: "none",
+        }}>
+          <Image
+            src="/images/card-hero/tallion-card-reflection.png"
+            alt=""
+            width={cardW}
+            height={Math.round(cardW * 0.63)}
+            style={{ display: "block", width: cardW, height: "auto" }}
+          />
+        </div>
+      )}
     </div>
   );
 }
