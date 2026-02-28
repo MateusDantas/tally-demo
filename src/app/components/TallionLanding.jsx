@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 
 // ═══════════════════════════════════════════════════════════════
-// TALLY — LANDING PAGE
+// TALLION — LANDING PAGE
 // Developer-first · Investor tab · Vision memo
 // ═══════════════════════════════════════════════════════════════
 
@@ -83,7 +83,7 @@ function Hero({ onNav }) {
       <FadeIn>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32 }}>
           <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 4px 20px ${C.gold}30` }}><Shield s={18} c={C.bg}/></div>
-          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 18, color: C.gold, letterSpacing: 0.5 }}>Tally</span>
+          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 18, color: C.gold, letterSpacing: 0.5 }}>Tallion</span>
         </div>
       </FadeIn>
 
@@ -96,7 +96,7 @@ function Hero({ onNav }) {
       <FadeIn delay={0.3}>
         <p style={{ fontFamily: F.b, fontSize: 17, color: C.txM, textAlign: "center", lineHeight: 1.7, maxWidth: 540, margin: "0 0 40px" }}>
           Your AI agent found the perfect flight. It can't buy it.<br />
-          Tally gives every agent the power to transact — with you in control.
+          Tallion gives every agent the power to transact — with you in control.
         </p>
       </FadeIn>
 
@@ -143,10 +143,10 @@ function DevSection() {
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
-    { title: "Initialize", desc: "Install the SDK and create a client. One API key. That's it.", code: "import Tally from '" + String.fromCharCode(64) + "tally-pay/connect'\n\nconst tally = new Tally({\n  apiKey: 'tally_live_sk_...',\n  environment: 'production'\n})" },
-    { title: "Request payment", desc: "When your agent needs to buy something, request approval from the consumer.", code: "const payment = await tally.payments.request({\n  amount: 34200,          // cents\n  currency: 'usd',\n  merchant: 'Delta Air Lines',\n  description: 'DL482 LAX→JFK, Mar 21',\n  metadata: {\n    reasoning: 'Cheapest nonstop. $55 less than last week.',\n    confidence: 0.94\n  }\n})"  },
-    { title: "Handle approval", desc: "Consumer approves via push notification + Face ID. You get a single-use virtual card.", code: "// Consumer approves in ~5 seconds via Tally app\nconst result = await payment.waitForApproval()\n\nif (result.status === 'approved') {\n  const card = result.virtualCard\n  // card.number: '4147829300127744'\n  // card.exp: '03/26'\n  // card.cvv: '482'\n  // Single-use. Auto-destroys after charge.\n  \n  await bookFlight(card)\n}"  },
-    { title: "Confirm", desc: "Let Tally know the purchase succeeded. The consumer sees it in their feed instantly.", code: "await tally.payments.confirm(payment.id, {\n  status: 'completed',\n  confirmation: 'DL-7829K',\n  receipt_url: 'https://delta.com/receipt/...'\n})\n\n// Consumer sees:\n// ✓ Delta Air Lines — $342.00\n// via YourAgent · just now"  },
+    { title: "Initialize", desc: "Install the SDK and create a client. One API key. That's it.", code: "import Tallion from '" + String.fromCharCode(64) + "tallion-pay/connect'\n\nconst tallion = new Tallion({\n  apiKey: 'tallion_live_sk_...',\n  environment: 'production'\n})" },
+    { title: "Request payment", desc: "When your agent needs to buy something, request approval from the consumer.", code: "const payment = await tallion.payments.request({\n  amount: 34200,          // cents\n  currency: 'usd',\n  merchant: 'Delta Air Lines',\n  description: 'DL482 LAX→JFK, Mar 21',\n  metadata: {\n    reasoning: 'Cheapest nonstop. $55 less than last week.',\n    confidence: 0.94\n  }\n})"  },
+    { title: "Handle approval", desc: "Consumer approves via push notification + Face ID. You get a single-use virtual card.", code: "// Consumer approves in ~5 seconds via Tallion app\nconst result = await payment.waitForApproval()\n\nif (result.status === 'approved') {\n  const card = result.virtualCard\n  // card.number: '4147829300127744'\n  // card.exp: '03/26'\n  // card.cvv: '482'\n  // Single-use. Auto-destroys after charge.\n  \n  await bookFlight(card)\n}"  },
+    { title: "Confirm", desc: "Let Tallion know the purchase succeeded. The consumer sees it in their feed instantly.", code: "await tallion.payments.confirm(payment.id, {\n  status: 'completed',\n  confirmation: 'DL-7829K',\n  receipt_url: 'https://delta.com/receipt/...'\n})\n\n// Consumer sees:\n// ✓ Delta Air Lines — $342.00\n// via YourAgent · just now"  },
   ];
 
   return (
@@ -160,7 +160,7 @@ function DevSection() {
           Give your agent <span style={{ color: C.gold }}>purchasing power</span>
         </h2>
         <p style={{ fontFamily: F.b, fontSize: 15, color: C.txM, lineHeight: 1.7, maxWidth: 520, marginBottom: 56 }}>
-          Tally Connect is a free SDK that lets any AI agent make real purchases. Your agent proposes, the consumer approves via Tally, and a single-use virtual Visa is issued instantly. Works at 80M+ merchants.
+          Tallion Connect is a free SDK that lets any AI agent make real purchases. Your agent proposes, the consumer approves via Tallion, and a single-use virtual Visa is issued instantly. Works at 80M+ merchants.
         </p>
       </FadeIn>
 
@@ -185,7 +185,7 @@ function DevSection() {
                 <Chk s={12} c={C.grn} />
                 <span style={{ fontSize: 12, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>Your agent doesn't touch money</span>
               </div>
-              <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5 }}>Tally handles identity, payment, and card issuance. You just ask and receive.</div>
+              <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5 }}>Tallion handles identity, payment, and card issuance. You just ask and receive.</div>
             </div>
           </div>
         </FadeIn>
@@ -194,11 +194,11 @@ function DevSection() {
         <FadeIn delay={0.2}>
           <Code title={`Step ${activeStep + 1}: ${steps[activeStep].title}`}>{steps[activeStep].code}</Code>
 
-          {/* What you get / what Tally handles */}
+          {/* What you get / what Tallion handles */}
           <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 16, marginTop: 24 }}>
             <div style={{ padding: 24, borderRadius: 16, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
               <div style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 12 }}>What your agent gets</div>
-              {["Payment capability at 80M+ merchants", "Single-use virtual Visa per transaction", "Consumer trust (they chose to allow you)", "Transaction confirmation & receipts", "Co-branded UX: 'YourApp Pay · powered by Tally'"].map((f, i) => (
+              {["Payment capability at 80M+ merchants", "Single-use virtual Visa per transaction", "Consumer trust (they chose to allow you)", "Transaction confirmation & receipts", "Co-branded UX: 'YourApp Pay · powered by Tallion'"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
                   <Chk s={10} c={C.gold} />
                   <span style={{ fontSize: 12, color: C.txS, fontFamily: F.b, lineHeight: 1.4 }}>{f}</span>
@@ -206,7 +206,7 @@ function DevSection() {
               ))}
             </div>
             <div style={{ padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.015)", border: `1px solid ${C.bd}` }}>
-              <div style={{ fontSize: 12, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 12 }}>What Tally handles</div>
+              <div style={{ fontSize: 12, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 12 }}>What Tallion handles</div>
               {["Consumer identity & KYC", "Card issuance & network processing", "Fraud detection & 3DS authentication", "Spending rules & approval flow", "PCI-DSS compliance (you don't need it)"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
                   <Shield s={10} c={C.txM} />
@@ -219,7 +219,7 @@ function DevSection() {
           {/* Integration metrics */}
           <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(3, 1fr)", gap: 12, marginTop: 24 }}>
             {[
-              { v: "npm install", l: String.fromCharCode(64) + "tally-pay/connect", c: C.txS },
+              { v: "npm install", l: String.fromCharCode(64) + "tallion-pay/connect", c: C.txS },
               { v: "0", l: "PCI requirements for you", c: C.grn },
               { v: "$0", l: "to integrate. Free forever.", c: C.gold },
             ].map((m, i) => (
@@ -251,7 +251,7 @@ function InvestorSection() {
           The financial infrastructure of the <span style={{ color: C.gold }}>agent economy</span>
         </h2>
         <p style={{ fontFamily: F.b, fontSize: 15, color: C.txM, lineHeight: 1.7, maxWidth: 600, marginBottom: 56 }}>
-          McKinsey projects $3–5T in agentic commerce by 2030. Every transaction needs a trust layer between the AI and the consumer's money. That's Tally.
+          McKinsey projects $3–5T in agentic commerce by 2030. Every transaction needs a trust layer between the AI and the consumer's money. That's Tallion.
         </p>
       </FadeIn>
 
@@ -271,7 +271,7 @@ function InvestorSection() {
           <div style={{ padding: 36, borderRadius: 20, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
             <div style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 16 }}>The thesis in four sentences</div>
             <div style={{ fontFamily: F.d, fontSize: 20, color: C.tx, lineHeight: 1.6 }}>
-              "Every AI agent will need to spend money on behalf of humans. Consumers will never give agents their credit card. The company that becomes the trust layer between agents and money wins the next generation of financial infrastructure. That company is Tally."
+              "Every AI agent will need to spend money on behalf of humans. Consumers will never give agents their credit card. The company that becomes the trust layer between agents and money wins the next generation of financial infrastructure. That company is Tallion."
             </div>
           </div>
           <div style={{ padding: 36, borderRadius: 20, background: "rgba(255,255,255,0.015)", border: `1px solid ${C.bd}` }}>
@@ -299,8 +299,8 @@ function InvestorSection() {
           <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(4, 1fr)", gap: 16 }}>
             {[
               { phase: "Phase 1", years: "Year 1", title: "Payment Rails", revenue: "$7M ARR", users: "130K", vol: "$702M", color: C.gold, desc: "Free SDK. Agents distribute. Interchange revenue. $0 CAC." },
-              { phase: "Phase 2", years: "Years 2–3", title: "Tally Direct", revenue: "$634M ARR", users: "4.1M", vol: "$64B", color: C.grn, desc: "Skip Visa. Settle directly to merchants at 0% fees. 3x margin improvement." },
-              { phase: "Phase 3", years: "Year 4", title: "Financial Products", revenue: "$2.7B ARR", users: "12.1M", vol: "$276B", color: C.blu, desc: "Tally Card, Balance, Credit. Richest behavioral data in commerce." },
+              { phase: "Phase 2", years: "Years 2–3", title: "Tallion Direct", revenue: "$634M ARR", users: "4.1M", vol: "$64B", color: C.grn, desc: "Skip Visa. Settle directly to merchants at 0% fees. 3x margin improvement." },
+              { phase: "Phase 3", years: "Year 4", title: "Financial Products", revenue: "$2.7B ARR", users: "12.1M", vol: "$276B", color: C.blu, desc: "Tallion Card, Balance, Credit. Richest behavioral data in commerce." },
               { phase: "Phase 4", years: "Years 5–7", title: "The Bank", revenue: "$27B ARR", users: "54M", vol: "$2.5T", color: C.purple, desc: "Bank charter. Deposits, lending, merchant banking. Own the entire relationship." },
             ].map((p, i) => (
               <div key={i} style={{ padding: 24, borderRadius: 16, background: `${p.color}04`, border: `1px solid ${p.color}10` }}>
@@ -345,12 +345,12 @@ function InvestorSection() {
             </div>
           </div>
           <div style={{ padding: 32, borderRadius: 20, background: "rgba(255,255,255,0.015)", border: `1px solid ${C.bd}` }}>
-            <div style={{ fontSize: 13, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 20 }}>How Tally compares at scale</div>
+            <div style={{ fontSize: 13, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 20 }}>How Tallion compares at scale</div>
             {[
               { name: "JPMorgan Chase", users: "80M", arpu: "~$750/yr", hl: false },
               { name: "Cash App", users: "56M", arpu: "~$120/yr", hl: false },
               { name: "Nubank", users: "100M", arpu: "~$50/yr", hl: false },
-              { name: "Tally (Year 7)", users: "54M", arpu: "$496/yr", hl: true },
+              { name: "Tallion (Year 7)", users: "54M", arpu: "$496/yr", hl: true },
             ].map((b, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: i < 3 ? `1px solid ${C.bd}` : "none" }}>
                 <span style={{ fontSize: 13, color: b.hl ? C.gold : C.txM, fontFamily: F.b, fontWeight: b.hl ? 600 : 400 }}>{b.name}</span>
@@ -361,7 +361,7 @@ function InvestorSection() {
               </div>
             ))}
             <div style={{ marginTop: 16, fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5 }}>
-              Tally sees every agent transaction — not just what flows through a bank account. User base of a Nubank, ARPU approaching JPMorgan.
+              Tallion sees every agent transaction — not just what flows through a bank account. User base of a Nubank, ARPU approaching JPMorgan.
             </div>
           </div>
         </div>
@@ -412,17 +412,17 @@ function VisionSection() {
           </p>
 
           <p style={{ marginBottom: 24, color: C.tx, fontWeight: 500 }}>
-            Tally exists to solve this exact problem.
+            Tallion exists to solve this exact problem.
           </p>
 
           <div style={{ margin: "40px 0", padding: "28px 0", borderTop: `1px solid ${C.bd}`, borderBottom: `1px solid ${C.bd}` }}>
             <p style={{ fontFamily: F.d, fontSize: 22, color: C.gold, lineHeight: 1.5, textAlign: "center", margin: 0 }}>
-              The agent proposes. Tally disposes.
+              The agent proposes. Tallion disposes.
             </p>
           </div>
 
           <p style={{ marginBottom: 24 }}>
-            We're building the trust layer between AI agents and the financial system. When an agent finds a $342 flight for you, it doesn't get your credit card. Instead, it sends a request to Tally. You see the amount, the merchant, the agent's reasoning — and you approve with Face ID. Tally issues a single-use virtual card that works at 80 million merchants, self-destructs after the charge, and is never seen by the agent. Your real payment information never leaves your control.
+            We're building the trust layer between AI agents and the financial system. When an agent finds a $342 flight for you, it doesn't get your credit card. Instead, it sends a request to Tallion. You see the amount, the merchant, the agent's reasoning — and you approve with Face ID. Tallion issues a single-use virtual card that works at 80 million merchants, self-destructs after the charge, and is never seen by the agent. Your real payment information never leaves your control.
           </p>
 
           <p style={{ marginBottom: 24 }}>
@@ -431,10 +431,10 @@ function VisionSection() {
 
           <div style={{ margin: "32px 0", padding: "24px 28px", borderRadius: 16, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
             {[
-              ["Zero customer acquisition cost", "Every AI agent that integrates Tally becomes a distribution channel. Poke's 6,000 users become Tally users at the moment of first purchase. We don't buy customers. We inherit them."],
-              ["Mandatory conversion", "Tally isn't a feature consumers opt into. It's the only way to complete the purchase. When an agent says 'set up Tally to book this flight,' 72–90% of consumers do it. Because they want the flight."],
-              ["Revenue that compounds", "Interchange becomes Tally Direct becomes financial products becomes a bank. The same consumer generates $54/year in Year 1 and $496/year in Year 7. Nine times more revenue, zero incremental cost."],
-              ["A moat built on trust", "Every transaction makes the trust graph deeper. Every agent connected makes the network more valuable. By the time competitors realize what's happening, Tally will have the data, the merchants, and the muscle memory of 50 million consumers."],
+              ["Zero customer acquisition cost", "Every AI agent that integrates Tallion becomes a distribution channel. Poke's 6,000 users become Tallion users at the moment of first purchase. We don't buy customers. We inherit them."],
+              ["Mandatory conversion", "Tallion isn't a feature consumers opt into. It's the only way to complete the purchase. When an agent says 'set up Tallion to book this flight,' 72–90% of consumers do it. Because they want the flight."],
+              ["Revenue that compounds", "Interchange becomes Tallion Direct becomes financial products becomes a bank. The same consumer generates $54/year in Year 1 and $496/year in Year 7. Nine times more revenue, zero incremental cost."],
+              ["A moat built on trust", "Every transaction makes the trust graph deeper. Every agent connected makes the network more valuable. By the time competitors realize what's happening, Tallion will have the data, the merchants, and the muscle memory of 50 million consumers."],
             ].map(([title, desc], i) => (
               <div key={i} style={{ marginBottom: i < 3 ? 20 : 0 }}>
                 <div style={{ fontSize: 14, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>{title}</div>
@@ -448,12 +448,12 @@ function VisionSection() {
           </p>
 
           <p style={{ marginBottom: 24 }}>
-            Tally is the Visa, Stripe, and Apple Pay of the agent economy — combined into one company. We're the rails (payment processing), the API (developer infrastructure), and the wallet (consumer trust layer), all in one. We have to be. Because in agent commerce, these things can't be separated. The entity that holds the consumer's trust must also issue the card, settle the payment, and enforce the rules. Fragmenting this creates exactly the kind of broken experience that agents are supposed to eliminate.
+            Tallion is the Visa, Stripe, and Apple Pay of the agent economy — combined into one company. We're the rails (payment processing), the API (developer infrastructure), and the wallet (consumer trust layer), all in one. We have to be. Because in agent commerce, these things can't be separated. The entity that holds the consumer's trust must also issue the card, settle the payment, and enforce the rules. Fragmenting this creates exactly the kind of broken experience that agents are supposed to eliminate.
           </p>
 
           <div style={{ margin: "40px 0", padding: "28px 0", borderTop: `1px solid ${C.bd}`, borderBottom: `1px solid ${C.bd}` }}>
             <p style={{ fontFamily: F.d, fontSize: 22, color: C.tx, lineHeight: 1.5, textAlign: "center", margin: 0 }}>
-              In seven years, we believe Tally will be how the world pays<br />when machines do the shopping.
+              In seven years, we believe Tallion will be how the world pays<br />when machines do the shopping.
             </p>
           </div>
 
@@ -470,7 +470,7 @@ function VisionSection() {
           </p>
 
           <p style={{ marginBottom: 0, color: C.tx, fontWeight: 500 }}>
-            We're building Tally for the long arc. The agents are here. The commerce is coming. The trust layer is missing. Not for long.
+            We're building Tallion for the long arc. The agents are here. The commerce is coming. The trust layer is missing. Not for long.
           </p>
 
           <div style={{ marginTop: 48, paddingTop: 32, borderTop: `1px solid ${C.bd}` }}>
@@ -478,7 +478,7 @@ function VisionSection() {
               <div style={{ width: 44, height: 44, borderRadius: 12, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={20} c={C.bg}/></div>
               <div>
                 <div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Mateus</div>
-                <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b }}>Founder, Tally</div>
+                <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b }}>Founder, Tallion</div>
               </div>
             </div>
           </div>
@@ -493,14 +493,32 @@ function VisionSection() {
 // FOOTER
 // ═══════════════════════════════════════════════
 function Footer() {
+  const mob = useIsMobile();
   return (
     <div style={{ borderTop: `1px solid ${C.bd}`, padding: "48px 24px" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 24, height: 24, borderRadius: 7, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={12} c={C.bg}/></div>
-          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tally</span>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 24, height: 24, borderRadius: 7, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={12} c={C.bg}/></div>
+            <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tallion</span>
+          </div>
+          <div style={{ fontSize: 11, color: C.txF, fontFamily: F.b }}>The trust layer for agent commerce · 2026</div>
         </div>
-        <div style={{ fontSize: 11, color: C.txF, fontFamily: F.b }}>The trust layer for agent commerce · 2026</div>
+        <div style={{ borderTop: `1px solid ${C.bd}`, paddingTop: 20, display: "flex", flexWrap: "wrap", gap: mob ? 16 : 32, fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.6 }}>
+          <div>
+            <div style={{ color: C.txF, fontWeight: 500, marginBottom: 4 }}>Odysseus Lab, Ltd.</div>
+            <div>Delaware C Corporation</div>
+          </div>
+          <div>
+            <div style={{ color: C.txF, fontWeight: 500, marginBottom: 4 }}>Contact</div>
+            <div>(256) 991-1141</div>
+          </div>
+          <div>
+            <div style={{ color: C.txF, fontWeight: 500, marginBottom: 4 }}>Address</div>
+            <div>1111b S Governors Ave, Suite 44362</div>
+            <div>Dover, DE 19904</div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -509,7 +527,7 @@ function Footer() {
 // ═══════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════
-export default function TallyLanding() {
+export default function TallionLanding() {
   const [activeTab, setActiveTab] = useState("dev");
   const contentRef = useRef(null);
 
@@ -542,7 +560,7 @@ export default function TallyLanding() {
             <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", height: 52, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
                 <div style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={11} c={C.bg}/></div>
-                <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tally</span>
+                <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tallion</span>
               </div>
               <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
                 {[

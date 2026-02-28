@@ -1,8 +1,8 @@
-# Tally Demo — Claude Code Setup Instructions
+# Tallion Demo — Claude Code Setup Instructions
 
 ## What This Is
 
-A static demo site showcasing Tally's B2B2C agent payment infrastructure. No backend, no real integrations — just an interactive React prototype for investors, developers, and partners to see how Tally works. Deploy to Vercel.
+A static demo site showcasing Tallion's B2B2C agent payment infrastructure. No backend, no real integrations — just an interactive React prototype for investors, developers, and partners to see how Tallion works. Deploy to Vercel.
 
 ## Stack
 
@@ -15,23 +15,23 @@ A static demo site showcasing Tally's B2B2C agent payment infrastructure. No bac
 ## Repo Setup
 
 ```bash
-npx create-next-app@latest tally-demo --typescript --tailwind --eslint --app --src-dir --no-import-alias
-cd tally-demo
+npx create-next-app@latest tallion-demo --typescript --tailwind --eslint --app --src-dir --no-import-alias
+cd tallion-demo
 ```
 
 ## Project Structure
 
 ```
-tally-demo/
+tallion-demo/
 ├── src/
 │   └── app/
 │       ├── layout.tsx          # Root layout with fonts + metadata
-│       ├── page.tsx            # Main page — renders TallyDemo component
+│       ├── page.tsx            # Main page — renders TallionDemo component
 │       ├── globals.css         # Minimal Tailwind base + custom scrollbar
 │       └── components/
-│           └── TallyDemo.tsx   # THE ENTIRE DEMO (single component file)
+│           └── TallionDemo.tsx   # THE ENTIRE DEMO (single component file)
 ├── public/
-│   └── favicon.svg            # Tally shield icon
+│   └── favicon.svg            # Tallion shield icon
 ├── next.config.js
 ├── package.json
 ├── tsconfig.json
@@ -44,13 +44,13 @@ tally-demo/
 The entire demo lives in a single React component file. I'm providing the complete source below. **Do not split it into multiple files** — it's designed as a self-contained interactive prototype.
 
 The component has three tabs:
-1. **Before & After** — Two phone mockups side by side showing the same purchase flow without vs with Tally
+1. **Before & After** — Two phone mockups side by side showing the same purchase flow without vs with Tallion
 2. **For Developers** — Integration code, value exchange breakdown
 3. **vs. Competitors** — Expandable cards for each competitor (Stripe ACP, Visa TAP, Mastercard Agent Pay, Google AP2, Skyfire, Nekuda, Build In-House) showing what happens when an agent like Poke tries each alternative
 
-### Component File: `src/app/components/TallyDemo.tsx`
+### Component File: `src/app/components/TallionDemo.tsx`
 
-Paste the contents of the attached `tally-complete.jsx` file into this path. Add `"use client";` as the very first line since it uses React hooks (`useState`, `useEffect`, `useRef`).
+Paste the contents of the attached `tallion-complete.jsx` file into this path. Add `"use client";` as the very first line since it uses React hooks (`useState`, `useEffect`, `useRef`).
 
 The file I'm providing uses JSX with inline styles only. No Tailwind classes inside the component — all styling is via the `style` prop. This is intentional for the ultra-premium aesthetic.
 
@@ -85,13 +85,13 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tally — Consumer Payment Rails for the Agentic Economy",
+  title: "Tallion — Consumer Payment Rails for the Agentic Economy",
   description:
-    "The trust layer between consumers and their AI agents' financial lives. See how Tally transforms agent commerce.",
+    "The trust layer between consumers and their AI agents' financial lives. See how Tallion transforms agent commerce.",
   openGraph: {
-    title: "Tally — Before & After Agent Payments",
+    title: "Tallion — Before & After Agent Payments",
     description:
-      "Same request. Completely different experience. See how AI agents handle payments with and without Tally.",
+      "Same request. Completely different experience. See how AI agents handle payments with and without Tallion.",
     type: "website",
   },
 };
@@ -153,16 +153,16 @@ button:active {
 ### `src/app/page.tsx`
 
 ```tsx
-import TallyDemo from "./components/TallyDemo";
+import TallionDemo from "./components/TallionDemo";
 
 export default function Home() {
-  return <TallyDemo />;
+  return <TallionDemo />;
 }
 ```
 
-### `src/app/components/TallyDemo.tsx`
+### `src/app/components/TallionDemo.tsx`
 
-**This is the main component.** Take the complete contents of the `tally-complete.jsx` file and:
+**This is the main component.** Take the complete contents of the `tallion-complete.jsx` file and:
 
 1. Add `"use client";` as the first line
 2. Replace the font family strings to use CSS variables from next/font:
@@ -172,7 +172,7 @@ export default function Home() {
 3. Remove the `@import url('https://fonts.googleapis.com/css2?...')` line from the inline `<style>` tag (fonts are loaded via next/font in layout.tsx instead)
 4. Keep everything else exactly as-is — all inline styles, all component logic
 
-The full JSX source is in the file `tally-complete.jsx` that should be in the same directory as this markdown file, or ask me to provide it.
+The full JSX source is in the file `tallion-complete.jsx` that should be in the same directory as this markdown file, or ask me to provide it.
 
 ### `public/favicon.svg`
 
@@ -220,7 +220,7 @@ vercel
 
 # Follow prompts:
 # - Link to existing project? No
-# - Project name: tally-demo
+# - Project name: tallion-demo
 # - Framework: Next.js (auto-detected)
 # - Build settings: defaults are fine
 
@@ -238,7 +238,7 @@ None required. This is a fully static demo with no API calls, no backend, no env
 
 ### Tab 1: Before & After
 
-Two realistic iPhone mockups side by side. Same conversation plays out on both — the left phone shows what happens WITHOUT Tally (agent can't pay, sends you to a website, manual checkout, 3DS verification, etc.) and the right phone shows what happens WITH Tally (agent requests payment, you approve with Face ID in the Tally app, done).
+Two realistic iPhone mockups side by side. Same conversation plays out on both — the left phone shows what happens WITHOUT Tallion (agent can't pay, sends you to a website, manual checkout, 3DS verification, etc.) and the right phone shows what happens WITH Tallion (agent requests payment, you approve with Face ID in the Tallion app, done).
 
 Three scenarios:
 - **First Purchase**: Book a flight (10 steps → 3 steps)
@@ -249,8 +249,8 @@ Has Play/Pause, Step, Reset, Show All controls. Progress dots. Summary stats at 
 
 ### Tab 2: For Developers
 
-- **Integration tab**: 4 code blocks showing the complete Tally Connect SDK (initialize, request payment, handle response, webhooks)
-- **Value Exchange tab**: What developers get (free payment capability, no PCI, no fraud liability, 80M merchants, trust signal) vs what Tally earns (interchange, $0 CAC consumers, trust data). Explicitly notes interchange is NOT shared with developers.
+- **Integration tab**: 4 code blocks showing the complete Tallion Connect SDK (initialize, request payment, handle response, webhooks)
+- **Value Exchange tab**: What developers get (free payment capability, no PCI, no fraud liability, 80M merchants, trust signal) vs what Tallion earns (interchange, $0 CAC consumers, trust data). Explicitly notes interchange is NOT shared with developers.
 
 ### Tab 3: vs. Competitors
 
@@ -266,7 +266,7 @@ Seven expandable competitor cards, each framed as "What if Poke used this instea
 
 Each expands to show: what it is, step-by-step Poke integration flow, what works (green), where it breaks (red), and a verdict.
 
-Plus a summary comparison table (8 dimensions × 8 solutions) and a "Tally's architectural advantage" section explaining the whitespace: protocols build from above, crypto builds from edges, consumer-facing middle layer is underbuilt.
+Plus a summary comparison table (8 dimensions × 8 solutions) and a "Tallion's architectural advantage" section explaining the whitespace: protocols build from above, crypto builds from edges, consumer-facing middle layer is underbuilt.
 
 ## Design System Reference
 
@@ -297,7 +297,7 @@ For anyone extending or modifying the demo, here's the design language:
 - Width: 300px, border-radius: 36px outer / 31px inner
 - Dynamic Island: 80×22px pill, centered
 - Status bar: 9:41 left, signal bars right
-- Gold glow shadow on "With Tally" phone, red-tinted border on "Without"
+- Gold glow shadow on "With Tallion" phone, red-tinted border on "Without"
 
 ## Notes
 

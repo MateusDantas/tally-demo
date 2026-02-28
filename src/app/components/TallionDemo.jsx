@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 
 // ═══════════════════════════════════════════════════════════════
-// TALLY — COMPLETE DEMO (4 TABS)
+// TALLION — COMPLETE DEMO (4 TABS)
 // 1. Before & After  2. For Developers  3. vs Competitors  4. Vision
 // ═══════════════════════════════════════════════════════════════
 
@@ -73,7 +73,7 @@ function useIsMobile(bp = 768) {
 
 const SCENARIOS = [{ id: "first", label: "First Purchase", maxStep: 11 }, { id: "repeat", label: "Repeat Purchase", maxStep: 5 }, { id: "second", label: "Second Agent", maxStep: 5 }];
 
-function WithoutTally({ scenario, step }) {
+function WithoutTallion({ scenario, step }) {
   if (scenario === "first") {
     return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       {step <= 3 ? (<><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}>
@@ -108,7 +108,7 @@ function WithoutTally({ scenario, step }) {
   return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><div style={{ padding: "6px 14px 10px", borderBottom: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 28, height: 28, borderRadius: 14, background: `${C.gpt}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>🤖</div><div><div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>ChatGPT</div></div></div><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="order Sony WH-1000XM5 headphones" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="$348 on Amazon. can't purchase." />}{step >= 2 && <SysCard color={C.red}><Ext s={10} c={C.red} /><span style={{ fontSize: 10, color: C.red, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>OPEN AMAZON.COM</span></SysCard>}{step >= 3 && <Bub from="user" text="again?? 😤" />}{step >= 4 && <SysCard color={C.red}><div style={{ fontSize: 11, color: C.red, fontFamily: F.b, fontWeight: 500 }}>The pattern repeats forever</div></SysCard>}</div></div>;
 }
 
-function WithTally({ scenario, step }) {
+function WithTallion({ scenario, step }) {
   if (scenario === "first") {
     return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       {step <= 2 ? (
@@ -117,7 +117,7 @@ function WithTally({ scenario, step }) {
           <Bub from="user" text="book me a flight to NYC next friday, cheapest nonstop" vis={step >= 0} />
           <Bub from="agent" text="found it! Delta DL482, $342 nonstop. $55 less than last week 📉" vis={step >= 1} />
           {step >= 2 && <Bub from="user" text="book it" />}
-          {step >= 2 && <Bub from="agent" text="to complete this purchase, set up Tally (90 sec) 🛡️" />}
+          {step >= 2 && <Bub from="agent" text="to complete this purchase, set up Tallion (90 sec) 🛡️" />}
         </div></>
       ) : step === 3 ? (
         /* STEP 3: ID VERIFICATION */
@@ -127,7 +127,7 @@ function WithTally({ scenario, step }) {
             <span style={{ fontSize: 13, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Poke Pay</span>
             <span style={{ fontSize: 11, color: C.txF }}>·</span>
             <Shield s={11} c={C.gold} />
-            <span style={{ fontSize: 11, color: C.gold, fontFamily: F.b, fontWeight: 500 }}>powered by Tally</span>
+            <span style={{ fontSize: 11, color: C.gold, fontFamily: F.b, fontWeight: 500 }}>powered by Tallion</span>
           </div>
           <div style={{ textAlign: "center", marginBottom: 16 }}>
             <div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Verify your identity</div>
@@ -172,7 +172,7 @@ function WithTally({ scenario, step }) {
             <span style={{ fontSize: 13, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Poke Pay</span>
             <span style={{ fontSize: 11, color: C.txF }}>·</span>
             <Shield s={11} c={C.gold} />
-            <span style={{ fontSize: 11, color: C.gold, fontFamily: F.b, fontWeight: 500 }}>powered by Tally</span>
+            <span style={{ fontSize: 11, color: C.gold, fontFamily: F.b, fontWeight: 500 }}>powered by Tallion</span>
           </div>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
             <div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>Add a payment method</div>
@@ -226,7 +226,7 @@ function WithTally({ scenario, step }) {
       ) : step <= 7 ? (
         /* STEPS 6-7: APPROVAL SCREEN */
         <div style={{ flex: 1, padding: 16, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          {step === 6 && <div style={{ width: "100%", padding: "8px 12px", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: `1px solid ${C.bd}`, marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 20, height: 20, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={9} c={C.bg}/></div><div style={{ flex: 1 }}><div style={{ fontSize: 10.5, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Tally</div><div style={{ fontSize: 9, color: C.txM, fontFamily: F.b }}>Poke wants to pay $342</div></div></div>}
+          {step === 6 && <div style={{ width: "100%", padding: "8px 12px", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: `1px solid ${C.bd}`, marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 20, height: 20, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={9} c={C.bg}/></div><div style={{ flex: 1 }}><div style={{ fontSize: 10.5, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Tallion</div><div style={{ fontSize: 9, color: C.txM, fontFamily: F.b }}>Poke wants to pay $342</div></div></div>}
           <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 20px rgba(191,163,109,0.22)", marginBottom: 10 }}><Shield s={16} c={C.bg}/></div>
           <div style={{ fontSize: 11, color: C.txS, fontFamily: F.b }}>Payment Request</div>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 10, marginTop: 2 }}><span style={{ fontSize: 10 }}>🌴</span><span style={{ fontSize: 10, color: C.txM, fontFamily: F.b }}>via Poke</span></div>
@@ -248,9 +248,9 @@ function WithTally({ scenario, step }) {
         <div style={{ flex: 1, padding: 14, display: "flex", flexDirection: "column" }}>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: 52, height: 52, borderRadius: 14, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px rgba(191,163,109,0.25)", marginBottom: 14 }}><Shield s={24} c={C.bg}/></div>
-            <div style={{ fontSize: 16, color: C.tx, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Get the Tally app</div>
+            <div style={{ fontSize: 16, color: C.tx, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Get the Tallion app</div>
             <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, textAlign: "center", lineHeight: 1.5, marginBottom: 16, maxWidth: 220 }}>Approve with Face ID. Manage all your agents. Set smarter rules.</div>
-            <div style={{ width: "100%", padding: 12, borderRadius: 12, background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, textAlign: "center", marginBottom: 8, cursor: "default" }}><span style={{ fontSize: 13, color: C.bg, fontFamily: F.b, fontWeight: 600 }}>Download Tally</span></div>
+            <div style={{ width: "100%", padding: 12, borderRadius: 12, background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, textAlign: "center", marginBottom: 8, cursor: "default" }}><span style={{ fontSize: 13, color: C.bg, fontFamily: F.b, fontWeight: 600 }}>Download Tallion</span></div>
             <div style={{ fontSize: 10, color: C.txF, fontFamily: F.b }}>Next time: approve in 5 seconds</div>
           </div>
           <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
@@ -264,14 +264,14 @@ function WithTally({ scenario, step }) {
       ) : (
         /* STEP 11: SUMMARY */
         <><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}>
-          <Bub from="agent" text="all set! flight booked, Tally app ready. next purchase will be instant ⚡" />
-          <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500, marginBottom: 4 }}>Setup complete. You're in control.</div><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b }}>0 app switches · card never exposed · Tally app ready</div></SysCard>
+          <Bub from="agent" text="all set! flight booked, Tallion app ready. next purchase will be instant ⚡" />
+          <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500, marginBottom: 4 }}>Setup complete. You're in control.</div><div style={{ fontSize: 10, color: C.txM, fontFamily: F.b }}>0 app switches · card never exposed · Tallion app ready</div></SysCard>
         </div></>
       )}
     </div>;
   }
     if (scenario === "repeat") return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><PokeHeader /><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="get me an uber to Nobu tonight" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="UberX, 12 min, $28.50. booking now…" />}{step >= 2 && <SysCard color={C.grn}><Shield s={10} c={C.gold} /><span style={{ fontSize: 10, color: C.gold, fontFamily: F.b, fontWeight: 500, marginLeft: 6 }}>AUTO-APPROVED</span><span style={{ fontSize: 9, color: C.txF, fontFamily: F.b, marginLeft: 4 }}>$28 {"<"} $50 limit</span></SysCard>}{step >= 3 && <Bub from="agent" text="uber booked ✓ Marcus, gray Camry, 12 min 🚗" />}{step >= 4 && <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Zero effort. Zero friction.</div><div style={{ marginTop: 4 }}><TimerBadge time="0 sec" color={C.grn} /></div></SysCard>}</div></div>;
-  return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><div style={{ padding: "6px 14px 10px", borderBottom: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 28, height: 28, borderRadius: 14, background: `${C.gpt}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>🤖</div><div><div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>ChatGPT</div></div></div><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="order Sony WH-1000XM5 headphones" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="$348 on Amazon. setting up payment…" />}{step >= 2 && <SysCard color={C.gold}><Shield s={10} c={C.gold}/><span style={{ fontSize: 10, color: C.gold, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>TALLY RECOGNIZED YOU</span></SysCard>}{step >= 3 && <SysCard color={C.grn}><Chk s={10} c={C.grn}/><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>AUTHORIZED & APPROVED</span></SysCard>}{step >= 4 && <Bub from="agent" text="ordered ✓ Sony WH-1000XM5, arrives Wed 📦" />}{step >= 5 && <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Two agents. One Tally.</div><div style={{ marginTop: 4 }}><TimerBadge time="3 sec" color={C.grn} /></div></SysCard>}</div></div>;
+  return <div style={{ flex: 1, display: "flex", flexDirection: "column" }}><div style={{ padding: "6px 14px 10px", borderBottom: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 28, height: 28, borderRadius: 14, background: `${C.gpt}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>🤖</div><div><div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>ChatGPT</div></div></div><div style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-end" }}><Bub from="user" text="order Sony WH-1000XM5 headphones" vis={step >= 0} />{step >= 1 && <Bub from="agent" text="$348 on Amazon. setting up payment…" />}{step >= 2 && <SysCard color={C.gold}><Shield s={10} c={C.gold}/><span style={{ fontSize: 10, color: C.gold, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>TALLION RECOGNIZED YOU</span></SysCard>}{step >= 3 && <SysCard color={C.grn}><Chk s={10} c={C.grn}/><span style={{ fontSize: 10, color: C.grn, fontFamily: F.b, fontWeight: 600, marginLeft: 6 }}>AUTHORIZED & APPROVED</span></SysCard>}{step >= 4 && <Bub from="agent" text="ordered ✓ Sony WH-1000XM5, arrives Wed 📦" />}{step >= 5 && <SysCard color={C.grn}><div style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 500 }}>Two agents. One Tallion.</div><div style={{ marginTop: 4 }}><TimerBadge time="3 sec" color={C.grn} /></div></SysCard>}</div></div>;
 }
 
 function BeforeAfterTab() {
@@ -293,16 +293,16 @@ function BeforeAfterTab() {
     {mob ? (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
-          <button onClick={() => setPhoneView("without")} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: phoneView === "without" ? `${C.red}15` : "transparent", color: phoneView === "without" ? C.red : C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>✕ Without Tally</button>
-          <button onClick={() => setPhoneView("with")} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: phoneView === "with" ? C.gG : "transparent", color: phoneView === "with" ? C.gold : C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>🛡 With Tally</button>
+          <button onClick={() => setPhoneView("without")} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: phoneView === "without" ? `${C.red}15` : "transparent", color: phoneView === "without" ? C.red : C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>✕ Without Tallion</button>
+          <button onClick={() => setPhoneView("with")} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: phoneView === "with" ? C.gG : "transparent", color: phoneView === "with" ? C.gold : C.txM, fontSize: 11, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>🛡 With Tallion</button>
         </div>
-        {phoneView === "without" ? <Phone label="Without Tally" labelColor={C.red} glow="red"><WithoutTally scenario={sc.id} step={step} /></Phone> : <Phone label="With Tally" labelColor={C.gold} glow="gold"><WithTally scenario={sc.id} step={step} /></Phone>}
+        {phoneView === "without" ? <Phone label="Without Tallion" labelColor={C.red} glow="red"><WithoutTallion scenario={sc.id} step={step} /></Phone> : <Phone label="With Tallion" labelColor={C.gold} glow="gold"><WithTallion scenario={sc.id} step={step} /></Phone>}
       </div>
     ) : (
       <div style={{ display: "flex", justifyContent: "center", gap: 28, alignItems: "flex-start" }}>
-        <Phone label="Without Tally" labelColor={C.red} glow="red"><WithoutTally scenario={sc.id} step={step} /></Phone>
+        <Phone label="Without Tallion" labelColor={C.red} glow="red"><WithoutTallion scenario={sc.id} step={step} /></Phone>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 60, gap: 8 }}><div style={{ width: 1, height: 100, background: `linear-gradient(180deg, transparent, ${C.bd}, ${C.gold}20, ${C.bd}, transparent)` }} /><div style={{ fontSize: 10, color: C.txF, fontFamily: F.b, letterSpacing: 3, writingMode: "vertical-rl" }}>VS</div><div style={{ width: 1, height: 100, background: `linear-gradient(180deg, transparent, ${C.bd}, ${C.gold}20, ${C.bd}, transparent)` }} /></div>
-        <Phone label="With Tally" labelColor={C.gold} glow="gold"><WithTally scenario={sc.id} step={step} /></Phone>
+        <Phone label="With Tallion" labelColor={C.gold} glow="gold"><WithTallion scenario={sc.id} step={step} /></Phone>
       </div>
     )}
     {done && <div style={{ marginTop: 28, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>{(scIdx === 0 ? [["Time","8–15 min","~30 sec"],["Switches","4","0"],["Card exposed","Yes","Never"],["Steps","10","3"]] : scIdx === 1 ? [["Effort","Manual","Zero"],["Switches","2","0"],["Time","1–2 min","0 sec"]] : [["Setup","Full redo","1 tap"],["Cards","Re-enter","Inherited"],["Friction","Maximum","Zero"]]).map(([l,b,a],i) => (<div key={i} style={{ flex: 1, maxWidth: 180 }}><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 6, textAlign: "center" }}>{l.toUpperCase()}</div><div style={{ display: "flex", gap: 5 }}><div style={{ flex: 1, padding: "7px 8px", borderRadius: 8, background: C.redS, border: `1px solid ${C.red}10`, textAlign: "center" }}><span style={{ fontSize: 12, color: C.red, fontFamily: F.m, fontWeight: 500 }}>{b}</span></div><div style={{ flex: 1, padding: "7px 8px", borderRadius: 8, background: C.gG, border: `1px solid ${C.gB}`, textAlign: "center" }}><span style={{ fontSize: 12, color: C.grn, fontFamily: F.m, fontWeight: 500 }}>{a}</span></div></div></div>))}</div>}
@@ -323,14 +323,14 @@ function DevTab() {
     <div style={{ textAlign: "center", marginBottom: 32 }}><Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>FOR DEVELOPERS</Lbl><h2 style={{ fontFamily: F.b, fontSize: mob ? 20 : 30, fontWeight: 300, color: C.tx }}>30 minutes. Two API calls. <span style={{ fontFamily: F.d, color: C.gold }}>Zero cost.</span></h2></div>
     <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 24 }}>{[{ id: "code", l: "Integration" }, { id: "value", l: "Value Exchange" }].map(t => <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: "8px 20px", borderRadius: 10, border: "none", background: tab === t.id ? C.gG : "transparent", color: tab === t.id ? C.gold : C.txM, fontSize: 12.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{t.l}</button>)}</div>
     {tab === "code" && <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 12 }}>
-      <Code label="1 · Initialize"><Kw>import</Kw> {"{ "}<Tp>TallyConnect</Tp>{" }"} <Kw>from</Kw> <Str>'@tally-pay/connect'</Str>{"\n\n"}<Kw>const</Kw> <Pr>tally</Pr> = <Kw>new</Kw> <Fn2>TallyConnect</Fn2>({`{\n  `}<Pr>apiKey</Pr>: <Str>'pk_live_...'</Str>,{`\n  `}<Pr>agentName</Pr>: <Str>'Poke'</Str>{`\n}`})</Code>
-      <Code label="2 · Request payment"><Kw>const</Kw> <Pr>payment</Pr> = <Kw>await</Kw> <Pr>tally</Pr>.<Fn2>requestPayment</Fn2>({`{\n  `}<Pr>consumerId</Pr>: <Str>'user_abc123'</Str>,{`\n  `}<Pr>amount</Pr>: <Nm>34200</Nm>,{`\n  `}<Pr>merchant</Pr>: <Str>'Delta Air Lines'</Str>{`\n}`})</Code>
-      <Code label="3 · Handle response"><Kw>if</Kw> (<Pr>payment</Pr>.<Pr>status</Pr> === <Str>'approved'</Str>) {`{\n  `}<Kw>await</Kw> <Fn2>checkout</Fn2>(<Pr>payment</Pr>.<Pr>card</Pr>){`\n  `}<Kw>await</Kw> <Pr>tally</Pr>.<Fn2>confirm</Fn2>(<Pr>payment</Pr>.<Pr>id</Pr>){`\n}`}</Code>
+      <Code label="1 · Initialize"><Kw>import</Kw> {"{ "}<Tp>TallionConnect</Tp>{" }"} <Kw>from</Kw> <Str>'@tallion-pay/connect'</Str>{"\n\n"}<Kw>const</Kw> <Pr>tallion</Pr> = <Kw>new</Kw> <Fn2>TallionConnect</Fn2>({`{\n  `}<Pr>apiKey</Pr>: <Str>'pk_live_...'</Str>,{`\n  `}<Pr>agentName</Pr>: <Str>'Poke'</Str>{`\n}`})</Code>
+      <Code label="2 · Request payment"><Kw>const</Kw> <Pr>payment</Pr> = <Kw>await</Kw> <Pr>tallion</Pr>.<Fn2>requestPayment</Fn2>({`{\n  `}<Pr>consumerId</Pr>: <Str>'user_abc123'</Str>,{`\n  `}<Pr>amount</Pr>: <Nm>34200</Nm>,{`\n  `}<Pr>merchant</Pr>: <Str>'Delta Air Lines'</Str>{`\n}`})</Code>
+      <Code label="3 · Handle response"><Kw>if</Kw> (<Pr>payment</Pr>.<Pr>status</Pr> === <Str>'approved'</Str>) {`{\n  `}<Kw>await</Kw> <Fn2>checkout</Fn2>(<Pr>payment</Pr>.<Pr>card</Pr>){`\n  `}<Kw>await</Kw> <Pr>tallion</Pr>.<Fn2>confirm</Fn2>(<Pr>payment</Pr>.<Pr>id</Pr>){`\n}`}</Code>
       <Code label="4 · Webhooks"><Cm>{"// payment.approved → card ready"}</Cm>{"\n"}<Cm>{"// payment.completed → settled"}</Cm>{"\n"}<Cm>{"// payment.declined → reason"}</Cm></Code>
     </div>}
     {tab === "value" && <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 14 }}>
       <Surf gold style={{ padding: 26 }}><div style={{ fontSize: 15, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 14 }}>Developer gets</div>{["Payment capability — free", "No PCI-DSS", "No fraud liability", "80M+ merchants via Visa", "Co-branded trust signal"].map((it,i) => <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 9 }}><Chk s={12} c={C.grn}/><span style={{ fontSize: 13, color: C.tx, fontFamily: F.b }}>{it}</span></div>)}</Surf>
-      <Surf style={{ padding: 26 }}><div style={{ fontSize: 15, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 14 }}>Tally earns</div>{["1.5–2% interchange (not shared)", "Consumer at $0 CAC", "Trust data per transaction", "Brand recognition"].map((it,i) => <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 9 }}><div style={{ width: 5, height: 5, borderRadius: 3, background: C.gold, opacity: 0.4, flexShrink: 0 }}/><span style={{ fontSize: 13, color: C.txS, fontFamily: F.b }}>{it}</span></div>)}</Surf>
+      <Surf style={{ padding: 26 }}><div style={{ fontSize: 15, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 14 }}>Tallion earns</div>{["1.5–2% interchange (not shared)", "Consumer at $0 CAC", "Trust data per transaction", "Brand recognition"].map((it,i) => <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 9 }}><div style={{ width: 5, height: 5, borderRadius: 3, background: C.gold, opacity: 0.4, flexShrink: 0 }}/><span style={{ fontSize: 13, color: C.txS, fontFamily: F.b }}>{it}</span></div>)}</Surf>
     </div>}
   </div>;
 }
@@ -340,12 +340,12 @@ function DevTab() {
 // ═══════════════════════════════════════════════
 const COMPETITORS = [
   { name: "Stripe ACP", color: C.stripe, tag: "Only Stripe merchants. Delta.com isn't one.", verdict: "red", detail: "Checkout protocol, not payment capability. Only works where Stripe already is." },
-  { name: "Visa TAP", color: "#1A1F71", tag: "Agent identity, zero consumer product.", verdict: "amb", detail: "Brilliant plumbing — but no approval UX, no controls, no app. Needs Tally on top." },
+  { name: "Visa TAP", color: "#1A1F71", tag: "Agent identity, zero consumer product.", verdict: "amb", detail: "Brilliant plumbing — but no approval UX, no controls, no app. Needs Tallion on top." },
   { name: "MC Agent Pay", color: C.mc, tag: "Locked to Mastercard. Bank-dependent UX.", verdict: "amb", detail: "Excellent tokens, but only MC holders. No cross-network, no unified experience." },
   { name: "Google AP2", color: C.google, tag: "Google ecosystem. Can't reach iMessage.", verdict: "amb", detail: "Most ambitious protocol but tied to Google. Poke on iMessage can't access Google Wallet." },
   { name: "Skyfire", color: "#FF6B35", tag: "Crypto-native. Delta doesn't accept USDC.", verdict: "red", detail: "USD→USDC conversion. Mainstream consumers booking flights need card rails, not blockchain." },
   { name: "Nekuda", color: "#8B5CF6", tag: "Closest competitor. $5M, pilot-only.", verdict: "amb", detail: "Same consumer thesis, but limited verticals, no virtual cards, very early." },
-  { name: "Build In-House", color: C.txM, tag: "$500K+, 6–18 months, PCI, 50-state licensing.", verdict: "red", detail: "Poke raised $15M for AI, not fintech. Tally gives them everything in 30 min, free." },
+  { name: "Build In-House", color: C.txM, tag: "$500K+, 6–18 months, PCI, 50-state licensing.", verdict: "red", detail: "Poke raised $15M for AI, not fintech. Tallion gives them everything in 30 min, free." },
 ];
 
 function CompTab() {
@@ -363,7 +363,7 @@ function CompTab() {
         {open === i && <div style={{ padding: "0 20px 16px" }}><div style={{ fontSize: 12.5, color: C.txS, fontFamily: F.b, lineHeight: 1.6, padding: "10px 14px", borderRadius: 10, background: `${c.verdict === "red" ? C.red : C.amb}08`, border: `1px solid ${c.verdict === "red" ? C.red : C.amb}12` }}>{c.detail}</div></div>}
       </div>)}
     </div>
-    <Surf gold style={{ padding: 22 }}><div style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 8 }}>Tally's position</div><div style={{ fontSize: 12.5, color: C.txM, fontFamily: F.b, lineHeight: 1.7 }}>Protocols build from above. Crypto builds from the edges. The consumer-facing middle — trusted controls, financial identity, seamless UX — is <span style={{ color: C.gold }}>strikingly underbuilt</span>. Tally issues virtual Visa through Lithic. Works everywhere. Day one.</div></Surf>
+    <Surf gold style={{ padding: 22 }}><div style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 8 }}>Tallion's position</div><div style={{ fontSize: 12.5, color: C.txM, fontFamily: F.b, lineHeight: 1.7 }}>Protocols build from above. Crypto builds from the edges. The consumer-facing middle — trusted controls, financial identity, seamless UX — is <span style={{ color: C.gold }}>strikingly underbuilt</span>. Tallion issues virtual Visa through Lithic. Works everywhere. Day one.</div></Surf>
   </div>;
 }
 
@@ -411,8 +411,8 @@ function FlowDiagram({ steps, color }) {
 // ─── BOTTOMS-UP MODEL DATA (7-YEAR) ───
 // Conversion: 72-90%. Not an upsell — it's the only checkout path.
 // Monthly spend: avg US household = ~$6K/mo. Agents handle 8% → 63% over 7 years.
-// Banking: JPMorgan = ~$750/consumer/yr. Nubank = ~$50 at 100M. Tally targets $400-600 at scale.
-// McKinsey: $3-5T global agentic commerce by 2030. Tally targets 10%+ share.
+// Banking: JPMorgan = ~$750/consumer/yr. Nubank = ~$50 at 100M. Tallion targets $400-600 at scale.
+// McKinsey: $3-5T global agentic commerce by 2030. Tallion targets 10%+ share.
 const MODEL = [
   { yr: 1, agents: 15,  cpa: 12,  conv: 72, uniq: 130,    mo: 450,  vol: 0.702,   directPct: 0,  merchants: 0,      premPct: 0,  balPct: 0,  avgBal: 0,    cardPct: 0,  depositPct: 0,  avgDep: 0,     lendPct: 0,   avgLoan: 0,     phase: 1 },
   { yr: 2, agents: 50,  cpa: 25,  conv: 78, uniq: 975,    mo: 750,  vol: 8.78,    directPct: 12, merchants: 1200,   premPct: 6,  balPct: 5,  avgBal: 800,  cardPct: 0,  depositPct: 0,  avgDep: 0,     lendPct: 0,   avgLoan: 0,     phase: 2 },
@@ -509,8 +509,8 @@ function VisionTab() {
               {[
                 { l: "Agents integrated", k: "agents", f: v => v },
                 { l: "Avg consumers / agent", k: "cpa", f: v => `${v}K`, s: "K" },
-                { l: "Tally conversion", k: "conv", f: v => `${v}%` },
-                { l: "Unique Tally consumers", k: "uniq", f: v => fmtN(v), hl: true },
+                { l: "Tallion conversion", k: "conv", f: v => `${v}%` },
+                { l: "Unique Tallion consumers", k: "uniq", f: v => fmtN(v), hl: true },
               ].map((row, ri) => (
                 <tr key={ri} style={{ borderBottom: `1px solid ${C.bd}08` }}>
                   <td style={{ padding: "6px 10px", color: row.hl ? C.tx : C.txM, fontWeight: row.hl ? 500 : 400 }}>{row.l}</td>
@@ -525,7 +525,7 @@ function VisionTab() {
               {[
                 { l: "Monthly spend / consumer", k: "mo", f: v => `$${v}` },
                 { l: "Annual volume", k: "vol", f: v => v >= 1000 ? `$${(v/1000).toFixed(1)}T` : v >= 1 ? `$${v.toFixed(1)}B` : `$${Math.round(v*1000)}M`, hl: true },
-                { l: "Tally Direct %", k: "directPct", f: v => v > 0 ? `${v}%` : "—", c: C.grn },
+                { l: "Tallion Direct %", k: "directPct", f: v => v > 0 ? `${v}%` : "—", c: C.grn },
                 { l: "Direct merchants", k: "merchants", f: v => v > 0 ? v.toLocaleString() : "—" },
               ].map((row, ri) => (
                 <tr key={ri} style={{ borderBottom: `1px solid ${C.bd}08` }}>
@@ -540,10 +540,10 @@ function VisionTab() {
               </tr>
               {[
                 { l: "Interchange (Visa rails)", f: r => calcRevenue(r).interchange, c: C.gold },
-                { l: "Tally Direct margin", f: r => calcRevenue(r).directRev, c: C.grn },
+                { l: "Tallion Direct margin", f: r => calcRevenue(r).directRev, c: C.grn },
                 { l: "Premium subscriptions", f: r => calcRevenue(r).premiumRev, c: C.amb },
                 { l: "Float / balance yield", f: r => calcRevenue(r).floatRev, c: C.blu },
-                { l: "Tally Card interchange", f: r => calcRevenue(r).cardRev, c: C.gold },
+                { l: "Tallion Card interchange", f: r => calcRevenue(r).cardRev, c: C.gold },
                 { l: "Deposit NIM", f: r => calcRevenue(r).depositRev, c: C.purple },
                 { l: "Lending margin", f: r => calcRevenue(r).lendRev, c: C.purple },
               ].map((row, ri) => (
@@ -594,7 +594,7 @@ function VisionTab() {
         </div>
         <div style={{ display: "flex", gap: 12, marginTop: 14, flexWrap: "wrap" }}>
           {[
-            { c: C.gold, l: "Interchange" }, { c: C.grn, l: "Tally Direct" }, { c: C.amb, l: "Premium" },
+            { c: C.gold, l: "Interchange" }, { c: C.grn, l: "Tallion Direct" }, { c: C.amb, l: "Premium" },
             { c: C.blu, l: "Float" }, { c: C.purple, l: "Banking" },
           ].map((leg, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
@@ -631,13 +631,13 @@ function VisionTab() {
 
       {/* ─── BANK COMPARABLES ─── */}
       <Surf style={{ padding: "18px 22px", marginBottom: 20 }}>
-        <Lbl style={{ marginBottom: 12, letterSpacing: 4, color: C.txF }}>HOW TALLY COMPARES TO BANKS AT SCALE</Lbl>
+        <Lbl style={{ marginBottom: 12, letterSpacing: 4, color: C.txF }}>HOW TALLION COMPARES TO BANKS AT SCALE</Lbl>
         <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "repeat(4, 1fr)", gap: 12 }}>
           {[
             { name: "JPMorgan Chase", users: "80M", arpu: "~$750", color: C.txM, note: "Full-service bank" },
             { name: "Nubank", users: "100M", arpu: "~$50", color: C.txM, note: "Digital bank, LatAm" },
             { name: "Cash App", users: "56M", arpu: "~$120", color: C.txM, note: "Payments + banking" },
-            { name: "Tally Year 7", users: fmtN(MODEL[6].uniq), arpu: "$" + Math.round(calcRevenue(MODEL[6]).total / MODEL[6].uniq * 1e3), color: C.gold, note: "Agent commerce bank" },
+            { name: "Tallion Year 7", users: fmtN(MODEL[6].uniq), arpu: "$" + Math.round(calcRevenue(MODEL[6]).total / MODEL[6].uniq * 1e3), color: C.gold, note: "Agent commerce bank" },
           ].map((b, i) => (
             <div key={i} style={{ padding: 14, borderRadius: 12, background: i === 3 ? C.gG : C.sf, border: `1px solid ${i === 3 ? C.gB : C.bd}` }}>
               <div style={{ fontSize: 12, color: b.color, fontFamily: F.b, fontWeight: 600, marginBottom: 6 }}>{b.name}</div>
@@ -654,7 +654,7 @@ function VisionTab() {
           ))}
         </div>
         <div style={{ marginTop: 10, fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5, textAlign: "center" }}>
-          Tally at scale has the user base of a Nubank, the ARPU approaching a JPMorgan — because Tally sees <span style={{ color: C.gold }}>every transaction</span>, not just the ones that happen to flow through a bank account.
+          Tallion at scale has the user base of a Nubank, the ARPU approaching a JPMorgan — because Tallion sees <span style={{ color: C.gold }}>every transaction</span>, not just the ones that happen to flow through a bank account.
         </div>
       </Surf>
 
@@ -666,25 +666,25 @@ function VisionTab() {
           icon={<Shield s={20} c={C.gold} />} isActive={activePhase === 0} onClick={() => setActivePhase(activePhase === 0 ? -1 : 0)}>
           <Lbl style={{ marginBottom: 8, letterSpacing: 4 }}>Money flow</Lbl>
           <FlowDiagram color={C.gold} steps={[
-            { label: "Consumer" }, { label: "Tally" }, { label: "Lithic", highlight: true },
+            { label: "Consumer" }, { label: "Tallion" }, { label: "Lithic", highlight: true },
             { label: "Visa" }, { label: "Processor" }, { label: "Merchant" },
           ]} />
           <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b, lineHeight: 1.65, marginBottom: 12 }}>
-            Free SDK. Agents integrate in 30 min. Consumer sets rules, Tally issues single-use virtual Visa via Lithic. At $450/mo avg spend per consumer (flights, rides, shopping), interchange is the only revenue — but CAC is $0 and conversion is <span style={{ color: C.gold, fontWeight: 500 }}>72%+ from day one</span>.
+            Free SDK. Agents integrate in 30 min. Consumer sets rules, Tallion issues single-use virtual Visa via Lithic. At $450/mo avg spend per consumer (flights, rides, shopping), interchange is the only revenue — but CAC is $0 and conversion is <span style={{ color: C.gold, fontWeight: 500 }}>72%+ from day one</span>.
           </div>
           <Surf gold style={{ padding: 12, marginBottom: 12 }}>
             <div style={{ fontSize: 11, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 3 }}>Why 72%+ conversion?</div>
             <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.55 }}>
-              Tally isn't an upsell — it's the only way to complete the purchase. When Poke says "to book this flight, set up Tally (90 sec)," the consumer is at peak intent. Same mechanic as Uber requiring a card. You don't NOT do it.
+              Tallion isn't an upsell — it's the only way to complete the purchase. When Poke says "to book this flight, set up Tallion (90 sec)," the consumer is at peak intent. Same mechanic as Uber requiring a card. You don't NOT do it.
             </div>
           </Surf>
           <div style={{ padding: 12, borderRadius: 10, background: C.ambS, border: `1px solid ${C.amb}12` }}>
-            <span style={{ fontSize: 11, color: C.amb, fontFamily: F.b }}><span style={{ fontWeight: 600 }}>Limitation:</span> Tally only nets ~1% after Lithic + Visa. The merchant's processor (Stripe) takes another 2.9% from the merchant side. Everyone eats margin → Phase 2 fixes this.</span>
+            <span style={{ fontSize: 11, color: C.amb, fontFamily: F.b }}><span style={{ fontWeight: 600 }}>Limitation:</span> Tallion only nets ~1% after Lithic + Visa. The merchant's processor (Stripe) takes another 2.9% from the merchant side. Everyone eats margin → Phase 2 fixes this.</span>
           </div>
         </PhaseCard>
 
-        {/* PHASE 2 — TALLY DIRECT */}
-        <PhaseCard phase={2} title="Tally Direct" timeline="Years 2–3" color={C.grn} revenue={fmt(calcRevenue(MODEL[2]).total) + " ARR by Yr 3"}
+        {/* PHASE 2 — TALLION DIRECT */}
+        <PhaseCard phase={2} title="Tallion Direct" timeline="Years 2–3" color={C.grn} revenue={fmt(calcRevenue(MODEL[2]).total) + " ARR by Yr 3"}
           icon={<Zap s={20} c={C.grn} />} isActive={activePhase === 1} onClick={() => setActivePhase(activePhase === 1 ? -1 : 1)}>
 
           <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 14 }}>
@@ -695,11 +695,11 @@ function VisionTab() {
 
           {directView === "how" && <>
             <Lbl style={{ marginBottom: 6, letterSpacing: 4 }}>Today: 6 parties take a cut</Lbl>
-            <FlowDiagram color={C.red} steps={[{ label: "Consumer" }, { label: "Tally" }, { label: "Lithic" }, { label: "Visa" }, { label: "Stripe" }, { label: "Merchant" }]} />
-            <div style={{ display: "flex", justifyContent: "center", margin: "10px 0" }}><div style={{ padding: "5px 14px", borderRadius: 7, background: C.grnS, border: `1px solid ${C.grn}15` }}><span style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>↓ Tally Direct: skip 4 middlemen</span></div></div>
-            <FlowDiagram color={C.grn} steps={[{ label: "Consumer", highlight: true }, { label: "Tally", highlight: true }, { label: "Merchant", highlight: true }]} />
+            <FlowDiagram color={C.red} steps={[{ label: "Consumer" }, { label: "Tallion" }, { label: "Lithic" }, { label: "Visa" }, { label: "Stripe" }, { label: "Merchant" }]} />
+            <div style={{ display: "flex", justifyContent: "center", margin: "10px 0" }}><div style={{ padding: "5px 14px", borderRadius: 7, background: C.grnS, border: `1px solid ${C.grn}15` }}><span style={{ fontSize: 11, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>↓ Tallion Direct: skip 4 middlemen</span></div></div>
+            <FlowDiagram color={C.grn} steps={[{ label: "Consumer", highlight: true }, { label: "Tallion", highlight: true }, { label: "Merchant", highlight: true }]} />
             <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b, lineHeight: 1.65, marginTop: 8 }}>
-              ACH / FedNow / RTP: Tally debits consumer's bank, holds in trust, settles directly to merchant. Cost per transaction drops from ~0.6–0.8% (Lithic + network) to pennies. Merchant pays <span style={{ color: C.grn, fontWeight: 600 }}>0% processing fees</span>.
+              ACH / FedNow / RTP: Tallion debits consumer's bank, holds in trust, settles directly to merchant. Cost per transaction drops from ~0.6–0.8% (Lithic + network) to pennies. Merchant pays <span style={{ color: C.grn, fontWeight: 600 }}>0% processing fees</span>.
             </div>
           </>}
 
@@ -715,13 +715,13 @@ function VisionTab() {
                 ))}
               </div>
               <div style={{ padding: 16, borderRadius: 14, background: C.grnS, border: `1px solid ${C.grn}12`, textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <div style={{ fontSize: 12, color: C.grn, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Tally Direct</div>
+                <div style={{ fontSize: 12, color: C.grn, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Tallion Direct</div>
                 <div style={{ fontSize: 42, fontFamily: F.d, color: C.grn }}>0%</div>
                 <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, marginTop: 4 }}>Merchant keeps 100% of sale</div>
               </div>
             </div>
             <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b, lineHeight: 1.6 }}>
-              A merchant processing $1M/year saves <span style={{ color: C.grn, fontWeight: 600 }}>$29K–35K</span> by accepting Tally Direct. The pitch: "Accept Tally Direct and your agent commerce channel is free." We project <span style={{ color: C.tx }}>{MODEL[3].merchants.toLocaleString()} merchants</span> on Direct by Year 4, covering {MODEL[3].directPct}% of Tally volume.
+              A merchant processing $1M/year saves <span style={{ color: C.grn, fontWeight: 600 }}>$29K–35K</span> by accepting Tallion Direct. The pitch: "Accept Tallion Direct and your agent commerce channel is free." We project <span style={{ color: C.tx }}>{MODEL[3].merchants.toLocaleString()} merchants</span> on Direct by Year 4, covering {MODEL[3].directPct}% of Tallion volume.
             </div>
           </>}
 
@@ -729,10 +729,10 @@ function VisionTab() {
             <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 12, marginBottom: 12 }}>
               <div style={{ padding: 14, borderRadius: 12, background: C.gG, border: `1px solid ${C.gB}` }}>
                 <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 4 }}>VIA VISA RAILS</div>
-                <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.55 }}>Gross: 1.5–2% interchange<br />Lithic + network: –40%<br />Net: <span style={{ color: C.gold, fontWeight: 600 }}>~1% to Tally</span></div>
+                <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.55 }}>Gross: 1.5–2% interchange<br />Lithic + network: –40%<br />Net: <span style={{ color: C.gold, fontWeight: 600 }}>~1% to Tallion</span></div>
               </div>
               <div style={{ padding: 14, borderRadius: 12, background: C.grnS, border: `1px solid ${C.grn}12` }}>
-                <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 4 }}>VIA TALLY DIRECT</div>
+                <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2, marginBottom: 4 }}>VIA TALLION DIRECT</div>
                 <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.55 }}>ACH: $0.20–0.50/tx<br />FedNow: $0.01–0.04/tx<br />Margin: <span style={{ color: C.grn, fontWeight: 600 }}>~0.5% + float + premium</span></div>
               </div>
             </div>
@@ -747,14 +747,14 @@ function VisionTab() {
           icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.blu} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3h-8l-2 4h12l-2-4z"/></svg>}
           isActive={activePhase === 2} onClick={() => setActivePhase(activePhase === 2 ? -1 : 2)}>
           <div style={{ fontSize: 12, color: C.txS, fontFamily: F.b, lineHeight: 1.65, marginBottom: 14 }}>
-            {fmtN(MODEL[3].uniq)} consumers, ${MODEL[3].vol.toFixed(0)}B volume, {MODEL[3].merchants.toLocaleString()} Direct merchants. Tally launches products built on the richest behavioral data in commerce.
+            {fmtN(MODEL[3].uniq)} consumers, ${MODEL[3].vol.toFixed(0)}B volume, {MODEL[3].merchants.toLocaleString()} Direct merchants. Tallion launches products built on the richest behavioral data in commerce.
           </div>
           <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 10 }}>
             {[
-              { icon: "💳", title: "Tally Card", desc: `Physical + virtual debit. ${MODEL[3].cardPct}% adoption by Yr 4. ~$45/user/yr card interchange.`, metric: `${fmtN(MODEL[3].uniq * MODEL[3].cardPct / 100)} holders` },
-              { icon: "💰", title: "Tally Balance", desc: `Hold funds, earn yield, instant agent funding. ${MODEL[3].balPct}% adoption, avg $${MODEL[3].avgBal.toLocaleString()} balance.`, metric: `${fmt(calcRevenue(MODEL[3]).floatRev)} yield rev` },
-              { icon: "📊", title: "Tally Credit", desc: "Agent transaction history = richest credit signal ever. Underwrite consumers bureaus can't score.", metric: "Launches Yr 5" },
-              { icon: "🛡️", title: "Tally Protect", desc: "Purchase protection, disputes, fraud insurance. Built in free, premium tier for higher coverage.", metric: "Bundled w/ Premium" },
+              { icon: "💳", title: "Tallion Card", desc: `Physical + virtual debit. ${MODEL[3].cardPct}% adoption by Yr 4. ~$45/user/yr card interchange.`, metric: `${fmtN(MODEL[3].uniq * MODEL[3].cardPct / 100)} holders` },
+              { icon: "💰", title: "Tallion Balance", desc: `Hold funds, earn yield, instant agent funding. ${MODEL[3].balPct}% adoption, avg $${MODEL[3].avgBal.toLocaleString()} balance.`, metric: `${fmt(calcRevenue(MODEL[3]).floatRev)} yield rev` },
+              { icon: "📊", title: "Tallion Credit", desc: "Agent transaction history = richest credit signal ever. Underwrite consumers bureaus can't score.", metric: "Launches Yr 5" },
+              { icon: "🛡️", title: "Tallion Protect", desc: "Purchase protection, disputes, fraud insurance. Built in free, premium tier for higher coverage.", metric: "Bundled w/ Premium" },
             ].map((p, i) => (
               <div key={i} style={{ padding: 14, borderRadius: 14, background: C.sf, border: `1px solid ${C.bd}` }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
@@ -788,7 +788,7 @@ function VisionTab() {
           <Surf gold style={{ padding: 16 }}>
             <div style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>The endgame: own the entire financial relationship</div>
             <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b, lineHeight: 1.6 }}>
-              Banks own the account. Card networks own the transaction. Processors own the checkout. Tally owns <span style={{ color: C.tx }}>all three</span>. At {fmtN(MODEL[6].uniq)} consumers and ${MODEL[6].vol.toFixed(0)}B volume: <span style={{ color: C.gold, fontWeight: 600 }}>{fmt(calcRevenue(MODEL[6]).total)} ARR → $30–50B valuation.</span>
+              Banks own the account. Card networks own the transaction. Processors own the checkout. Tallion owns <span style={{ color: C.tx }}>all three</span>. At {fmtN(MODEL[6].uniq)} consumers and ${MODEL[6].vol.toFixed(0)}B volume: <span style={{ color: C.gold, fontWeight: 600 }}>{fmt(calcRevenue(MODEL[6]).total)} ARR → $30–50B valuation.</span>
             </div>
           </Surf>
         </PhaseCard>
@@ -818,9 +818,9 @@ function VisionTab() {
 
 
 // ═══════════════════════════════════════════════
-// TAB 5: TALLY APP
+// TAB 5: TALLION APP
 // ═══════════════════════════════════════════════
-function TallyAppTab() {
+function TallionAppTab() {
   const mob = useIsMobile();
   const [screen, setScreen] = useState("home");
   const navItems = [
@@ -845,7 +845,7 @@ function TallyAppTab() {
   const HomeScreen = () => (
     <div style={{ flex: 1, padding: "10px 14px", overflow: "auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-        <div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>TALLY BALANCE</div><div style={{ fontSize: 26, fontFamily: F.d, color: C.gold }}>$2,847</div></div>
+        <div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b, letterSpacing: 2 }}>TALLION BALANCE</div><div style={{ fontSize: 26, fontFamily: F.d, color: C.gold }}>$2,847</div></div>
         <div style={{ width: 32, height: 32, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={15} c={C.bg}/></div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 6, marginBottom: 14 }}>
@@ -875,7 +875,7 @@ function TallyAppTab() {
   const AgentsScreen = () => (
     <div style={{ flex: 1, padding: "10px 14px", overflow: "auto" }}>
       <div style={{ fontSize: 15, color: C.tx, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Connected agents</div>
-      <div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginBottom: 12 }}>4 agents using your Tally account</div>
+      <div style={{ fontSize: 10, color: C.txM, fontFamily: F.b, marginBottom: 12 }}>4 agents using your Tallion account</div>
       {[
         { icon: "🌴", name: "Poke", desc: "iMessage assistant", spent: "$2,140", txns: 24, limit: "$500/tx", color: C.pk, trust: 94 },
         { icon: "🤖", name: "ChatGPT Operator", desc: "OpenAI", spent: "$892", txns: 8, limit: "$1,000/tx", color: C.gpt, trust: 88 },
@@ -902,7 +902,7 @@ function TallyAppTab() {
     <div style={{ flex: 1, padding: "10px 14px", overflow: "auto" }}>
       <div style={{ padding: 18, borderRadius: 18, background: `linear-gradient(145deg, ${C.gold}18, ${C.goldM}08)`, border: `1px solid ${C.gB}`, marginBottom: 14 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 5 }}><Shield s={14} c={C.gold} /><span style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Tally</span></div>
+          <div style={{ display: "flex", alignItems: "center", gap: 5 }}><Shield s={14} c={C.gold} /><span style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Tallion</span></div>
           <div style={{ width: 32, height: 20, borderRadius: 4, background: `linear-gradient(135deg, #1A1F71, #2D4AA8)` }}><span style={{ fontSize: 7, color: "white", fontFamily: F.b, fontWeight: 700, display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>VISA</span></div>
         </div>
         <div style={{ fontFamily: F.m, fontSize: 15, color: C.gold, letterSpacing: 3, marginBottom: 14 }}>4147 8293 0012 7744</div>
@@ -977,7 +977,7 @@ function TallyAppTab() {
   return (
     <div style={{ maxWidth: 1060, margin: "0 auto", padding: "72px 20px 60px" }}>
       <div style={{ textAlign: "center", marginBottom: 28 }}>
-        <Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>THE TALLY APP</Lbl>
+        <Lbl style={{ color: C.goldM, marginBottom: 12, letterSpacing: 5 }}>THE TALLION APP</Lbl>
         <h2 style={{ fontFamily: F.b, fontSize: mob ? 22 : 32, fontWeight: 300, color: C.tx, letterSpacing: -0.5, marginBottom: 6 }}>
           Your <span style={{ fontFamily: F.d, color: C.gold }}>agent control center</span>
         </h2>
@@ -986,9 +986,9 @@ function TallyAppTab() {
         </p>
       </div>
       <div style={{ display: "flex", flexDirection: mob ? "column" : "row", gap: mob ? 20 : 40, justifyContent: "center", alignItems: mob ? "center" : "flex-start" }}>
-        <Phone label="Tally" labelColor={C.gold} glow="gold">
+        <Phone label="Tallion" labelColor={C.gold} glow="gold">
           <div style={{ padding: "4px 14px 6px", display: "flex", alignItems: "center", gap: 6 }}>
-            <Shield s={12} c={C.gold} /><span style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Tally</span>
+            <Shield s={12} c={C.gold} /><span style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600 }}>Tallion</span>
           </div>
           {screen === "home" && <HomeScreen />}
           {screen === "agents" && <AgentsScreen />}
@@ -998,10 +998,10 @@ function TallyAppTab() {
         </Phone>
         <div style={{ maxWidth: mob ? "100%" : 380, paddingTop: mob ? 0 : 40 }}>
           {[
-            { id: "home", title: "Dashboard", desc: "Tally Balance, monthly spend, recent transactions across all agents. See everything at a glance.", color: C.gold, features: ["Real-time transaction feed", "Spending by agent", "Monthly analytics"] },
-            { id: "agents", title: "Connected Agents", desc: "Every agent using your Tally. See trust scores, spending history, and per-agent limits.", color: C.grn, features: ["Trust scores per agent", "Spending & transaction count", "Per-agent limit overrides"] },
-            { id: "card", title: "Tally Card", desc: "Physical + virtual card. See active virtual cards issued for each purchase. Manage funding methods.", color: C.blu, features: ["Virtual cards self-destruct after use", "Card never exposed to agents", "Primary + backup funding"] },
-            { id: "rules", title: "Smart Rules", desc: "Global defaults + per-agent overrides. Tally suggests smarter limits based on your behavior.", color: C.purple, features: ["Auto-approve thresholds", "Blocked categories", "AI-powered suggestions"] },
+            { id: "home", title: "Dashboard", desc: "Tallion Balance, monthly spend, recent transactions across all agents. See everything at a glance.", color: C.gold, features: ["Real-time transaction feed", "Spending by agent", "Monthly analytics"] },
+            { id: "agents", title: "Connected Agents", desc: "Every agent using your Tallion. See trust scores, spending history, and per-agent limits.", color: C.grn, features: ["Trust scores per agent", "Spending & transaction count", "Per-agent limit overrides"] },
+            { id: "card", title: "Tallion Card", desc: "Physical + virtual card. See active virtual cards issued for each purchase. Manage funding methods.", color: C.blu, features: ["Virtual cards self-destruct after use", "Card never exposed to agents", "Primary + backup funding"] },
+            { id: "rules", title: "Smart Rules", desc: "Global defaults + per-agent overrides. Tallion suggests smarter limits based on your behavior.", color: C.purple, features: ["Auto-approve thresholds", "Blocked categories", "AI-powered suggestions"] },
           ].map((s, i) => (
             <div key={s.id} onClick={() => setScreen(s.id)} style={{ padding: 16, borderRadius: 14, background: screen === s.id ? `${s.color}06` : "transparent", border: `1px solid ${screen === s.id ? s.color + "15" : "transparent"}`, cursor: "pointer", marginBottom: 6, transition: "all 0.3s ease" }}>
               <div style={{ fontSize: 13, color: screen === s.id ? s.color : C.txM, fontFamily: F.b, fontWeight: 600, marginBottom: 3 }}>{s.title}</div>
@@ -1020,7 +1020,7 @@ function TallyAppTab() {
 // ═══════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════
-export default function TallyDemo() {
+export default function TallionDemo() {
   const mob = useIsMobile();
   const [view, setView] = useState("ba");
   return (
@@ -1036,16 +1036,16 @@ export default function TallyDemo() {
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(5,5,5,0.85)", backdropFilter: "blur(40px)", borderBottom: `1px solid ${C.bd}` }}>
             <div style={{ maxWidth: 1100, margin: "0 auto", padding: "10px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={11} c={C.bg}/></div><span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tally</span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={11} c={C.bg}/></div><span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tallion</span></div>
               <div style={{ display: "flex", gap: 2 }}>
-                {[{ id: "ba", l: "Before & After" }, { id: "app", l: "Tally App" }, { id: "dev", l: "Developers" }, { id: "comp", l: "Competitors" }, { id: "vision", l: "Vision" }].map(t => (
+                {[{ id: "ba", l: "Before & After" }, { id: "app", l: "Tallion App" }, { id: "dev", l: "Developers" }, { id: "comp", l: "Competitors" }, { id: "vision", l: "Vision" }].map(t => (
                   <button key={t.id} onClick={() => setView(t.id)} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: view === t.id ? C.gG : "transparent", color: view === t.id ? C.gold : C.txM, fontSize: 11.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{t.l}</button>
                 ))}
               </div>
             </div>
           </div>
           {view === "ba" && <BeforeAfterTab />}
-          {view === "app" && <TallyAppTab />}
+          {view === "app" && <TallionAppTab />}
           {view === "dev" && <DevTab />}
           {view === "comp" && <CompTab />}
           {view === "vision" && <VisionTab />}

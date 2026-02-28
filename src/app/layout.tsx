@@ -34,13 +34,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tally — Consumer Payment Rails for the Agentic Economy",
+  title: "Tallion — Consumer Payment Rails for the Agentic Economy",
   description:
-    "The trust layer between consumers and their AI agents' financial lives. See how Tally transforms agent commerce.",
+    "The trust layer between consumers and their AI agents' financial lives. See how Tallion transforms agent commerce.",
   openGraph: {
-    title: "Tally — Before & After Agent Payments",
+    title: "Tallion — Before & After Agent Payments",
     description:
-      "Same request. Completely different experience. See how AI agents handle payments with and without Tally.",
+      "Same request. Completely different experience. See how AI agents handle payments with and without Tallion.",
     type: "website",
   },
 };

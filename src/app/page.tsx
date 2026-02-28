@@ -1,5 +1,5 @@
-import TallyDemo from "./components/TallyDemo";
+import TallionLanding from "./components/TallionLanding";
 
 export default function Home() {
-  return <TallyDemo />;
+  return <TallionLanding />;
 }
