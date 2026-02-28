@@ -13,16 +13,16 @@ function useIsMobile(bp = 768) {
 }
 
 const C = {
-  gold: "#BFA36D", goldM: "#917A4A", goldL: "#D4C4A0",
-  bg: "#050505", bgS: "#0A0A09",
+  gold: "#d4a940", goldM: "#a88425", goldL: "#d9b044",
+  bg: "#0a0a0a", bgS: "#111111",
   bd: "rgba(255,255,255,0.04)", bdH: "rgba(255,255,255,0.08)",
-  tx: "#EDE8DF", txS: "#B8B0A2", txM: "#6B6560", txF: "#3D3935",
+  tx: "#f7f4ee", txS: "#B8B0A2", txM: "#7a6a35", txF: "#3D3935",
   grn: "#6FCF97", red: "#EB5757", blu: "#6B9FD4", purple: "#A78BFA",
 };
 const F = {
-  d: "var(--font-sora), 'DM Sans', sans-serif",
-  b: "var(--font-dm-sans), sans-serif",
-  m: "var(--font-jetbrains), 'IBM Plex Mono', monospace",
+  d: "var(--font-montserrat), 'Montserrat', sans-serif",
+  b: "var(--font-montserrat), 'Montserrat', sans-serif",
+  m: "var(--font-jetbrains), 'JetBrains Mono', monospace",
 };
 
 const Shield = ({s=15,c=C.gold}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
@@ -542,10 +542,10 @@ export default function TallionLanding() {
     <>
       <style>{`
         *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-        html{background:#050505;scroll-behavior:smooth}
+        html{background:#0a0a0a;scroll-behavior:smooth}
         body{overflow-x:hidden}
-        ::selection{background:rgba(191,163,109,0.2);color:#EDE8DF}
-        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(191,163,109,0.08);border-radius:2px}
+        ::selection{background:rgba(212,169,64,0.2);color:#f7f4ee}
+        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(212,169,64,0.08);border-radius:2px}
         button{outline:none;transition:all 0.2s ease}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button:active{transform:translateY(0) scale(0.98)}
         p{margin:0}
       `}</style>

@@ -7,11 +7,11 @@ import { useState, useEffect, useRef } from "react";
 // ═══════════════════════════════════════════════════════════════
 
 const C = {
-  gold: "#BFA36D", goldM: "#917A4A",
-  gG: "rgba(191,163,109,0.07)", gB: "rgba(191,163,109,0.12)",
-  bg: "#050505", sf: "rgba(255,255,255,0.018)",
+  gold: "#d4a940", goldM: "#a88425",
+  gG: "rgba(212,169,64,0.07)", gB: "rgba(212,169,64,0.12)",
+  bg: "#0a0a0a", sf: "rgba(255,255,255,0.018)",
   bd: "rgba(255,255,255,0.04)",
-  tx: "#EDE8DF", txS: "#B8B0A2", txM: "#6B6560", txF: "#3D3935",
+  tx: "#f7f4ee", txS: "#B8B0A2", txM: "#7a6a35", txF: "#3D3935",
   grn: "#6FCF97", grnS: "rgba(111,207,151,0.10)",
   red: "#EB5757", redS: "rgba(235,87,87,0.06)",
   blu: "#6B9FD4", bluS: "rgba(107,159,212,0.08)",
@@ -21,7 +21,7 @@ const C = {
   stripe: "#635BFF", visa: "#1A1F71", mc: "#EB001B", google: "#4285F4",
   purple: "#A78BFA", purpleS: "rgba(167,139,250,0.08)",
 };
-const F = { d: "var(--font-sora), 'DM Sans', sans-serif", b: "var(--font-dm-sans), sans-serif", m: "var(--font-ibm-mono), monospace" };
+const F = { d: "var(--font-montserrat), 'Montserrat', sans-serif", b: "var(--font-montserrat), 'Montserrat', sans-serif", m: "var(--font-jetbrains), 'JetBrains Mono', monospace" };
 
 // ─── ICONS ───
 const Shield = ({s=15,c=C.gold}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
@@ -58,8 +58,8 @@ const Phone = ({ children, label, labelColor = C.txF, glow }) => (
 const PokeHeader = () => (<div style={{ padding: "6px 14px 10px", borderBottom: `1px solid ${C.bd}`, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 28, height: 28, borderRadius: 14, background: `linear-gradient(145deg, ${C.pk}, #1B9E5E)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>🌴</div><div><div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Poke</div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b }}>iMessage</div></div></div>);
 const Bub = ({ text, from, vis = true }) => (<div style={{ alignSelf: from === "user" ? "flex-end" : "flex-start", maxWidth: "84%", opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(6px)", transition: "all 0.45s cubic-bezier(0.16,1,0.3,1)" }}><div style={{ padding: "10px 14px", borderRadius: 18, borderBottomRightRadius: from === "user" ? 4 : 18, borderBottomLeftRadius: from === "agent" ? 4 : 18, background: from === "user" ? `linear-gradient(135deg, ${C.pk}20, ${C.pk}0A)` : "rgba(255,255,255,0.04)", border: `1px solid ${from === "user" ? `${C.pk}15` : C.bd}` }}><div style={{ fontSize: 13, color: from === "user" ? C.tx : C.txS, fontFamily: F.b, lineHeight: 1.55 }}>{text}</div></div></div>);
 const SysCard = ({ children, color = C.gold, vis = true }) => (<div style={{ margin: "4px 0", padding: "12px 14px", borderRadius: 14, background: `${color}06`, border: `1px solid ${color}10`, opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(6px)", transition: "all 0.45s cubic-bezier(0.16,1,0.3,1)" }}>{children}</div>);
-const Surf = ({ children, style, gold, onClick }) => (<div onClick={onClick} style={{ background: gold ? `linear-gradient(165deg, rgba(191,163,109,0.055), rgba(191,163,109,0.015))` : C.sf, borderRadius: 18, border: `1px solid ${gold ? C.gB : C.bd}`, cursor: onClick ? "pointer" : "default", transition: "all 0.3s ease", ...style }}>{children}</div>);
-const Btn = ({ children, onClick, primary, style }) => (<button onClick={onClick} style={{ padding: "12px 28px", borderRadius: 12, border: primary ? "none" : `1px solid ${C.gold}28`, background: primary ? `linear-gradient(135deg, ${C.gold}, ${C.goldM})` : "transparent", color: primary ? "#080706" : C.gold, fontSize: 13, fontFamily: F.b, fontWeight: 600, cursor: "pointer", boxShadow: primary ? `0 6px 24px rgba(191,163,109,0.18)` : "none", ...style }}>{children}</button>);
+const Surf = ({ children, style, gold, onClick }) => (<div onClick={onClick} style={{ background: gold ? `linear-gradient(165deg, rgba(212,169,64,0.055), rgba(212,169,64,0.015))` : C.sf, borderRadius: 18, border: `1px solid ${gold ? C.gB : C.bd}`, cursor: onClick ? "pointer" : "default", transition: "all 0.3s ease", ...style }}>{children}</div>);
+const Btn = ({ children, onClick, primary, style }) => (<button onClick={onClick} style={{ padding: "12px 28px", borderRadius: 12, border: primary ? "none" : `1px solid ${C.gold}28`, background: primary ? `linear-gradient(135deg, ${C.gold}, ${C.goldM})` : "transparent", color: primary ? "#080706" : C.gold, fontSize: 13, fontFamily: F.b, fontWeight: 600, cursor: "pointer", boxShadow: primary ? `0 6px 24px rgba(212,169,64,0.18)` : "none", ...style }}>{children}</button>);
 
 // ═══════════════════════════════════════════════
 // TAB 1: BEFORE & AFTER
@@ -227,7 +227,7 @@ function WithTallion({ scenario, step }) {
         /* STEPS 6-7: APPROVAL SCREEN */
         <div style={{ flex: 1, padding: 16, display: "flex", flexDirection: "column", alignItems: "center" }}>
           {step === 6 && <div style={{ width: "100%", padding: "8px 12px", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: `1px solid ${C.bd}`, marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 20, height: 20, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={9} c={C.bg}/></div><div style={{ flex: 1 }}><div style={{ fontSize: 10.5, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Tallion</div><div style={{ fontSize: 9, color: C.txM, fontFamily: F.b }}>Poke wants to pay $342</div></div></div>}
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 20px rgba(191,163,109,0.22)", marginBottom: 10 }}><Shield s={16} c={C.bg}/></div>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 20px rgba(212,169,64,0.22)", marginBottom: 10 }}><Shield s={16} c={C.bg}/></div>
           <div style={{ fontSize: 11, color: C.txS, fontFamily: F.b }}>Payment Request</div>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 10, marginTop: 2 }}><span style={{ fontSize: 10 }}>🌴</span><span style={{ fontSize: 10, color: C.txM, fontFamily: F.b }}>via Poke</span></div>
           <div style={{ fontSize: 32, fontFamily: F.d, color: C.gold }}>$342</div>
@@ -247,7 +247,7 @@ function WithTallion({ scenario, step }) {
         /* STEP 10: DOWNLOAD APP */
         <div style={{ flex: 1, padding: 14, display: "flex", flexDirection: "column" }}>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px rgba(191,163,109,0.25)", marginBottom: 14 }}><Shield s={24} c={C.bg}/></div>
+            <div style={{ width: 52, height: 52, borderRadius: 14, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px rgba(212,169,64,0.25)", marginBottom: 14 }}><Shield s={24} c={C.bg}/></div>
             <div style={{ fontSize: 16, color: C.tx, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>Get the Tallion app</div>
             <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, textAlign: "center", lineHeight: 1.5, marginBottom: 16, maxWidth: 220 }}>Approve with Face ID. Manage all your agents. Set smarter rules.</div>
             <div style={{ width: "100%", padding: 12, borderRadius: 12, background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, textAlign: "center", marginBottom: 8, cursor: "default" }}><span style={{ fontSize: 13, color: C.bg, fontFamily: F.b, fontWeight: 600 }}>Download Tallion</span></div>
@@ -574,7 +574,7 @@ function VisionTab() {
               { v: rev.directRev, c: C.grn, l: "Direct" },
               { v: rev.premiumRev, c: C.amb, l: "Premium" },
               { v: rev.floatRev, c: C.blu, l: "Float" },
-              { v: rev.cardRev, c: "#BFA36D80", l: "Card" },
+              { v: rev.cardRev, c: "#d4a94080", l: "Card" },
               { v: rev.depositRev, c: C.purple, l: "Deposits" },
               { v: rev.lendRev, c: "#A78BFA80", l: "Lending" },
             ].filter(l => l.v > 0);
@@ -1027,11 +1027,11 @@ export default function TallionDemo() {
     <>
       <style>{`
         *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-        html{background:#050505}
-        ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(191,163,109,0.06);border-radius:2px}
+        html{background:#0a0a0a}
+        ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(212,169,64,0.06);border-radius:2px}
         button{outline:none}button:hover{filter:brightness(1.08)}button:active{transform:scale(0.97)}
       `}</style>
-      <div style={{ minHeight: "100vh", color: C.tx, background: `radial-gradient(ellipse 80% 50% at 50% -10%, rgba(191,163,109,0.03), transparent 60%), ${C.bg}` }}>
+      <div style={{ minHeight: "100vh", color: C.tx, background: `radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,169,64,0.03), transparent 60%), ${C.bg}` }}>
         <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none", opacity: 0.25, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")` }} />
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(5,5,5,0.85)", backdropFilter: "blur(40px)", borderBottom: `1px solid ${C.bd}` }}>

@@ -1,30 +1,11 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Serif_Display, IBM_Plex_Mono, Sora, JetBrains_Mono } from "next/font/google";
+import { Montserrat, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
-  weight: ["200", "300", "400", "500", "600", "700"],
-});
-
-const dmSerif = DM_Serif_Display({
-  subsets: ["latin"],
-  variable: "--font-dm-serif",
-  weight: ["400"],
-  style: ["normal", "italic"],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  variable: "--font-ibm-mono",
-  weight: ["300", "400", "500"],
-});
-
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-sora",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-montserrat",
+  weight: ["400", "500", "600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -34,14 +15,30 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tallion — Consumer Payment Rails for the Agentic Economy",
+  title: "Tallion — AI Payment Infrastructure",
   description:
-    "The trust layer between consumers and their AI agents' financial lives. See how Tallion transforms agent commerce.",
+    "Tallion — AI Payment Infrastructure. Programmable cards and wallets for AI agents.",
   openGraph: {
-    title: "Tallion — Before & After Agent Payments",
+    title: "Tallion — AI Payment Infrastructure",
     description:
-      "Same request. Completely different experience. See how AI agents handle payments with and without Tallion.",
+      "Programmable cards and wallets for AI agents.",
     type: "website",
+    images: ["/images/tallion-og.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tallion — AI Payment Infrastructure",
+    images: ["/images/tallion-og.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/images/tallion-icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/tallion-icon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/images/tallion-icon-180.png", sizes: "180x180" },
+    ],
   },
 };
 
@@ -51,9 +48,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${dmSerif.variable} ${ibmPlexMono.variable} ${sora.variable} ${jetbrainsMono.variable}`}
+      className={`${montserrat.variable} ${jetbrainsMono.variable}`}
     >
-      <body style={{ background: "#050505", margin: 0 }}>{children}</body>
+      <body style={{ background: "#0a0a0a", margin: 0 }}>{children}</body>
     </html>
   );
 }
