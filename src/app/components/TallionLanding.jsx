@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 // ═══════════════════════════════════════════════════════════════
 // TALLION — LANDING PAGE
@@ -82,8 +83,8 @@ function Hero({ onNav }) {
 
       <FadeIn>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 4px 20px ${C.gold}30` }}><Shield s={18} c={C.bg}/></div>
-          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 18, color: C.gold, letterSpacing: 0.5 }}>Tallion</span>
+          <Image src="/images/tallion-icon-256.png" alt="Tallion" width={40} height={40} style={{ borderRadius: 10 }} />
+          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 20, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
         </div>
       </FadeIn>
 
@@ -499,8 +500,8 @@ function Footer() {
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ width: 24, height: 24, borderRadius: 7, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={12} c={C.bg}/></div>
-            <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tallion</span>
+            <Image src="/images/tallion-icon-256.png" alt="Tallion" width={24} height={24} style={{ borderRadius: 7 }} />
+            <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
           </div>
           <div style={{ fontSize: 11, color: C.txF, fontFamily: F.b }}>The trust layer for agent commerce · 2026</div>
         </div>
@@ -559,8 +560,8 @@ export default function TallionLanding() {
           <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(5,5,5,0.8)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", borderBottom: `1px solid ${C.bd}` }}>
             <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", height: 52, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-                <div style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={11} c={C.bg}/></div>
-                <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tallion</span>
+                <Image src="/images/tallion-icon-256.png" alt="Tallion" width={22} height={22} style={{ borderRadius: 6 }} />
+                <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
               </div>
               <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
                 {[

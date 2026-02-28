@@ -15,29 +15,33 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tallion — AI Payment Infrastructure",
+  metadataBase: new URL("https://tallion.ai"),
+  title: "Tallion — The Trust Layer for Agent Commerce",
   description:
-    "Tallion — AI Payment Infrastructure. Programmable cards and wallets for AI agents.",
+    "Your AI agent found the perfect flight. It can't buy it. Tallion gives every agent the power to transact — with you in control.",
   openGraph: {
-    title: "Tallion — AI Payment Infrastructure",
+    title: "Tallion — The Trust Layer for Agent Commerce",
     description:
       "Programmable cards and wallets for AI agents.",
+    url: "https://tallion.ai",
+    siteName: "Tallion",
     type: "website",
-    images: ["/images/tallion-og.png"],
+    images: [{ url: "/images/tallion-icon-1024.png", width: 1024, height: 1024 }],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Tallion — AI Payment Infrastructure",
-    images: ["/images/tallion-og.png"],
+    card: "summary",
+    title: "Tallion — The Trust Layer for Agent Commerce",
+    description: "Programmable cards and wallets for AI agents.",
+    images: ["/images/tallion-icon-1024.png"],
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.ico", sizes: "48x48" },
       { url: "/images/tallion-icon-32.png", sizes: "32x32", type: "image/png" },
       { url: "/images/tallion-icon-16.png", sizes: "16x16", type: "image/png" },
     ],
     apple: [
-      { url: "/images/tallion-icon-180.png", sizes: "180x180" },
+      { url: "/images/tallion-icon-180.png", sizes: "180x180", type: "image/png" },
     ],
   },
 };

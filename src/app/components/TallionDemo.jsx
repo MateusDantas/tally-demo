@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 // ═══════════════════════════════════════════════════════════════
 // TALLION — COMPLETE DEMO (4 TABS)
@@ -1036,7 +1037,7 @@ export default function TallionDemo() {
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(5,5,5,0.85)", backdropFilter: "blur(40px)", borderBottom: `1px solid ${C.bd}` }}>
             <div style={{ maxWidth: 1100, margin: "0 auto", padding: "10px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={11} c={C.bg}/></div><span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold }}>Tallion</span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Image src="/images/tallion-icon-256.png" alt="Tallion" width={22} height={22} style={{ borderRadius: 6 }} /><span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold, letterSpacing: "0.12em" }}>tallion</span></div>
               <div style={{ display: "flex", gap: 2 }}>
                 {[{ id: "ba", l: "Before & After" }, { id: "app", l: "Tallion App" }, { id: "dev", l: "Developers" }, { id: "comp", l: "Competitors" }, { id: "vision", l: "Vision" }].map(t => (
                   <button key={t.id} onClick={() => setView(t.id)} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: view === t.id ? C.gG : "transparent", color: view === t.id ? C.gold : C.txM, fontSize: 11.5, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{t.l}</button>
