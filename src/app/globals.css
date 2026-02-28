@@ -1,37 +1,109 @@
 @import "tailwindcss";
 
+:root {
+  --gold: #d4a940;
+  --gold-light: #e8c560;
+  --gold-bright: #f0d878;
+  --gold-dark: #a88425;
+  --gold-deep: #7a5c18;
+  --gold-muted: #7a6a35;
+  --gold-faint: rgba(212, 169, 64, 0.07);
+  --gold-glow: rgba(212, 169, 64, 0.12);
+  --bg: #050505;
+  --bg-card: #0a0a0a;
+  --bg-elevated: #0f0e0c;
+  --border: rgba(212, 169, 64, 0.08);
+  --border-hover: rgba(212, 169, 64, 0.18);
+  --text: #ece6d8;
+  --text-muted: #8a8478;
+  --text-dim: #4a463e;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
 }
 
 html {
-  background: #0a0a0a;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-montserrat), sans-serif;
+  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(212, 169, 64, 0.2);
+  color: var(--text);
 }
 
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 169, 64, 0.06);
+  background: rgba(212, 169, 64, 0.08);
   border-radius: 2px;
 }
 
 button {
   outline: none;
 }
-button:hover {
-  filter: brightness(1.08);
+
+/* ═══ KEYFRAME ANIMATIONS ═══ */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-button:active {
-  transform: scale(0.97);
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotateY(-12deg) rotateX(8deg); }
+  50% { transform: translateY(-14px) rotateY(-12deg) rotateX(8deg); }
+}
+
+@keyframes cardGlow {
+  0%, 100% { box-shadow: 0 20px 80px rgba(212,169,64,0.12), 0 0 0 1px rgba(212,169,64,0.1); }
+  50% { box-shadow: 0 25px 100px rgba(212,169,64,0.2), 0 0 0 1px rgba(212,169,64,0.15); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes scrollDown {
+  0% { top: -40%; }
+  100% { top: 140%; }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(3%, -15%); }
+  50% { transform: translate(12%, 9%); }
+  70% { transform: translate(9%, 4%); }
+  90% { transform: translate(-1%, 7%); }
+}
+
+@keyframes buttonShimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
 }

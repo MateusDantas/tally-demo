@@ -5,7 +5,7 @@ import "./globals.css";
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -54,7 +54,7 @@ export default function RootLayout({
       lang="en"
       className={`${montserrat.variable} ${jetbrainsMono.variable}`}
     >
-      <body style={{ background: "#0a0a0a", margin: 0 }}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -1,72 +1,228 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 
 // ═══════════════════════════════════════════════════════════════
-// TALLION — LANDING PAGE
-// Developer-first · Investor tab · Vision memo
+// TALLION — PREMIUM LANDING PAGE
+// Nav · Hero + 3D Card · Problem · Benefits · Comparison
+// How It Works · Use Cases · API · CTA · Footer
 // ═══════════════════════════════════════════════════════════════
 
+// ─── SCROLL REVEAL ───
+function useScrollReveal(threshold = 0.12) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold, rootMargin: "0px 0px -40px 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, visible];
+}
+
+function Reveal({ children, delay = 0, style = {} }) {
+  const [ref, visible] = useScrollReveal();
+  return (
+    <div ref={ref} style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? "translateY(0)" : "translateY(40px)",
+      transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+      ...style,
+    }}>{children}</div>
+  );
+}
+
+// ─── RESPONSIVE HOOK ───
 function useIsMobile(bp = 768) {
   const [m, setM] = useState(false);
   useEffect(() => { const c = () => setM(window.innerWidth < bp); c(); window.addEventListener("resize", c); return () => window.removeEventListener("resize", c); }, [bp]);
   return m;
 }
-
-const C = {
-  gold: "#d4a940", goldM: "#a88425", goldL: "#d9b044",
-  bg: "#0a0a0a", bgS: "#111111",
-  bd: "rgba(255,255,255,0.04)", bdH: "rgba(255,255,255,0.08)",
-  tx: "#f7f4ee", txS: "#B8B0A2", txM: "#7a6a35", txF: "#3D3935",
-  grn: "#6FCF97", red: "#EB5757", blu: "#6B9FD4", purple: "#A78BFA",
-};
-const F = {
-  d: "var(--font-montserrat), 'Montserrat', sans-serif",
-  b: "var(--font-montserrat), 'Montserrat', sans-serif",
-  m: "var(--font-jetbrains), 'JetBrains Mono', monospace",
-};
-
-const Shield = ({s=15,c=C.gold}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
-const Arrow = ({s=14,c=C.txF}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
-const Chk = ({s=13,c=C.grn}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
-
-function FadeIn({ children, delay = 0, style = {} }) {
-  const [vis, setVis] = useState(false);
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect(); } }, { threshold: 0.15 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return <div ref={ref} style={{ opacity: vis ? 1 : 0, transform: vis ? "translateY(0)" : "translateY(24px)", transition: `opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`, ...style }}>{children}</div>;
+function useIsTablet(bp = 1024) {
+  const [m, setM] = useState(false);
+  useEffect(() => { const c = () => setM(window.innerWidth < bp); c(); window.addEventListener("resize", c); return () => window.removeEventListener("resize", c); }, [bp]);
+  return m;
 }
 
-// ─── CODE BLOCK ───
-function Code({ children, title, lang = "javascript" }) {
+// ─── SECTION HEADER ───
+function SectionHeader({ label, title, subtitle, center = true, maxSubWidth = 520 }) {
   return (
-    <div style={{ borderRadius: 16, overflow: "hidden", border: `1px solid ${C.bd}`, background: "rgba(255,255,255,0.015)" }}>
-      {title && <div style={{ padding: "10px 16px", borderBottom: `1px solid ${C.bd}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: 11, color: C.txM, fontFamily: F.b, fontWeight: 500 }}>{title}</span>
-        <span style={{ fontSize: 9, color: C.txF, fontFamily: F.m, letterSpacing: 1 }}>{lang.toUpperCase()}</span>
-      </div>}
-      <pre style={{ padding: "18px 20px", margin: 0, fontFamily: F.m, fontSize: 12.5, lineHeight: 1.7, color: C.txS, overflowX: "auto", WebkitFontSmoothing: "antialiased" }}>{children}</pre>
-    </div>
+    <Reveal>
+      <div style={{ textAlign: center ? "center" : "left", marginBottom: 56 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--gold-muted)", marginBottom: 16 }}>{label}</div>
+        <h2 style={{ fontSize: "clamp(30px, 3.5vw, 46px)", fontWeight: 600, lineHeight: 1.18, letterSpacing: "-0.02em", color: "var(--text)", marginBottom: subtitle ? 16 : 0 }}>{title}</h2>
+        {subtitle && <p style={{ fontSize: 16, color: "var(--text-muted)", lineHeight: 1.7, maxWidth: maxSubWidth, margin: center ? "0 auto" : 0 }}>{subtitle}</p>}
+      </div>
+    </Reveal>
   );
 }
 
-function CodeLine({ k, v, c = C.txS, kc = C.gold }) {
-  return <div><span style={{ color: kc }}>{k}</span><span style={{ color: C.txF }}>: </span><span style={{ color: c }}>{v}</span></div>;
+// ═══════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════
+function Nav() {
+  const mob = useIsMobile();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
+      background: "rgba(5, 5, 5, 0.8)",
+      backdropFilter: "blur(24px) saturate(1.2)", WebkitBackdropFilter: "blur(24px) saturate(1.2)",
+      borderBottom: `1px solid rgba(212, 169, 64, ${scrolled ? 0.08 : 0.04})`,
+      padding: mob ? "14px 20px" : "18px 48px",
+      display: "flex", justifyContent: "space-between", alignItems: "center",
+      animation: "fadeIn 0.8s ease",
+      transition: "border-color 0.3s ease",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+        <Image src="/images/tallion-icon-256.png" alt="Tallion" width={36} height={36} style={{ borderRadius: 9 }} />
+        <span style={{ fontSize: 20, fontWeight: 600, color: "var(--gold)", letterSpacing: "0.12em" }}>tallion</span>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+        {!mob && ["For you", "Developers", "Vision"].map((label, i) => (
+          <a key={i} href={`#${["benefits", "developers", "vision"][i]}`} style={{
+            fontSize: 13, fontWeight: 500, color: "var(--text-muted)", padding: "8px 18px",
+            borderRadius: 8, textDecoration: "none", transition: "color 0.2s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.color = "var(--text)"}
+          onMouseLeave={e => e.currentTarget.style.color = "var(--text-muted)"}
+          >{label}</a>
+        ))}
+        <a href="#cta" style={{
+          fontSize: 13, fontWeight: 600, color: "#0a0a0a", background: "var(--gold)",
+          padding: "8px 18px", borderRadius: 8, textDecoration: "none",
+          transition: "all 0.2s", marginLeft: mob ? 0 : 8,
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = "var(--gold-light)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = "var(--gold)"; e.currentTarget.style.transform = "translateY(0)"; }}
+        >Get early access</a>
+      </div>
+    </nav>
+  );
 }
 
-// ─── STAT CARD ───
-function Stat({ value, label, sub, color = C.gold }) {
+// ═══════════════════════════════════════════════
+// 3D GOLD CARD
+// ═══════════════════════════════════════════════
+function TallionCard() {
+  const cardRef = useRef(null);
+  const mob = useIsMobile();
+  const [rotation, setRotation] = useState({ x: 8, y: -12 });
+
+  useEffect(() => {
+    if (mob) return;
+    const handleMouse = (e) => {
+      const card = cardRef.current;
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = (e.clientX - centerX) / rect.width;
+      const dy = (e.clientY - centerY) / rect.height;
+      setRotation({ x: 8 - dy * 10, y: -12 + dx * 15 });
+    };
+    window.addEventListener("mousemove", handleMouse);
+    return () => window.removeEventListener("mousemove", handleMouse);
+  }, [mob]);
+
+  const cardW = mob ? 300 : 380;
+  const cardH = mob ? 190 : 240;
+
   return (
-    <div style={{ padding: "28px 24px", borderRadius: 16, background: `${color}04`, border: `1px solid ${color}10` }}>
-      <div style={{ fontSize: 36, fontFamily: F.d, color, letterSpacing: -1, marginBottom: 6 }}>{value}</div>
-      <div style={{ fontSize: 13, color: C.tx, fontFamily: F.b, fontWeight: 500 }}>{label}</div>
-      {sub && <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, marginTop: 4 }}>{sub}</div>}
+    <div style={{ perspective: 1200, display: "flex", justifyContent: "center", alignItems: "center", animation: "fadeIn 1.2s ease 0.3s both" }}>
+      {/* Float wrapper */}
+      <div ref={cardRef} style={{ position: "relative", animation: mob ? "none" : "float 5s ease-in-out infinite" }}>
+        {/* Shadow below card */}
+        <div style={{
+          position: "absolute", bottom: -30, left: "50%", transform: "translateX(-50%)",
+          width: cardW * 0.7, height: 40, borderRadius: "50%",
+          background: "radial-gradient(ellipse, rgba(212,169,64,0.15) 0%, transparent 70%)",
+          filter: "blur(12px)",
+        }} />
+
+        {/* Card */}
+        <div style={{
+          width: cardW, height: cardH, borderRadius: 18, position: "relative", overflow: "hidden",
+          transform: `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)`,
+          transition: mob ? "none" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+          animation: "cardGlow 4s infinite",
+          cursor: "default",
+        }}
+        onMouseEnter={() => !mob && setRotation({ x: 3, y: -4 })}
+        onMouseLeave={() => !mob && setRotation({ x: 8, y: -12 })}
+        >
+          {/* Gold gradient surface */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(145deg, #c9a238 0%, #b8922e 20%, #dab44c 40%, #c9a238 55%, #a8861e 75%, #c9a238 100%)",
+          }} />
+
+          {/* Diagonal stripe texture */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px)",
+            backgroundSize: "4px 4px",
+          }} />
+
+          {/* Shimmer sweep */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.15) 55%, transparent 70%)",
+            backgroundSize: "200% 100%",
+            animation: "shimmer 6s infinite",
+          }} />
+
+          {/* Card content */}
+          <div style={{
+            position: "relative", zIndex: 2, padding: mob ? "20px 22px" : "28px 32px",
+            display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%",
+          }}>
+            {/* Top row */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Image src="/images/tallion-icon-64.png" alt="Tallion" width={32} height={32} style={{ borderRadius: 8 }} />
+                <span style={{ fontSize: 15, fontWeight: 700, color: "rgba(26,21,8,0.8)", letterSpacing: "0.12em" }}>tallion</span>
+              </div>
+              {/* Chip */}
+              <div style={{
+                width: 36, height: 28, borderRadius: 5,
+                background: "linear-gradient(145deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15))",
+                border: "1px solid rgba(255,255,255,0.25)",
+              }} />
+            </div>
+
+            {/* Card number */}
+            <div style={{ fontSize: mob ? 15 : 18, fontWeight: 600, letterSpacing: "0.2em", color: "rgba(26,21,8,0.75)" }}>
+              4821 •••• •••• 7340
+            </div>
+
+            {/* Bottom row */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+              <div>
+                <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.15em", color: "rgba(26,21,8,0.4)", textTransform: "uppercase", marginBottom: 2 }}>Agent</div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(26,21,8,0.65)", letterSpacing: "0.05em" }}>TRAVEL-AGENT-01</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.15em", color: "rgba(26,21,8,0.4)", textTransform: "uppercase", marginBottom: 2 }}>Limit</div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(26,21,8,0.65)" }}>$2,000</div>
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 700, fontStyle: "italic", color: "rgba(26,21,8,0.5)", letterSpacing: "0.02em" }}>VISA</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -74,419 +230,483 @@ function Stat({ value, label, sub, color = C.gold }) {
 // ═══════════════════════════════════════════════
 // HERO
 // ═══════════════════════════════════════════════
-function Hero({ onNav }) {
+function Hero() {
   const mob = useIsMobile();
+  const tab = useIsTablet();
+
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "0 24px", position: "relative" }}>
-      {/* Subtle radial glow */}
-      <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 600, height: 600, borderRadius: "50%", background: `radial-gradient(circle, ${C.gold}06 0%, transparent 70%)`, pointerEvents: "none" }} />
+    <section id="hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: mob ? "120px 20px 60px" : "120px 48px 80px", position: "relative" }}>
+      {/* Background glow */}
+      <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: 900, height: 900, borderRadius: "50%", background: "radial-gradient(circle, rgba(212,169,64,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
 
-      <FadeIn>
-        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 36 }}>
-          <Image src="/images/tallion-icon-256.png" alt="Tallion" width={56} height={56} style={{ borderRadius: 14 }} />
-          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 28, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
-        </div>
-      </FadeIn>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: tab ? "1fr" : "1fr 1fr",
+        gap: tab ? 48 : 80,
+        maxWidth: 1240, width: "100%", position: "relative",
+        alignItems: "center",
+      }}>
+        {/* Card first on mobile/tablet */}
+        {tab && (
+          <div style={{ animation: "fadeIn 1.2s ease 0.3s both", display: "flex", justifyContent: "center" }}>
+            <TallionCard />
+          </div>
+        )}
 
-      <FadeIn delay={0.15}>
-        <h1 style={{ fontFamily: F.d, fontSize: "clamp(42px, 6vw, 72px)", fontWeight: 400, color: C.tx, textAlign: "center", lineHeight: 1.1, letterSpacing: -1, maxWidth: 800, margin: "0 0 24px" }}>
-          The trust layer for<br /><span style={{ color: C.gold }}>agent commerce</span>
-        </h1>
-      </FadeIn>
-
-      <FadeIn delay={0.3}>
-        <p style={{ fontFamily: F.b, fontSize: 17, color: C.txM, textAlign: "center", lineHeight: 1.7, maxWidth: 540, margin: "0 0 40px" }}>
-          Your AI agent found the perfect flight. It can't buy it.<br />
-          Tallion gives every agent the power to transact — with you in control.
-        </p>
-      </FadeIn>
-
-      <FadeIn delay={0.45}>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-          <button onClick={() => onNav("dev")} style={{ padding: "14px 32px", borderRadius: 12, border: "none", background: `linear-gradient(135deg, ${C.gold}, ${C.goldM})`, color: C.bg, fontSize: 14, fontFamily: F.b, fontWeight: 600, cursor: "pointer", letterSpacing: 0.3, boxShadow: `0 4px 24px ${C.gold}25` }}>
-            Start building →
-          </button>
-          <button onClick={() => onNav("vision")} style={{ padding: "14px 32px", borderRadius: 12, border: `1px solid ${C.bd}`, background: "transparent", color: C.txS, fontSize: 14, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>
-            Read the vision
-          </button>
-        </div>
-      </FadeIn>
-
-      <FadeIn delay={0.6}>
-        <div style={{ display: "flex", gap: mob ? 24 : 40, marginTop: mob ? 48 : 80, flexWrap: "wrap", justifyContent: "center" }}>
-          {[
-            { v: "30 min", l: "integration" },
-            { v: "3 lines", l: "to first payment" },
-            { v: "80M+", l: "merchants day one" },
-          ].map((s, i) => (
-            <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 20, fontFamily: F.d, color: C.gold }}>{s.v}</div>
-              <div style={{ fontSize: 11, color: C.txF, fontFamily: F.b, marginTop: 4, letterSpacing: 0.5 }}>{s.l}</div>
+        {/* Left: content */}
+        <div style={{ animation: "fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1)", textAlign: tab ? "center" : "left" }}>
+          {/* Mobile brand badge */}
+          {tab && (
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 32, justifyContent: "center" }}>
+              <Image src="/images/tallion-icon-256.png" alt="Tallion" width={56} height={56} style={{ borderRadius: 14 }} />
+              <span style={{ fontSize: 28, fontWeight: 600, color: "var(--gold)", letterSpacing: "0.12em" }}>tallion</span>
             </div>
-          ))}
+          )}
+
+          {/* Eyebrow */}
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            border: "1px solid rgba(212, 169, 64, 0.12)", borderRadius: 20,
+            padding: "6px 14px", marginBottom: 24,
+          }}>
+            <div style={{ width: 6, height: 6, borderRadius: 3, background: "var(--gold)", animation: "pulseGlow 2s infinite" }} />
+            <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--gold-muted)" }}>Now in private beta</span>
+          </div>
+
+          {/* Headline */}
+          <h1 style={{
+            fontSize: "clamp(38px, 4.2vw, 58px)", fontWeight: 600, lineHeight: 1.12,
+            letterSpacing: "-0.03em", color: "var(--text)", marginBottom: 20,
+          }}>
+            Your agents can finally{" "}
+            <em style={{
+              fontStyle: "normal",
+              background: "linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark))",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}>pay for things</em>
+          </h1>
+
+          {/* Subtext */}
+          <p style={{ fontSize: 17, fontWeight: 400, lineHeight: 1.75, color: "var(--text-muted)", maxWidth: tab ? 520 : 480, margin: tab ? "0 auto 32px" : "0 0 32px" }}>
+            AI agents book flights, find deals, and manage your money. Tallion gives them secure, programmable cards — with rules you control and rewards you earn.
+          </p>
+
+          {/* Buttons */}
+          <div style={{ display: "flex", gap: 12, marginBottom: 48, flexWrap: "wrap", justifyContent: tab ? "center" : "flex-start", flexDirection: mob ? "column" : "row" }}>
+            <a href="#cta" style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              padding: "14px 30px", borderRadius: 10, border: "none",
+              background: "linear-gradient(135deg, var(--gold-light), var(--gold))",
+              color: "#0a0a0a", fontSize: 15, fontWeight: 700, textDecoration: "none",
+              position: "relative", overflow: "hidden",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(212,169,64,0.3)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+            >Get early access →</a>
+            <a href="#developers" style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              padding: "14px 30px", borderRadius: 10,
+              border: "1px solid rgba(255,255,255,0.1)", background: "transparent",
+              color: "var(--text-muted)", fontSize: 15, fontWeight: 500, textDecoration: "none",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; e.currentTarget.style.color = "var(--text)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "var(--text-muted)"; }}
+            >I'm a developer</a>
+          </div>
+
+          {/* Proof stats */}
+          <div style={{ display: "flex", gap: mob ? 24 : 48, justifyContent: tab ? "center" : "flex-start", flexWrap: "wrap" }}>
+            {[
+              { v: "80M+", l: "merchants day one" },
+              { v: "<30s", l: "card creation" },
+              { v: "$0", l: "fraud liability" },
+            ].map((s, i) => (
+              <div key={i}>
+                <div style={{ fontSize: 24, fontWeight: 700, color: "var(--gold)" }}>{s.v}</div>
+                <div style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 2 }}>{s.l}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      </FadeIn>
+
+        {/* Right: Card (desktop only) */}
+        {!tab && (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <TallionCard />
+          </div>
+        )}
+      </div>
 
       {/* Scroll indicator */}
-      <div style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-        <div style={{ width: 1, height: 32, background: `linear-gradient(to bottom, transparent, ${C.gold}30)` }} />
-        <div style={{ width: 6, height: 6, borderRadius: 3, background: `${C.gold}40` }} />
-      </div>
-    </div>
+      {!mob && (
+        <div style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--text-dim)" }}>Scroll</span>
+          <div style={{ width: 1, height: 40, position: "relative", overflow: "hidden", background: "linear-gradient(to bottom, rgba(212,169,64,0.15), transparent)" }}>
+            <div style={{ position: "absolute", width: 1, height: 8, background: "var(--gold)", animation: "scrollDown 2s linear infinite" }} />
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
 
 // ═══════════════════════════════════════════════
-// DEVELOPERS
+// PROBLEM SECTION
 // ═══════════════════════════════════════════════
-function DevSection() {
-  const mob = useIsMobile();
-  const [activeStep, setActiveStep] = useState(0);
+function Problem() {
+  return (
+    <section style={{ padding: "140px 48px", maxWidth: 840, margin: "0 auto", textAlign: "center" }}>
+      <Reveal>
+        <p style={{ fontSize: "clamp(24px, 3vw, 34px)", fontWeight: 400, lineHeight: 1.65, color: "var(--text-muted)", marginBottom: 48 }}>
+          AI agents can research, compare, and recommend. But the moment they need to <span style={{ color: "var(--gold)", fontWeight: 500 }}>pay</span>, everything breaks.
+        </p>
+      </Reveal>
+      <Reveal delay={0.2}>
+        <p style={{ fontSize: "clamp(24px, 3vw, 34px)", fontWeight: 400, lineHeight: 1.65, color: "var(--text-muted)" }}>
+          You wouldn't hand your wallet to a stranger. <span style={{ color: "var(--text)", fontWeight: 500 }}>Why give your credit card to an AI with no guardrails?</span>
+        </p>
+      </Reveal>
+      {/* Divider */}
+      <div style={{ width: 48, height: 1, background: "linear-gradient(90deg, transparent, var(--gold-muted), transparent)", margin: "100px auto", opacity: 0.4 }} />
+    </section>
+  );
+}
 
-  const steps = [
-    { title: "Initialize", desc: "Install the SDK and create a client. One API key. That's it.", code: "import Tallion from '" + String.fromCharCode(64) + "tallion-pay/connect'\n\nconst tallion = new Tallion({\n  apiKey: 'tallion_live_sk_...',\n  environment: 'production'\n})" },
-    { title: "Request payment", desc: "When your agent needs to buy something, request approval from the consumer.", code: "const payment = await tallion.payments.request({\n  amount: 34200,          // cents\n  currency: 'usd',\n  merchant: 'Delta Air Lines',\n  description: 'DL482 LAX→JFK, Mar 21',\n  metadata: {\n    reasoning: 'Cheapest nonstop. $55 less than last week.',\n    confidence: 0.94\n  }\n})"  },
-    { title: "Handle approval", desc: "Consumer approves via push notification + Face ID. You get a single-use virtual card.", code: "// Consumer approves in ~5 seconds via Tallion app\nconst result = await payment.waitForApproval()\n\nif (result.status === 'approved') {\n  const card = result.virtualCard\n  // card.number: '4147829300127744'\n  // card.exp: '03/26'\n  // card.cvv: '482'\n  // Single-use. Auto-destroys after charge.\n  \n  await bookFlight(card)\n}"  },
-    { title: "Confirm", desc: "Let Tallion know the purchase succeeded. The consumer sees it in their feed instantly.", code: "await tallion.payments.confirm(payment.id, {\n  status: 'completed',\n  confirmation: 'DL-7829K',\n  receipt_url: 'https://delta.com/receipt/...'\n})\n\n// Consumer sees:\n// ✓ Delta Air Lines — $342.00\n// via YourAgent · just now"  },
+// ═══════════════════════════════════════════════
+// BENEFITS
+// ═══════════════════════════════════════════════
+function Benefits() {
+  const mob = useIsMobile();
+  const tab = useIsTablet();
+
+  const cards = [
+    { icon: "\u{1F6E1}", title: "Zero exposure", text: "Your real card never touches a merchant. Each agent gets a unique virtual card that auto-expires after use. No leaked numbers, no fraud risk." },
+    { icon: "\u26A1", title: "Your rules, enforced", text: "Set limits per agent, per merchant, per category. Your travel agent books flights \u2014 nothing else. $500 ceiling, airlines only, expires Friday." },
+    { icon: "\u{1F441}", title: "Total visibility", text: "Every transaction in real time. Full audit trail of what the agent compared, why it chose this purchase, and how much it saved you." },
+    { icon: "\u{1F4B0}", title: "Earn as they spend", text: "Cashback on every agent transaction. The more your agents transact, the higher your tier. Efficiency bonuses when agents beat your budget." },
   ];
 
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "120px 24px" }}>
-      <FadeIn>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-          <div style={{ width: 20, height: 1, background: C.gold }} />
-          <span style={{ fontSize: 11, color: C.gold, fontFamily: F.m, letterSpacing: 3 }}>FOR DEVELOPERS</span>
-        </div>
-        <h2 style={{ fontFamily: F.d, fontSize: 44, fontWeight: 400, color: C.tx, letterSpacing: -0.5, marginBottom: 12 }}>
-          Give your agent <span style={{ color: C.gold }}>purchasing power</span>
-        </h2>
-        <p style={{ fontFamily: F.b, fontSize: 15, color: C.txM, lineHeight: 1.7, maxWidth: 520, marginBottom: 56 }}>
-          Tallion Connect is a free SDK that lets any AI agent make real purchases. Your agent proposes, the consumer approves via Tallion, and a single-use virtual Visa is issued instantly. Works at 80M+ merchants.
-        </p>
-      </FadeIn>
-
-      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "320px 1fr", gap: mob ? 20 : 32, alignItems: "start" }}>
-        {/* Step selector */}
-        <FadeIn delay={0.1}>
-          <div style={{ position: mob ? "static" : "sticky", top: 80, display: "flex", flexDirection: "column", gap: 4 }}>
-            {steps.map((s, i) => (
-              <div key={i} onClick={() => setActiveStep(i)} style={{ padding: "16px 20px", borderRadius: 14, background: activeStep === i ? `${C.gold}08` : "transparent", border: `1px solid ${activeStep === i ? `${C.gold}15` : "transparent"}`, cursor: "pointer", transition: "all 0.3s ease" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 8, background: activeStep === i ? `${C.gold}15` : "rgba(255,255,255,0.03)", border: `1px solid ${activeStep === i ? `${C.gold}20` : C.bd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontFamily: F.m, color: activeStep === i ? C.gold : C.txF, transition: "all 0.3s ease" }}>{i + 1}</div>
-                  <div>
-                    <div style={{ fontSize: 14, color: activeStep === i ? C.tx : C.txM, fontFamily: F.b, fontWeight: 600, transition: "color 0.3s ease" }}>{s.title}</div>
-                    {activeStep === i && <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, marginTop: 3, lineHeight: 1.5 }}>{s.desc}</div>}
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            <div style={{ marginTop: 20, padding: "16px 20px", borderRadius: 14, background: `${C.grn}06`, border: `1px solid ${C.grn}10` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                <Chk s={12} c={C.grn} />
-                <span style={{ fontSize: 12, color: C.grn, fontFamily: F.b, fontWeight: 600 }}>Your agent doesn't touch money</span>
-              </div>
-              <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5 }}>Tallion handles identity, payment, and card issuance. You just ask and receive.</div>
+    <section id="benefits" style={{ padding: mob ? "80px 20px" : "100px 48px", maxWidth: 1240, margin: "0 auto" }}>
+      <SectionHeader
+        label="WHY TALLION"
+        title="Let your agents spend. Never lose control."
+        subtitle="Every AI agent gets an isolated, programmable card. You define the rules. You see every transaction. You earn rewards."
+      />
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : tab ? "1fr 1fr" : "repeat(4, 1fr)", gap: 20 }}>
+        {cards.map((c, i) => (
+          <Reveal key={i} delay={0.1 * (i + 1)}>
+            <div style={{
+              background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16,
+              padding: "36px 28px", transition: "all 0.3s ease", position: "relative", overflow: "hidden", height: "100%",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.background = "var(--bg-elevated)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "var(--bg-card)"; }}
+            >
+              <div style={{
+                width: 44, height: 44, borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center",
+                background: "linear-gradient(135deg, rgba(212,169,64,0.1), rgba(212,169,64,0.04))",
+                border: "1px solid rgba(212,169,64,0.08)", fontSize: 20, marginBottom: 20,
+              }}>{c.icon}</div>
+              <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--text)", marginBottom: 10 }}>{c.title}</h3>
+              <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.65 }}>{c.text}</p>
             </div>
-          </div>
-        </FadeIn>
-
-        {/* Code display */}
-        <FadeIn delay={0.2}>
-          <Code title={`Step ${activeStep + 1}: ${steps[activeStep].title}`}>{steps[activeStep].code}</Code>
-
-          {/* What you get / what Tallion handles */}
-          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 16, marginTop: 24 }}>
-            <div style={{ padding: 24, borderRadius: 16, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
-              <div style={{ fontSize: 12, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 12 }}>What your agent gets</div>
-              {["Payment capability at 80M+ merchants", "Single-use virtual Visa per transaction", "Consumer trust (they chose to allow you)", "Transaction confirmation & receipts", "Co-branded UX: 'YourApp Pay · powered by Tallion'"].map((f, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-                  <Chk s={10} c={C.gold} />
-                  <span style={{ fontSize: 12, color: C.txS, fontFamily: F.b, lineHeight: 1.4 }}>{f}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{ padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.015)", border: `1px solid ${C.bd}` }}>
-              <div style={{ fontSize: 12, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 12 }}>What Tallion handles</div>
-              {["Consumer identity & KYC", "Card issuance & network processing", "Fraud detection & 3DS authentication", "Spending rules & approval flow", "PCI-DSS compliance (you don't need it)"].map((f, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-                  <Shield s={10} c={C.txM} />
-                  <span style={{ fontSize: 12, color: C.txM, fontFamily: F.b, lineHeight: 1.4 }}>{f}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Integration metrics */}
-          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(3, 1fr)", gap: 12, marginTop: 24 }}>
-            {[
-              { v: "npm install", l: String.fromCharCode(64) + "tallion-pay/connect", c: C.txS },
-              { v: "0", l: "PCI requirements for you", c: C.grn },
-              { v: "$0", l: "to integrate. Free forever.", c: C.gold },
-            ].map((m, i) => (
-              <div key={i} style={{ padding: "18px 20px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: `1px solid ${C.bd}` }}>
-                <div style={{ fontSize: 16, fontFamily: i === 0 ? F.m : F.d, color: m.c }}>{m.v}</div>
-                <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, marginTop: 4 }}>{m.l}</div>
-              </div>
-            ))}
-          </div>
-        </FadeIn>
+          </Reveal>
+        ))}
       </div>
-    </div>
+    </section>
   );
 }
 
 // ═══════════════════════════════════════════════
-// INVESTORS
+// COMPARISON
 // ═══════════════════════════════════════════════
-function InvestorSection() {
+function Comparison() {
+  const mob = useIsMobile();
+
+  const oldItems = [
+    "Full card number exposed to every merchant",
+    "No spending limits \u2014 agent can charge anything",
+    "No visibility into what the agent did",
+    "Compromised? Cancel everything",
+    "One card for all agents",
+    "Zero rewards on agent spend",
+  ];
+  const newItems = [
+    "Isolated virtual card per agent, per task",
+    "Custom limits by amount, merchant, category",
+    "Full audit trail with real-time alerts",
+    "Agent goes rogue? Kill that one card",
+    "Separate wallets and budgets per agent",
+    "Cashback + efficiency rewards",
+  ];
+
+  return (
+    <section style={{ padding: mob ? "80px 20px" : "100px 48px", maxWidth: 920, margin: "0 auto" }}>
+      <SectionHeader
+        label="THE DIFFERENCE"
+        title="Stop sharing your card blindly"
+      />
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr auto 1fr", gap: mob ? 20 : 0, alignItems: "stretch" }}>
+        {/* Old way */}
+        <Reveal delay={0.1}>
+          <div style={{
+            background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16,
+            padding: mob ? "32px 24px" : "44px 36px", opacity: 0.65,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-dim)", marginBottom: 24 }}>Your credit card, raw</div>
+            {oldItems.map((item, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 14 }}>
+                <span style={{ color: "#5a3a3a", fontSize: 13, flexShrink: 0, marginTop: 1 }}>✕</span>
+                <span style={{ fontSize: 13.5, lineHeight: 1.55, color: "var(--text-muted)" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* VS */}
+        {!mob && (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px" }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", letterSpacing: "0.1em" }}>vs</span>
+          </div>
+        )}
+
+        {/* New way */}
+        <Reveal delay={0.2}>
+          <div style={{
+            background: "linear-gradient(180deg, rgba(212,169,64,0.03) 0%, var(--bg-card) 100%)",
+            border: "1px solid rgba(212, 169, 64, 0.15)", borderRadius: 16,
+            padding: mob ? "32px 24px" : "44px 36px",
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--gold)", marginBottom: 24 }}>Through Tallion</div>
+            {newItems.map((item, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 14 }}>
+                <span style={{ color: "var(--gold)", fontSize: 12, flexShrink: 0, marginTop: 2 }}>◆</span>
+                <span style={{ fontSize: 13.5, lineHeight: 1.55, color: "var(--text-muted)" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════════
+// HOW IT WORKS
+// ═══════════════════════════════════════════════
+function HowItWorks() {
+  const mob = useIsMobile();
+
+  const steps = [
+    { num: "01", title: "Fund your wallet", desc: "Link your bank account. Transfer funds via ACH \u2014 free, instant, no credit card fees. Your balance earns interest while it waits." },
+    { num: "02", title: "Set the rules", desc: "Define spend limits, approved merchants, category restrictions, and approval workflows for each agent. \u201CUp to $2K at airlines. Nothing else.\u201D" },
+    { num: "03", title: "Let them transact", desc: "Each agent gets its own virtual card. They spend within your rules, you get notified instantly, and you earn cashback on every dollar." },
+  ];
+
+  return (
+    <section style={{ padding: mob ? "80px 20px" : "100px 48px", maxWidth: 1240, margin: "0 auto" }}>
+      <SectionHeader label="HOW IT WORKS" title="Three steps. Full control." />
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(3, 1fr)", gap: 24 }}>
+        {steps.map((s, i) => (
+          <Reveal key={i} delay={0.1 * (i + 1)}>
+            <div style={{
+              background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16,
+              padding: "40px 32px", transition: "all 0.3s ease", height: "100%",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <div style={{
+                fontSize: 56, fontWeight: 800, lineHeight: 1,
+                background: "linear-gradient(180deg, rgba(212,169,64,0.12), rgba(212,169,64,0.02))",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                marginBottom: 20,
+              }}>{s.num}</div>
+              <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--gold)", marginBottom: 10 }}>{s.title}</h3>
+              <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.65 }}>{s.desc}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════════
+// USE CASES
+// ═══════════════════════════════════════════════
+function UseCases() {
+  const mob = useIsMobile();
+  const tab = useIsTablet();
+
+  const cases = [
+    { tag: "TRAVEL", title: "Flights, hotels, car rentals", desc: "AI finds the best itinerary, books it end-to-end. Card auto-expires after the trip. Budget capped, receipts collected." },
+    { tag: "SHOPPING", title: "Price drops & restocks", desc: "Set a target price. Agent monitors and purchases the instant it hits. Unique card per buy, auto-voided after checkout." },
+    { tag: "SUBSCRIPTIONS", title: "SaaS, streaming, utilities", desc: "Dedicated cards per subscription. Agent audits charges monthly, cancels unused services, negotiates better rates." },
+    { tag: "PROCUREMENT", title: "Supplies & services", desc: "Multiple agents handle different vendors. Per-vendor limits, automatic receipts, expense categorization." },
+    { tag: "PERSONAL", title: "Errands & deliveries", desc: "Groceries, pharmacy, dry cleaning. Agent orders what you need with a card that only works at approved stores." },
+    { tag: "RESEARCH", title: "APIs & data access", desc: "Agent needs premium databases or paid searches. Micro-budget cards with per-query limits." },
+  ];
+
+  return (
+    <section style={{ padding: mob ? "80px 20px" : "100px 48px", maxWidth: 1240, margin: "0 auto" }}>
+      <SectionHeader label="USE CASES" title="One wallet. Every agent." />
+      <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : tab ? "1fr 1fr" : "repeat(3, 1fr)", gap: 20 }}>
+        {cases.map((c, i) => (
+          <Reveal key={i} delay={0.1 * ((i % 3) + 1)}>
+            <div style={{
+              padding: "32px 28px", borderRadius: 14, border: "1px solid var(--border)",
+              background: "var(--bg-card)", transition: "all 0.3s ease", height: "100%",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <span style={{
+                display: "inline-block", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em",
+                textTransform: "uppercase", color: "var(--gold-deep)",
+                border: "1px solid rgba(212,169,64,0.1)", borderRadius: 4,
+                padding: "4px 10px", marginBottom: 16,
+              }}>{c.tag}</span>
+              <h3 style={{ fontSize: 16, fontWeight: 600, color: "var(--text)", marginBottom: 8 }}>{c.title}</h3>
+              <p style={{ fontSize: 13.5, color: "var(--text-muted)", lineHeight: 1.6 }}>{c.desc}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════════
+// DEVELOPER API SECTION
+// ═══════════════════════════════════════════════
+function ApiSection() {
+  const mob = useIsMobile();
+  const tab = useIsTablet();
+
+  return (
+    <section id="developers" style={{ padding: mob ? "80px 20px" : "100px 48px", maxWidth: 1240, margin: "0 auto" }}>
+      <div style={{ display: "grid", gridTemplateColumns: tab ? "1fr" : "1fr 1.15fr", gap: tab ? 48 : 72, alignItems: "center" }}>
+        {/* Left */}
+        <Reveal>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--gold-muted)", marginBottom: 16 }}>FOR DEVELOPERS</div>
+            <h2 style={{ fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 600, lineHeight: 1.2, color: "var(--text)", marginBottom: 20 }}>Three lines to first payment</h2>
+            <p style={{ fontSize: 15, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 16 }}>
+              Tallion's API handles card issuing, spend controls, KYC, compliance, and settlement. You build the intelligence — we handle the money.
+            </p>
+            <p style={{ fontSize: 15, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 32 }}>
+              Issue virtual cards, set programmable rules, monitor transactions in real time, and earn interchange revenue on every dollar your users' agents spend.
+            </p>
+            <a href="#cta" style={{
+              display: "inline-flex", padding: "14px 30px", borderRadius: 10,
+              background: "linear-gradient(135deg, var(--gold-light), var(--gold))",
+              color: "#0a0a0a", fontSize: 15, fontWeight: 700, textDecoration: "none",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(212,169,64,0.3)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+            >View API docs →</a>
+          </div>
+        </Reveal>
+
+        {/* Right: Code block */}
+        <Reveal delay={0.2}>
+          <div style={{
+            background: "#0a0a0a", border: "1px solid var(--border)", borderRadius: 16,
+            overflow: "hidden", position: "relative",
+          }}>
+            {/* Top glow line */}
+            <div style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: 1, background: "linear-gradient(90deg, transparent, var(--gold-muted), transparent)", opacity: 0.4 }} />
+
+            {/* Header dots */}
+            <div style={{ padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.04)", display: "flex", gap: 6 }}>
+              <div style={{ width: 10, height: 10, borderRadius: 5, background: "rgba(255,255,255,0.08)" }} />
+              <div style={{ width: 10, height: 10, borderRadius: 5, background: "rgba(255,255,255,0.08)" }} />
+              <div style={{ width: 10, height: 10, borderRadius: 5, background: "rgba(255,255,255,0.08)" }} />
+            </div>
+
+            {/* Code */}
+            <pre style={{
+              padding: "24px 24px", margin: 0, overflowX: "auto",
+              fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace",
+              fontSize: 13, lineHeight: 1.7,
+            }}>
+              <code>
+                <span style={{ color: "var(--text-dim)" }}>{"// Issue a card for an AI agent"}</span>{"\n"}
+                <span style={{ color: "var(--gold)" }}>const</span> <span style={{ color: "var(--text-muted)" }}>card</span> <span style={{ color: "var(--text-dim)" }}>=</span> <span style={{ color: "var(--gold)" }}>await</span> <span style={{ color: "#a0c4a0" }}>tallion.cards.create</span><span style={{ color: "var(--text-dim)" }}>{"({"}</span>{"\n"}
+                <span style={{ color: "var(--text-muted)" }}>{"  agent_id"}</span><span style={{ color: "var(--text-dim)" }}>: </span><span style={{ color: "#7a9e7a" }}>{'"travel-agent-01"'}</span><span style={{ color: "var(--text-dim)" }}>,</span>{"\n"}
+                <span style={{ color: "var(--text-muted)" }}>{"  spend_limit"}</span><span style={{ color: "var(--text-dim)" }}>: </span><span style={{ color: "var(--text-muted)" }}>2000_00</span><span style={{ color: "var(--text-dim)" }}>,</span>{"\n"}
+                <span style={{ color: "var(--text-muted)" }}>{"  currency"}</span><span style={{ color: "var(--text-dim)" }}>: </span><span style={{ color: "#7a9e7a" }}>{'"USD"'}</span><span style={{ color: "var(--text-dim)" }}>,</span>{"\n"}
+                <span style={{ color: "var(--text-muted)" }}>{"  allowed_categories"}</span><span style={{ color: "var(--text-dim)" }}>: [</span><span style={{ color: "#7a9e7a" }}>{'"airlines"'}</span><span style={{ color: "var(--text-dim)" }}>, </span><span style={{ color: "#7a9e7a" }}>{'"hotels"'}</span><span style={{ color: "var(--text-dim)" }}>],</span>{"\n"}
+                <span style={{ color: "var(--text-muted)" }}>{"  expires"}</span><span style={{ color: "var(--text-dim)" }}>: </span><span style={{ color: "#7a9e7a" }}>{'"after_first_use"'}</span><span style={{ color: "var(--text-dim)" }}>,</span>{"\n"}
+                <span style={{ color: "var(--text-dim)" }}>{"})"}</span><span style={{ color: "var(--text-dim)" }}>;</span>{"\n\n"}
+                <span style={{ color: "var(--text-dim)" }}>{"// Card is live. Agent can transact."}</span>{"\n"}
+                <span style={{ color: "#a0c4a0" }}>console.log</span><span style={{ color: "var(--text-dim)" }}>(</span><span style={{ color: "var(--text-muted)" }}>card.number</span><span style={{ color: "var(--text-dim)" }}>, </span><span style={{ color: "var(--text-muted)" }}>card.cvv</span><span style={{ color: "var(--text-dim)" }}>)</span><span style={{ color: "var(--text-dim)" }}>;</span>
+              </code>
+            </pre>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════════
+// CTA
+// ═══════════════════════════════════════════════
+function Cta() {
   const mob = useIsMobile();
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "120px 24px" }}>
-      <FadeIn>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-          <div style={{ width: 20, height: 1, background: C.gold }} />
-          <span style={{ fontSize: 11, color: C.gold, fontFamily: F.m, letterSpacing: 3 }}>FOR INVESTORS</span>
-        </div>
-        <h2 style={{ fontFamily: F.d, fontSize: 44, fontWeight: 400, color: C.tx, letterSpacing: -0.5, marginBottom: 12 }}>
-          The financial infrastructure of the <span style={{ color: C.gold }}>agent economy</span>
+    <section id="cta" style={{ padding: mob ? "100px 20px" : "160px 48px", textAlign: "center", position: "relative" }}>
+      {/* Glow */}
+      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 600, height: 400, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(212,169,64,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
+
+      <Reveal>
+        <h2 style={{
+          fontSize: "clamp(34px, 4.5vw, 54px)", fontWeight: 600, letterSpacing: "-0.03em",
+          lineHeight: 1.15, marginBottom: 20, position: "relative",
+        }}>
+          Your agents are ready.{" "}
+          <em style={{
+            fontStyle: "normal",
+            background: "linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark))",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+          }}>Give them a wallet.</em>
         </h2>
-        <p style={{ fontFamily: F.b, fontSize: 15, color: C.txM, lineHeight: 1.7, maxWidth: 600, marginBottom: 56 }}>
-          McKinsey projects $3–5T in agentic commerce by 2030. Every transaction needs a trust layer between the AI and the consumer's money. That's Tallion.
+      </Reveal>
+      <Reveal delay={0.15}>
+        <p style={{ fontSize: 17, color: "var(--text-muted)", maxWidth: 440, margin: "0 auto 36px", lineHeight: 1.7 }}>
+          Join the waitlist for early access. Be the first to give your AI agents the power to pay — safely.
         </p>
-      </FadeIn>
-
-      {/* Market stats */}
-      <FadeIn delay={0.1}>
-        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "repeat(4, 1fr)", gap: 16, marginBottom: 48 }}>
-          <Stat value="$3–5T" label="Agentic commerce by 2030" sub="McKinsey, Gartner" />
-          <Stat value="<$100M" label="Total VC in agent payments" sub="Massive underfunding" color={C.red} />
-          <Stat value="$0" label="Consumer acquisition cost" sub="Agents are the distribution" color={C.grn} />
-          <Stat value="72–90%" label="Conversion rate" sub="Only way to complete purchase" />
+      </Reveal>
+      <Reveal delay={0.3}>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <a href="#" style={{
+            display: "inline-flex", padding: "14px 30px", borderRadius: 10,
+            background: "linear-gradient(135deg, var(--gold-light), var(--gold))",
+            color: "#0a0a0a", fontSize: 15, fontWeight: 700, textDecoration: "none",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(212,169,64,0.3)"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+          >Join the waitlist →</a>
+          <a href="#developers" style={{
+            display: "inline-flex", padding: "14px 30px", borderRadius: 10,
+            border: "1px solid rgba(255,255,255,0.1)", background: "transparent",
+            color: "var(--text-muted)", fontSize: 15, fontWeight: 500, textDecoration: "none",
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; e.currentTarget.style.color = "var(--text)"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "var(--text-muted)"; }}
+          >Read the docs</a>
         </div>
-      </FadeIn>
-
-      {/* The thesis */}
-      <FadeIn delay={0.15}>
-        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 24, marginBottom: 48 }}>
-          <div style={{ padding: 36, borderRadius: 20, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
-            <div style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 16 }}>The thesis in four sentences</div>
-            <div style={{ fontFamily: F.d, fontSize: 20, color: C.tx, lineHeight: 1.6 }}>
-              "Every AI agent will need to spend money on behalf of humans. Consumers will never give agents their credit card. The company that becomes the trust layer between agents and money wins the next generation of financial infrastructure. That company is Tallion."
-            </div>
-          </div>
-          <div style={{ padding: 36, borderRadius: 20, background: "rgba(255,255,255,0.015)", border: `1px solid ${C.bd}` }}>
-            <div style={{ fontSize: 13, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 16 }}>Why now</div>
-            {[
-              "AI agents crossing from research to commerce (ChatGPT Operator, Poke, Rabbit)",
-              "No standard exists for agent payments — greenfield",
-              "Card networks (Visa, Mastercard) building agent identity but no consumer UX",
-              "Regulatory window: lighter than banking, heavier than pure software",
-              "First mover with consumer trust data builds unassailable moat",
-            ].map((p, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
-                <div style={{ width: 4, height: 4, borderRadius: 2, background: C.gold, marginTop: 6, flexShrink: 0 }} />
-                <span style={{ fontSize: 13, color: C.txS, fontFamily: F.b, lineHeight: 1.55 }}>{p}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </FadeIn>
-
-      {/* Revenue evolution */}
-      <FadeIn delay={0.2}>
-        <div style={{ marginBottom: 48 }}>
-          <div style={{ fontSize: 13, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 20 }}>Revenue evolution — 7-year bottoms-up model</div>
-          <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "repeat(4, 1fr)", gap: 16 }}>
-            {[
-              { phase: "Phase 1", years: "Year 1", title: "Payment Rails", revenue: "$7M ARR", users: "130K", vol: "$702M", color: C.gold, desc: "Free SDK. Agents distribute. Interchange revenue. $0 CAC." },
-              { phase: "Phase 2", years: "Years 2–3", title: "Tallion Direct", revenue: "$634M ARR", users: "4.1M", vol: "$64B", color: C.grn, desc: "Skip Visa. Settle directly to merchants at 0% fees. 3x margin improvement." },
-              { phase: "Phase 3", years: "Year 4", title: "Financial Products", revenue: "$2.7B ARR", users: "12.1M", vol: "$276B", color: C.blu, desc: "Tallion Card, Balance, Credit. Richest behavioral data in commerce." },
-              { phase: "Phase 4", years: "Years 5–7", title: "The Bank", revenue: "$27B ARR", users: "54M", vol: "$2.5T", color: C.purple, desc: "Bank charter. Deposits, lending, merchant banking. Own the entire relationship." },
-            ].map((p, i) => (
-              <div key={i} style={{ padding: 24, borderRadius: 16, background: `${p.color}04`, border: `1px solid ${p.color}10` }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                  <span style={{ fontSize: 9, color: C.txF, fontFamily: F.m, letterSpacing: 2 }}>{p.phase}</span>
-                  <span style={{ fontSize: 9, color: p.color, fontFamily: F.b, fontWeight: 500 }}>{p.years}</span>
-                </div>
-                <div style={{ fontSize: 15, color: p.color, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>{p.title}</div>
-                <div style={{ fontSize: 28, fontFamily: F.d, color: p.color, marginBottom: 8 }}>{p.revenue}</div>
-                <div style={{ display: "flex", gap: 12, marginBottom: 10 }}>
-                  <div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b }}>USERS</div><div style={{ fontSize: 12, color: C.txS, fontFamily: F.m }}>{p.users}</div></div>
-                  <div><div style={{ fontSize: 9, color: C.txF, fontFamily: F.b }}>VOLUME</div><div style={{ fontSize: 12, color: C.txS, fontFamily: F.m }}>{p.vol}</div></div>
-                </div>
-                <div style={{ fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5 }}>{p.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </FadeIn>
-
-      {/* Per-user economics + comparables */}
-      <FadeIn delay={0.25}>
-        <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr" : "1fr 1fr", gap: 24 }}>
-          <div style={{ padding: 32, borderRadius: 20, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
-            <div style={{ fontSize: 13, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 20 }}>Revenue per user compounds 9×</div>
-            <div style={{ display: "grid", gridTemplateColumns: mob ? "1fr 1fr" : "1fr 1fr", gap: 16 }}>
-              {[
-                { yr: "Year 1", arpu: "$54", layers: "Interchange", c: C.gold },
-                { yr: "Year 3", arpu: "$155", layers: "+ Direct + Premium", c: C.grn },
-                { yr: "Year 5", arpu: "$310", layers: "+ Card + Deposits", c: C.blu },
-                { yr: "Year 7", arpu: "$496", layers: "Full bank", c: C.purple },
-              ].map((p, i) => (
-                <div key={i} style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 9, color: C.txF, fontFamily: F.b }}>{p.yr}</div>
-                  <div style={{ fontSize: 24, fontFamily: F.d, color: p.c, margin: "4px 0 2px" }}>{p.arpu}</div>
-                  <div style={{ fontSize: 9, color: C.txM, fontFamily: F.b }}>{p.layers}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 16, padding: "10px 14px", borderRadius: 10, background: "rgba(255,255,255,0.02)" }}>
-              <span style={{ fontSize: 11, color: C.txM, fontFamily: F.b }}>Same consumer, $0 incremental CAC. Each phase adds revenue on top.</span>
-            </div>
-          </div>
-          <div style={{ padding: 32, borderRadius: 20, background: "rgba(255,255,255,0.015)", border: `1px solid ${C.bd}` }}>
-            <div style={{ fontSize: 13, color: C.txS, fontFamily: F.b, fontWeight: 600, marginBottom: 20 }}>How Tallion compares at scale</div>
-            {[
-              { name: "JPMorgan Chase", users: "80M", arpu: "~$750/yr", hl: false },
-              { name: "Cash App", users: "56M", arpu: "~$120/yr", hl: false },
-              { name: "Nubank", users: "100M", arpu: "~$50/yr", hl: false },
-              { name: "Tallion (Year 7)", users: "54M", arpu: "$496/yr", hl: true },
-            ].map((b, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: i < 3 ? `1px solid ${C.bd}` : "none" }}>
-                <span style={{ fontSize: 13, color: b.hl ? C.gold : C.txM, fontFamily: F.b, fontWeight: b.hl ? 600 : 400 }}>{b.name}</span>
-                <div style={{ display: "flex", gap: 20 }}>
-                  <span style={{ fontSize: 12, color: C.txF, fontFamily: F.m }}>{b.users}</span>
-                  <span style={{ fontSize: 12, color: b.hl ? C.gold : C.txS, fontFamily: F.m, fontWeight: b.hl ? 600 : 400, minWidth: 70, textAlign: "right" }}>{b.arpu}</span>
-                </div>
-              </div>
-            ))}
-            <div style={{ marginTop: 16, fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.5 }}>
-              Tallion sees every agent transaction — not just what flows through a bank account. User base of a Nubank, ARPU approaching JPMorgan.
-            </div>
-          </div>
-        </div>
-      </FadeIn>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════
-// VISION MEMO
-// ═══════════════════════════════════════════════
-function VisionSection() {
-  return (
-    <div style={{ maxWidth: 720, margin: "0 auto", padding: "120px 24px 160px" }}>
-      <FadeIn>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 40 }}>
-          <div style={{ width: 20, height: 1, background: C.gold }} />
-          <span style={{ fontSize: 11, color: C.gold, fontFamily: F.m, letterSpacing: 3 }}>THE VISION</span>
-        </div>
-      </FadeIn>
-
-      <FadeIn delay={0.1}>
-        <div style={{ marginBottom: 48 }}>
-          <h2 style={{ fontFamily: F.d, fontSize: 48, fontWeight: 400, color: C.tx, lineHeight: 1.15, letterSpacing: -0.5, marginBottom: 8 }}>
-            A letter about the future<br />of <span style={{ color: C.gold }}>money and machines</span>
-          </h2>
-          <div style={{ fontSize: 13, color: C.txM, fontFamily: F.b }}>February 2026</div>
-        </div>
-      </FadeIn>
-
-      <FadeIn delay={0.2}>
-        <div style={{ fontFamily: F.b, fontSize: 16, color: C.txS, lineHeight: 1.85, letterSpacing: 0.1 }}>
-
-          <p style={{ fontSize: 20, color: C.tx, fontFamily: F.d, lineHeight: 1.6, marginBottom: 32, paddingLeft: 20, borderLeft: `2px solid ${C.gold}30` }}>
-            There's a moment in every technological revolution where the infrastructure catches up to the dream. For AI agents, that moment is now — and the dream is commerce.
-          </p>
-
-          <p style={{ marginBottom: 24 }}>
-            We're living through the fastest capability expansion in the history of computing. AI agents can research, reason, compare, negotiate, and recommend better than any human assistant. They can find you the cheapest flight, the best restaurant, the right gift for your partner's birthday. They can do all of this in seconds.
-          </p>
-
-          <p style={{ marginBottom: 24 }}>
-            But they can't buy anything.
-          </p>
-
-          <p style={{ marginBottom: 24 }}>
-            This isn't a technical limitation. It's a trust problem. No sane person will give their credit card number to an AI model that might hallucinate, overspend, or get exploited. And no merchant wants to accept a payment from an entity that doesn't have an identity, a credit history, or a way to dispute a charge.
-          </p>
-
-          <p style={{ marginBottom: 24, color: C.tx, fontWeight: 500 }}>
-            Tallion exists to solve this exact problem.
-          </p>
-
-          <div style={{ margin: "40px 0", padding: "28px 0", borderTop: `1px solid ${C.bd}`, borderBottom: `1px solid ${C.bd}` }}>
-            <p style={{ fontFamily: F.d, fontSize: 22, color: C.gold, lineHeight: 1.5, textAlign: "center", margin: 0 }}>
-              The agent proposes. Tallion disposes.
-            </p>
-          </div>
-
-          <p style={{ marginBottom: 24 }}>
-            We're building the trust layer between AI agents and the financial system. When an agent finds a $342 flight for you, it doesn't get your credit card. Instead, it sends a request to Tallion. You see the amount, the merchant, the agent's reasoning — and you approve with Face ID. Tallion issues a single-use virtual card that works at 80 million merchants, self-destructs after the charge, and is never seen by the agent. Your real payment information never leaves your control.
-          </p>
-
-          <p style={{ marginBottom: 24 }}>
-            This sounds simple. It is meant to. The best infrastructure is invisible. But underneath that simplicity is a business with extraordinary structural advantages:
-          </p>
-
-          <div style={{ margin: "32px 0", padding: "24px 28px", borderRadius: 16, background: `${C.gold}04`, border: `1px solid ${C.gold}10` }}>
-            {[
-              ["Zero customer acquisition cost", "Every AI agent that integrates Tallion becomes a distribution channel. Poke's 6,000 users become Tallion users at the moment of first purchase. We don't buy customers. We inherit them."],
-              ["Mandatory conversion", "Tallion isn't a feature consumers opt into. It's the only way to complete the purchase. When an agent says 'set up Tallion to book this flight,' 72–90% of consumers do it. Because they want the flight."],
-              ["Revenue that compounds", "Interchange becomes Tallion Direct becomes financial products becomes a bank. The same consumer generates $54/year in Year 1 and $496/year in Year 7. Nine times more revenue, zero incremental cost."],
-              ["A moat built on trust", "Every transaction makes the trust graph deeper. Every agent connected makes the network more valuable. By the time competitors realize what's happening, Tallion will have the data, the merchants, and the muscle memory of 50 million consumers."],
-            ].map(([title, desc], i) => (
-              <div key={i} style={{ marginBottom: i < 3 ? 20 : 0 }}>
-                <div style={{ fontSize: 14, color: C.gold, fontFamily: F.b, fontWeight: 600, marginBottom: 4 }}>{title}</div>
-                <div style={{ fontSize: 14, color: C.txS, fontFamily: F.b, lineHeight: 1.65 }}>{desc}</div>
-              </div>
-            ))}
-          </div>
-
-          <p style={{ marginBottom: 24 }}>
-            The playbook is not new. Visa didn't build stores. They built the rails between banks and merchants and took a fraction of every transaction. Stripe didn't build websites. They built the API that made internet payments possible and became the default. Apple Pay didn't change what you bought. They changed how you authorized the purchase.
-          </p>
-
-          <p style={{ marginBottom: 24 }}>
-            Tallion is the Visa, Stripe, and Apple Pay of the agent economy — combined into one company. We're the rails (payment processing), the API (developer infrastructure), and the wallet (consumer trust layer), all in one. We have to be. Because in agent commerce, these things can't be separated. The entity that holds the consumer's trust must also issue the card, settle the payment, and enforce the rules. Fragmenting this creates exactly the kind of broken experience that agents are supposed to eliminate.
-          </p>
-
-          <div style={{ margin: "40px 0", padding: "28px 0", borderTop: `1px solid ${C.bd}`, borderBottom: `1px solid ${C.bd}` }}>
-            <p style={{ fontFamily: F.d, fontSize: 22, color: C.tx, lineHeight: 1.5, textAlign: "center", margin: 0 }}>
-              In seven years, we believe Tallion will be how the world pays<br />when machines do the shopping.
-            </p>
-          </div>
-
-          <p style={{ marginBottom: 24 }}>
-            We don't think agent commerce is a niche. We think it's the future of all commerce. The percentage of consumer spending that touches an AI agent will go from near-zero today to a majority within a decade. Groceries, travel, subscriptions, bills, insurance, investments — anything that can be researched, compared, and purchased will be. Humans will still make the decisions. They just won't do the work.
-          </p>
-
-          <p style={{ marginBottom: 24 }}>
-            And every one of those transactions will need a trust layer.
-          </p>
-
-          <p style={{ marginBottom: 24 }}>
-            That's not a $100M opportunity. That's not a $1B opportunity. If we execute — and we will — this is a generational company. A company that sits at the intersection of AI and financial infrastructure during the most significant economic transformation since the internet.
-          </p>
-
-          <p style={{ marginBottom: 0, color: C.tx, fontWeight: 500 }}>
-            We're building Tallion for the long arc. The agents are here. The commerce is coming. The trust layer is missing. Not for long.
-          </p>
-
-          <div style={{ marginTop: 48, paddingTop: 32, borderTop: `1px solid ${C.bd}` }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: `linear-gradient(145deg, ${C.gold}, ${C.goldM})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Shield s={20} c={C.bg}/></div>
-              <div>
-                <div style={{ fontSize: 14, color: C.tx, fontFamily: F.b, fontWeight: 600 }}>Mateus</div>
-                <div style={{ fontSize: 12, color: C.txM, fontFamily: F.b }}>Founder, Tallion</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </FadeIn>
-    </div>
+      </Reveal>
+    </section>
   );
 }
 
@@ -496,96 +716,56 @@ function VisionSection() {
 function Footer() {
   const mob = useIsMobile();
   return (
-    <div style={{ borderTop: `1px solid ${C.bd}`, padding: "48px 24px" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "flex-start" : "center", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Image src="/images/tallion-icon-256.png" alt="Tallion" width={24} height={24} style={{ borderRadius: 7 }} />
-            <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
-          </div>
-          <div style={{ fontSize: 11, color: C.txF, fontFamily: F.b }}>The trust layer for agent commerce · 2026</div>
+    <footer id="vision" style={{
+      padding: mob ? "32px 20px" : "40px 48px",
+      borderTop: "1px solid rgba(255,255,255,0.03)",
+    }}>
+      <div style={{
+        maxWidth: 1240, margin: "0 auto",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        flexDirection: mob ? "column" : "row", gap: 16, textAlign: mob ? "center" : "left",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Image src="/images/tallion-icon-64.png" alt="Tallion" width={26} height={26} style={{ borderRadius: 6 }} />
+          <span style={{ fontSize: 14, fontWeight: 600, color: "var(--gold-muted)" }}>tallion</span>
         </div>
-        <div style={{ borderTop: `1px solid ${C.bd}`, paddingTop: 20, display: "flex", flexWrap: "wrap", gap: mob ? 16 : 32, fontSize: 11, color: C.txM, fontFamily: F.b, lineHeight: 1.6 }}>
-          <div>
-            <div style={{ color: C.txF, fontWeight: 500, marginBottom: 4 }}>Odysseus Lab, Ltd.</div>
-            <div>Delaware C Corporation</div>
-          </div>
-          <div>
-            <div style={{ color: C.txF, fontWeight: 500, marginBottom: 4 }}>Contact</div>
-            <div>(256) 991-1141</div>
-          </div>
-          <div>
-            <div style={{ color: C.txF, fontWeight: 500, marginBottom: 4 }}>Address</div>
-            <div>1111b S Governors Ave, Suite 44362</div>
-            <div>Dover, DE 19904</div>
-          </div>
+        <div style={{ display: "flex", gap: mob ? 16 : 24, flexWrap: "wrap", justifyContent: "center" }}>
+          {["Docs", "API", "Vision", "Twitter", "GitHub"].map((link, i) => (
+            <a key={i} href="#" style={{ fontSize: 12, color: "var(--text-dim)", textDecoration: "none", transition: "color 0.2s" }}
+              onMouseEnter={e => e.currentTarget.style.color = "var(--text-muted)"}
+              onMouseLeave={e => e.currentTarget.style.color = "var(--text-dim)"}
+            >{link}</a>
+          ))}
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 
 // ═══════════════════════════════════════════════
-// MAIN APP
+// MAIN LANDING PAGE
 // ═══════════════════════════════════════════════
 export default function TallionLanding() {
-  const [activeTab, setActiveTab] = useState("dev");
-  const contentRef = useRef(null);
-
-  const handleNav = (tab) => {
-    setActiveTab(tab);
-    if (contentRef.current) {
-      contentRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
     <>
-      <style>{`
-        *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-        html{background:#0a0a0a;scroll-behavior:smooth}
-        body{overflow-x:hidden}
-        ::selection{background:rgba(212,169,64,0.2);color:#f7f4ee}
-        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(212,169,64,0.08);border-radius:2px}
-        button{outline:none;transition:all 0.2s ease}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button:active{transform:translateY(0) scale(0.98)}
-        p{margin:0}
-      `}</style>
+      {/* Grain overlay */}
+      <div style={{
+        position: "fixed", top: "-50%", left: "-50%", width: "200%", height: "200%",
+        zIndex: 10000, pointerEvents: "none", opacity: 0.015,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        animation: "grain 4s steps(6) infinite",
+      }} />
 
-      <div style={{ minHeight: "100vh", color: C.tx, background: C.bg, position: "relative" }}>
-        {/* Grain overlay */}
-        <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none", opacity: 0.3, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")` }} />
-
-        <div style={{ position: "relative", zIndex: 1 }}>
-          {/* Fixed nav */}
-          <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(5,5,5,0.8)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", borderBottom: `1px solid ${C.bd}` }}>
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-                <Image src="/images/tallion-icon-256.png" alt="Tallion" width={36} height={36} style={{ borderRadius: 8 }} />
-                <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 22, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
-              </div>
-              <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
-                {[
-                  { id: "dev", l: "Developers" },
-                  { id: "invest", l: "Investors" },
-                  { id: "vision", l: "Vision" },
-                ].map(t => (
-                  <button key={t.id} onClick={() => handleNav(t.id)} style={{ padding: "6px 16px", borderRadius: 8, border: "none", background: activeTab === t.id ? `${C.gold}10` : "transparent", color: activeTab === t.id ? C.gold : C.txM, fontSize: 12, fontFamily: F.b, fontWeight: 500, cursor: "pointer" }}>{t.l}</button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <Hero onNav={handleNav} />
-
-          <div ref={contentRef}>
-            {activeTab === "dev" && <DevSection />}
-            {activeTab === "invest" && <InvestorSection />}
-            {activeTab === "vision" && <VisionSection />}
-          </div>
-
-          <Footer />
-        </div>
-      </div>
+      <Nav />
+      <Hero />
+      <Problem />
+      <Benefits />
+      <Comparison />
+      <HowItWorks />
+      <UseCases />
+      <ApiSection />
+      <Cta />
+      <Footer />
     </>
   );
 }
