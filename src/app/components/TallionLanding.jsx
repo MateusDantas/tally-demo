@@ -82,9 +82,9 @@ function Hero({ onNav }) {
       <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 600, height: 600, borderRadius: "50%", background: `radial-gradient(circle, ${C.gold}06 0%, transparent 70%)`, pointerEvents: "none" }} />
 
       <FadeIn>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32 }}>
-          <Image src="/images/tallion-icon-256.png" alt="Tallion" width={40} height={40} style={{ borderRadius: 10 }} />
-          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 20, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 36 }}>
+          <Image src="/images/tallion-icon-256.png" alt="Tallion" width={56} height={56} style={{ borderRadius: 14 }} />
+          <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 28, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
         </div>
       </FadeIn>
 
@@ -558,10 +558,10 @@ export default function TallionLanding() {
         <div style={{ position: "relative", zIndex: 1 }}>
           {/* Fixed nav */}
           <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(5,5,5,0.8)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", borderBottom: `1px solid ${C.bd}` }}>
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", height: 52, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-                <Image src="/images/tallion-icon-256.png" alt="Tallion" width={22} height={22} style={{ borderRadius: 6 }} />
-                <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 14, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+                <Image src="/images/tallion-icon-256.png" alt="Tallion" width={36} height={36} style={{ borderRadius: 8 }} />
+                <span style={{ fontFamily: F.b, fontWeight: 600, fontSize: 22, color: C.gold, letterSpacing: "0.12em" }}>tallion</span>
               </div>
               <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
                 {[
