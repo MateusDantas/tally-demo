@@ -16,23 +16,23 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tallion.ai"),
-  title: "Tallion — The Trust Layer for Agent Commerce",
+  title: "Tallion — The World's First AI-Native Card",
   description:
-    "Your AI agent found the perfect flight. It can't buy it. Tallion gives every agent the power to transact — with you in control.",
+    "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second.",
   openGraph: {
-    title: "Tallion — The Trust Layer for Agent Commerce",
+    title: "Tallion — The World's First AI-Native Card",
     description:
-      "Programmable cards and wallets for AI agents.",
+      "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second.",
     url: "https://tallion.ai",
     siteName: "Tallion",
     type: "website",
-    images: [{ url: "/images/tallion-icon-1024.png", width: 1024, height: 1024 }],
+    images: [{ url: "/images/tallion-og-image.png", width: 1024, height: 1024 }],
   },
   twitter: {
     card: "summary",
-    title: "Tallion — The Trust Layer for Agent Commerce",
-    description: "Programmable cards and wallets for AI agents.",
-    images: ["/images/tallion-icon-1024.png"],
+    title: "Tallion — The World's First AI-Native Card",
+    description: "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second.",
+    images: ["/images/tallion-og-image.png"],
   },
   icons: {
     icon: [
