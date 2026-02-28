@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://tallion.ai"),
   title: "Tallion — The World's First AI-Native Card",
   description:
-    "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second.",
+    "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second. Your agents find deals, book flights, and manage subscriptions — while you sleep.",
   openGraph: {
     title: "Tallion — The World's First AI-Native Card",
     description:
-      "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second.",
+      "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second. Your agents find deals, book flights, and manage subscriptions — while you sleep.",
     url: "https://tallion.ai",
     siteName: "Tallion",
     type: "website",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "Tallion — The World's First AI-Native Card",
-    description: "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second.",
+    description: "Giving AI the ability to think was the first revolution. Giving it the ability to pay is the second. Your agents find deals, book flights, and manage subscriptions — while you sleep.",
     images: ["/images/tallion-og-image.png"],
   },
   icons: {
