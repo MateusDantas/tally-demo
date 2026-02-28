@@ -687,11 +687,17 @@ function Footer() {
           <span style={{ fontSize: 14, fontWeight: 600, color: "var(--gold-muted)" }}>tallion</span>
         </div>
         <div style={{ display: "flex", gap: mob ? 16 : 24, flexWrap: "wrap", justifyContent: "center" }}>
-          {["Docs", "API", "Vision", "Twitter", "GitHub"].map((link, i) => (
-            <a key={i} href="#" style={{ fontSize: 12, color: "var(--text-dim)", textDecoration: "none", transition: "color 0.2s" }}
+          {[
+            { label: "Docs", href: "#developers" },
+            { label: "API", href: "#developers" },
+            { label: "Vision", href: "#vision" },
+            { label: "Twitter", href: "https://x.com/tallionhq" },
+            { label: "GitHub", href: "https://github.com/tallion-hq" },
+          ].map((link, i) => (
+            <a key={i} href={link.href} target={link.href.startsWith("http") ? "_blank" : undefined} rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined} style={{ fontSize: 12, color: "var(--text-dim)", textDecoration: "none", transition: "color 0.2s" }}
               onMouseEnter={e => e.currentTarget.style.color = "var(--text-muted)"}
               onMouseLeave={e => e.currentTarget.style.color = "var(--text-dim)"}
-            >{link}</a>
+            >{link.label}</a>
           ))}
         </div>
       </div>
